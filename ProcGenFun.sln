@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcGenFun", "ProcGenFun\ProcGenFun.csproj", "{76A41C16-1714-4291-9B35-FAF4FA638A36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcGenFun.WinForms", "ProcGenFun.WinForms\ProcGenFun.WinForms.csproj", "{DF247C4D-8B56-4351-AC81-C14CD39467AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76A41C16-1714-4291-9B35-FAF4FA638A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A41C16-1714-4291-9B35-FAF4FA638A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A41C16-1714-4291-9B35-FAF4FA638A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A41C16-1714-4291-9B35-FAF4FA638A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1E3BF4D-E625-4E44-80A6-15DB865B976C}
+	EndGlobalSection
+EndGlobal
