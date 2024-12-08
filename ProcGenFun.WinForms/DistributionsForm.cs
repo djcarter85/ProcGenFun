@@ -5,9 +5,9 @@ using RandN.Distributions;
 using RandN.Extensions;
 using ScottPlot;
 
-public partial class MainForm : Form
+public partial class DistributionsForm : Form
 {
-    public MainForm()
+    public DistributionsForm()
     {
         InitializeComponent();
 

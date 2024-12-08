@@ -1,6 +1,6 @@
 ﻿namespace ProcGenFun.WinForms
 {
-    partial class MainForm
+    partial class DistributionsForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -71,7 +71,7 @@
             regenerateButton.UseVisualStyleBackColor = true;
             regenerateButton.Click += RegenerateButton_Click;
             // 
-            // MainForm
+            // DistributionsForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
@@ -80,7 +80,7 @@
             this.Controls.Add(distributionTypeCombo);
             this.Controls.Add(label1);
             this.Controls.Add(formsPlot);
-            this.Name = "MainForm";
+            this.Name = "DistributionsForm";
             this.Text = "Fun ProcGen";
             Load += MainForm_Load;
             ResumeLayout(false);
