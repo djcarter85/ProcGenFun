@@ -6,6 +6,6 @@ public static class Program
     public static void Main()
     {
         ApplicationConfiguration.Initialize();
-        Application.Run(new DistributionsForm());
+        Application.Run(new MainForm());
     }
 }
