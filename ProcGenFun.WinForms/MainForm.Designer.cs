@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            formsPlot = new ScottPlot.WinForms.FormsPlot();
+            SuspendLayout();
+            // 
+            // formsPlot
+            // 
+            formsPlot.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            formsPlot.DisplayScale = 1F;
+            formsPlot.Location = new Point(12, 12);
+            formsPlot.Name = "formsPlot";
+            formsPlot.Size = new Size(776, 426);
+            formsPlot.TabIndex = 0;
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(800, 450);
+            this.Controls.Add(formsPlot);
+            this.Name = "MainForm";
             this.Text = "Fun ProcGen";
+            Load += MainForm_Load;
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private ScottPlot.WinForms.FormsPlot formsPlot;
     }
 }
