@@ -48,7 +48,7 @@
             this.ClientSize = new Size(261, 74);
             this.Controls.Add(visualiseDistributionsButton);
             this.Name = "MainForm";
-            this.Text = "Fun ProcGen";
+            this.Text = "ProcGen Fun";
             ResumeLayout(false);
         }
 
