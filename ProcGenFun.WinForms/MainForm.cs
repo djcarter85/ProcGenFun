@@ -19,20 +19,11 @@ public partial class MainForm : Form
     private void DisplayHistogram()
     {
         var rng = StandardRng.Create();
-        var dist = Uniform.New(0d, 1d);
+        var dist = Uniform.New(0d, 1d).Repeat(count: 100_000);
 
-        var values = TakeSamples(dist, count: 100_000, rng);
+        var values = dist.Sample(rng);
 
         DisplayHistogram(values);
-    }
-
-    private static IEnumerable<T> TakeSamples<T, TRng>(IDistribution<T> dist, int count, TRng rng)
-        where TRng : notnull, IRng
-    {
-        for (int i = 0; i < count; i++)
-        {
-            yield return dist.Sample(rng);
-        }
     }
 
     private void DisplayHistogram(IEnumerable<double> values)
