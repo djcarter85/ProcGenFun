@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcGenFun", "ProcGenFun\ProcGenFun.csproj", "{76A41C16-1714-4291-9B35-FAF4FA638A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcGenFun", "ProcGenFun\ProcGenFun.csproj", "{76A41C16-1714-4291-9B35-FAF4FA638A36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcGenFun.WinForms", "ProcGenFun.WinForms\ProcGenFun.WinForms.csproj", "{DF247C4D-8B56-4351-AC81-C14CD39467AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcGenFun.WinForms", "ProcGenFun.WinForms\ProcGenFun.WinForms.csproj", "{DF247C4D-8B56-4351-AC81-C14CD39467AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9C721B38-6890-46C1-B6AF-803D4016CA60}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
