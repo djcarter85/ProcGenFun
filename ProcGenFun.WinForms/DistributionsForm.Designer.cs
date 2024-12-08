@@ -81,7 +81,7 @@
             this.Controls.Add(label1);
             this.Controls.Add(formsPlot);
             this.Name = "DistributionsForm";
-            this.Text = "Fun ProcGen";
+            this.Text = "Fun ProcGen: Distributions";
             Load += MainForm_Load;
             ResumeLayout(false);
             PerformLayout();
