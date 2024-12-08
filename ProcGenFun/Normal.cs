@@ -2,31 +2,15 @@
 
 using RandN;
 using RandN.Distributions;
-using System.Diagnostics.CodeAnalysis;
+using RandN.Extensions;
 
 public static class Normal
 {
-    public static IDistribution<double> New() => new NormalDistribution();
-
-    private class NormalDistribution : IDistribution<double>
-    {
-        public double Sample<TRng>(TRng rng) where TRng : notnull, IRng
-        {
-            // This class uses the Box-Muller algorithm.
-            var uniformDist = Uniform.New(0d, 1d);
-            
-            var u1 = uniformDist.Sample(rng);
-            var u2 = uniformDist.Sample(rng);
-
-            return 
-                Math.Sqrt(-2.0 * Math.Log(u1))
-                * Math.Cos(2.0 * Math.PI * u2);
-        }
-
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out double result) where TRng : notnull, IRng
-        {
-            result = Sample(rng);
-            return true;
-        }
-    }
+    public static IDistribution<double> New() =>
+        // This calculation uses the Box-Muller algorithm.
+        from u1 in Uniform.New(0d, 1d)
+        from u2 in Uniform.New(0d, 1d)
+        select
+            Math.Sqrt(-2.0 * Math.Log(u1))
+            * Math.Cos(2.0 * Math.PI * u2);
 }
