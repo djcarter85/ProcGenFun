@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             visualiseDistributionsButton = new Button();
+            mazesButton = new Button();
             SuspendLayout();
             // 
             // visualiseDistributionsButton
@@ -41,11 +42,22 @@
             visualiseDistributionsButton.UseVisualStyleBackColor = true;
             visualiseDistributionsButton.Click += VisualiseDistributionsButton_Click;
             // 
+            // mazesButton
+            // 
+            mazesButton.Location = new Point(125, 12);
+            mazesButton.Name = "mazesButton";
+            mazesButton.Size = new Size(107, 50);
+            mazesButton.TabIndex = 1;
+            mazesButton.Text = "Mazes";
+            mazesButton.UseVisualStyleBackColor = true;
+            mazesButton.Click += MazesButton_Click;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(261, 74);
+            this.Controls.Add(mazesButton);
             this.Controls.Add(visualiseDistributionsButton);
             this.Name = "MainForm";
             this.Text = "ProcGen Fun";
@@ -55,5 +67,6 @@
         #endregion
 
         private Button visualiseDistributionsButton;
+        private Button mazesButton;
     }
 }
