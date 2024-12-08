@@ -2,6 +2,7 @@ namespace ProcGenFun.WinForms;
 
 using RandN;
 using RandN.Distributions;
+using RandN.Extensions;
 using ScottPlot;
 
 public partial class MainForm : Form
@@ -19,17 +20,18 @@ public partial class MainForm : Form
     private void DisplayHistogram()
     {
         var rng = StandardRng.Create();
-        var dist = Uniform.New(0d, 1d).Repeat(count: 100_000);
+        var dist =
+            Uniform.New(0d, 1d)
+                .Repeat(count: 100_000)
+                .Select(v => Histogram.New(v, min: 0, max: 1));
 
-        var values = dist.Sample(rng);
+        var histogram = dist.Sample(rng);
 
-        DisplayHistogram(values);
+        DisplayHistogram(histogram);
     }
 
-    private void DisplayHistogram(IEnumerable<double> values)
+    private void DisplayHistogram(Histogram histogram)
     {
-        var histogram = Histogram.New(values, min: 0, max: 1);
-
         formsPlot.Reset();
         var barPlot = formsPlot.Plot.Add.Bars(
             histogram.Buckets.Select(b => b.Centre),
