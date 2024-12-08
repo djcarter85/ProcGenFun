@@ -11,4 +11,9 @@ public partial class MainForm : Form
     {
         new DistributionsForm().Show();
     }
+
+    private void MazesButton_Click(object sender, EventArgs e)
+    {
+        new MazeForm().Show();
+    }
 }
