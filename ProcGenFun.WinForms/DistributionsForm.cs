@@ -7,8 +7,12 @@ using ScottPlot;
 
 public partial class DistributionsForm : Form
 {
-    public DistributionsForm()
+    private readonly IRng rng;
+
+    public DistributionsForm(IRng rng)
     {
+        this.rng = rng;
+
         InitializeComponent();
 
         this.distributionTypeCombo.Items.Add(DistributionType.Uniform);
@@ -29,10 +33,9 @@ public partial class DistributionsForm : Form
 
     private void GenerateAndDisplayHistogram()
     {
-        var rng = StandardRng.Create();
         var dist = GetSelectedHistogramDistribution();
 
-        var histogram = dist.Sample(rng);
+        var histogram = dist.Sample(this.rng);
 
         DisplayHistogram(histogram);
     }
