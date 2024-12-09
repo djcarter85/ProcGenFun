@@ -1,15 +1,21 @@
 ﻿namespace ProcGenFun.WinForms;
 
+using RandN;
+
 public partial class MainForm : Form
 {
-    public MainForm()
+    private readonly IRng rng;
+
+    public MainForm(IRng rng)
     {
+        this.rng = rng;
+
         InitializeComponent();
     }
 
     private void VisualiseDistributionsButton_Click(object sender, EventArgs e)
     {
-        new DistributionsForm().Show();
+        new DistributionsForm(this.rng).Show();
     }
 
     private void MazesButton_Click(object sender, EventArgs e)
