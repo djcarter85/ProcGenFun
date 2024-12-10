@@ -21,7 +21,7 @@ public partial class MazeForm : Form
         var grid = new Grid(width: 16, height: 10);
         var mazeDist = BinaryTree.MazeDistribution(grid);
 
-        var maze = mazeDist.Sample(this.rng);
+        var maze = Maze.WithAllWalls(grid);
 
         var svg = MazeImage.CreateSvg(maze);
 

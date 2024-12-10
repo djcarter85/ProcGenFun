@@ -28,7 +28,65 @@ public static class MazeImage
         };
 
         svgDocument.Children.Add(DrawCells(maze));
+
+        svgDocument.Children.Add(
+            new SvgRectangle
+            {
+                Fill = new SvgColourServer(Color.FromArgb(135, 197, 232)),
+                X = Left(new Cell(4, 0)),
+                Y = Top(new Cell(4, 0)),
+                Width = cellWidth,
+                Height = maze.Grid.Height * cellHeight
+            });
+
+        svgDocument.Children.Add(
+            new SvgRectangle
+            {
+                Fill = new SvgColourServer(Color.FromArgb(135, 197, 232)),
+                X = Left(new Cell(0, 6)),
+                Y = Top(new Cell(0, 6)),
+                Width = maze.Grid.Width * cellWidth,
+                Height = cellHeight
+            });
+
+        svgDocument.Children.Add(
+            new SvgRectangle
+            {
+                Fill = new SvgColourServer(Color.FromArgb(22, 110, 162)),
+                X = Left(new Cell(4, 6)),
+                Y = Top(new Cell(4, 6)),
+                Width = cellWidth,
+                Height = cellHeight
+            });
+
+        for (var x = 0; x < maze.Grid.Width; x++)
+        {
+            svgDocument.Children.Add(
+                new SvgText()
+                {
+                    TextAnchor = SvgTextAnchor.Middle,
+                    FontFamily = "sans-serif",
+                    Text = x.ToString(),
+                    X = [marginX + x * cellWidth + 12],
+                    Y = [18]
+                });
+        }
+
+        for (var y = 0; y < maze.Grid.Height; y++)
+        {
+            svgDocument.Children.Add(
+                new SvgText()
+                {
+                    TextAnchor = SvgTextAnchor.Middle,
+                    FontFamily = "sans-serif",
+                    Text = y.ToString(),
+                    X = [12],
+                    Y = [marginY + y * cellHeight + 18]
+                });
+        }
+
         svgDocument.Children.Add(DrawWalls(maze));
+
 
         return svgDocument;
     }
