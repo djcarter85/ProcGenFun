@@ -19,6 +19,9 @@ public class Grid
 
     public IEnumerable<Cell> Cells { get; }
 
+    public bool CanRemoveWall(Cell cell, Direction direction) =>
+        this.AdjacentCellOrNull(cell, direction) != null;
+
     public Cell? AdjacentCellOrNull(Cell cell, Direction direction)
     {
         var potentialAdjacentCell = AdjacentCell(cell, direction);

@@ -20,6 +20,6 @@ public partial class MainForm : Form
 
     private void MazesButton_Click(object sender, EventArgs e)
     {
-        new MazeForm().Show();
+        new MazeForm(this.rng).Show();
     }
 }
