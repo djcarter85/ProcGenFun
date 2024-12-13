@@ -27,4 +27,21 @@ public class Maze
     }
 
     public bool WallExists(Cell cell, Direction direction) => this.cellWalls[cell].Contains(direction);
+    
+    public Maze RemoveWall(Cell cell, Direction direction)
+    {
+        var adjacentCell = this.Grid.AdjacentCellOrNull(cell, direction);
+
+        if (adjacentCell == null)
+        {
+            // TODO: consider throwing an exception here
+            return this;
+        }
+
+        return new Maze(
+            this.Grid,
+            this.cellWalls
+                .SetItem(cell, this.cellWalls[cell].Remove(direction))
+                .SetItem(adjacentCell, this.cellWalls[adjacentCell].Remove(direction.Opposite())));
+    }
 }
