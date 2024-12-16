@@ -1,5 +1,6 @@
-﻿namespace ProcGenFun;
+﻿namespace ProcGenFun.Mazes;
 
+using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
@@ -27,8 +28,8 @@ public static class BinaryTree
 
         return UniformDistribution.TryCreate(validDirections, out var directionDist)
             ? (from maze in mazeDist
-                from direction in directionDist
-                select maze.RemoveWall(cell, direction))
+               from direction in directionDist
+               select maze.RemoveWall(cell, direction))
             : mazeDist;
     }
 
