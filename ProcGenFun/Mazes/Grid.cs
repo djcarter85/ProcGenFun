@@ -19,6 +19,8 @@ public class Grid
 
     public IEnumerable<Cell> Cells { get; }
 
+    public IEnumerable<int> ColumnIndices => Enumerable.Range(0, this.Width);
+    
     public IEnumerable<int> RowIndices => Enumerable.Range(0, this.Height);
 
     public Cell? AdjacentCellOrNull(Cell cell, Direction direction)

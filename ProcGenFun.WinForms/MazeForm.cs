@@ -23,7 +23,7 @@ public partial class MazeForm : Form
     private void GenerateButton_Click(object sender, EventArgs e)
     {
         var imageDist =
-            from maze in BinaryTree.MazeDistribution(Grid)
+            from maze in Sidewinder.MazeDistribution(Grid)
             let svg = MazeImage.CreateSvg(maze)
             select svg.Draw();
 
@@ -49,15 +49,15 @@ public partial class MazeForm : Form
                 path: Path.Combine(folderPath, "maze-all-walls.svg"),
                 MazeImage.CreateSvg(mazeWithAllWalls).GetXML());
 
-            var binaryTreeDistribution = BinaryTree.MazeDistribution(Grid);
+            var sidewinderDistribution = Sidewinder.MazeDistribution(Grid);
 
-            var binaryTreeMaze = binaryTreeDistribution.Sample(this.rng);
+            var sidewinderMaze = sidewinderDistribution.Sample(this.rng);
 
             File.WriteAllText(
-                path: Path.Combine(folderPath, "binary-tree.svg"),
-                MazeImage.CreateSvg(binaryTreeMaze).GetXML());
+                path: Path.Combine(folderPath, "sidewinder.svg"),
+                MazeImage.CreateSvg(sidewinderMaze).GetXML());
 
-            var repeatedDistribution = binaryTreeDistribution.Repeat(5);
+            var repeatedDistribution = sidewinderDistribution.Repeat(5);
 
             var mazes = repeatedDistribution.Sample(this.rng);
 

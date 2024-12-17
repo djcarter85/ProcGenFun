@@ -1,30 +1,58 @@
-﻿using RandN.Distributions;
+﻿namespace ProcGenFun.Mazes;
+
+using System.Collections.Immutable;
 using RandN;
-
-namespace ProcGenFun.Mazes;
-
 using RandN.Distributions;
-using RandN;
-using System;
+using RandN.Extensions;
 
 public static class Sidewinder
 {
     public static IDistribution<Maze> MazeDistribution(Grid grid)
     {
-        var initialState = Maze.WithAllWalls(grid);
+        var initialState = new State(Maze.WithAllWalls(grid));
 
-        IDistribution<Maze> mazeDist = Singleton.New(initialState);
+        IDistribution<State> stateDist = Singleton.New(initialState);
 
         foreach (var y in grid.RowIndices)
         {
-            mazeDist = RowDistribution(mazeDist, grid, y);
+            stateDist = RowDist(stateDist, grid, y);
         }
 
-        return mazeDist;
+        return stateDist.Select(s => s.Maze);
     }
 
-    private static IDistribution<Maze> RowDistribution(IDistribution<Maze> mazeDist, Grid grid, int y)
+    private static IDistribution<State> RowDist(IDistribution<State> stateDist, Grid grid, int y)
     {
-        throw new NotImplementedException();
+        foreach (var x in grid.ColumnIndices)
+        {
+            var cell = new Cell(x, y);
+            stateDist = CellDist(stateDist, grid, cell);
+        }
+
+        return stateDist;
     }
+
+    private static IDistribution<State> CellDist(IDistribution<State> stateDist, Grid grid, Cell cell)
+    {
+        // take from state dist
+        // calculate valid actions
+        // select one and apply it, or do nothing
+    }
+
+    private static IEnumerable<Action> GetValidActions(Grid grid, Cell cell)
+    {
+        if (grid.AdjacentCellOrNull(cell, Direction.East) != null)
+        {
+            yield return Action.CarveEast;
+        }
+
+        if (grid.AdjacentCellOrNull(cell, Direction.North) != null)
+        {
+            yield return Action.CloseRun;
+        }
+    }
+
+    private record State(Maze Maze, ImmutableList<Cell> CurrentRun);
+
+    private enum Action { CarveEast, CloseRun }
 }
