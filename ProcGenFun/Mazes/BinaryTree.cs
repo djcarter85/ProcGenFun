@@ -1,5 +1,6 @@
 ﻿namespace ProcGenFun.Mazes;
 
+using System.Collections.Immutable;
 using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
@@ -9,7 +10,17 @@ public static class BinaryTree
 {
     public static IDistribution<Maze> MazeDistribution(Grid grid)
     {
-        var initialState = new State(Maze.WithAllWalls(grid));
+        return StateDistribution(grid).Select(s => s.Maze);
+    }
+
+    public static IDistribution<IEnumerable<Maze>> MazesDistribution(Grid grid)
+    {
+        return StateDistribution(grid).Select(s => s.Mazes.Append(s.Maze));
+    }
+
+    private static IDistribution<State> StateDistribution(Grid grid)
+    {
+        var initialState = new State([], Maze.WithAllWalls(grid));
 
         IDistribution<State> stateDist = Singleton.New(initialState);
 
@@ -18,7 +29,7 @@ public static class BinaryTree
             stateDist = NextStepDistribution(stateDist, grid, cell);
         }
 
-        return stateDist.Select(s => s.Maze);
+        return stateDist;
     }
 
     private static IDistribution<State> NextStepDistribution(
@@ -29,7 +40,7 @@ public static class BinaryTree
         return UniformDistribution.TryCreate(validDirections, out var directionDist)
             ? (from state in stateDist
                from direction in directionDist
-               select new State(Maze: state.Maze.RemoveWall(cell, direction)))
+               select new State(Mazes: state.Mazes.Add(state.Maze), Maze: state.Maze.RemoveWall(cell, direction)))
             : stateDist;
     }
 
@@ -38,5 +49,5 @@ public static class BinaryTree
         where grid.AdjacentCellOrNull(cell, dir) != null
         select dir;
 
-    private record State(Maze Maze);
+    private record State(ImmutableList<Maze> Mazes, Maze Maze);
 }

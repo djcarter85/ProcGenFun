@@ -70,6 +70,18 @@ public partial class MazeForm : Form
                     gif.AddFrame(image, quality: GifQuality.Bit8);
                 }
             }
+
+            var steps = BinaryTree.MazesDistribution(Grid).Sample(this.rng);
+
+            using (var gif = AnimatedGif.Create(Path.Combine(folderPath, "construction.gif"), delay: 100))
+            {
+                foreach (var maze in steps)
+                {
+                    var image = MazeImage.CreateSvg(maze).Draw();
+
+                    gif.AddFrame(image, quality: GifQuality.Bit8);
+                }
+            }
         }
     }
 }
