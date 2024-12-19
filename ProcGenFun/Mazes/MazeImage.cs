@@ -1,5 +1,6 @@
 ﻿namespace ProcGenFun;
 
+using ProcGenFun.Mazes;
 using Svg;
 using Svg.Pathing;
 using System.Drawing;
