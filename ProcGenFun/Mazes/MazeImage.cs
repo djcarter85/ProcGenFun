@@ -1,8 +1,8 @@
-﻿namespace ProcGenFun;
+﻿namespace ProcGenFun.Mazes;
 
+using System.Drawing;
 using Svg;
 using Svg.Pathing;
-using System.Drawing;
 
 public static class MazeImage
 {
