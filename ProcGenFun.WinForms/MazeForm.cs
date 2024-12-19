@@ -1,6 +1,8 @@
 namespace ProcGenFun.WinForms;
 
 using AnimatedGif;
+using ProcGenFun.Distributions;
+using ProcGenFun.Mazes;
 using RandN;
 using RandN.Extensions;
 using Svg;

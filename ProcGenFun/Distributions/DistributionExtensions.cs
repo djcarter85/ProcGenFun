@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun;
+﻿namespace ProcGenFun.Distributions;
 
 using RandN;
 using System.Diagnostics.CodeAnalysis;

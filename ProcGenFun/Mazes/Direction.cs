@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun;
+﻿namespace ProcGenFun.Mazes;
 
 public enum Direction
 {

@@ -1,6 +1,7 @@
 ﻿namespace ProcGenFun;
 
 using System.Collections.Immutable;
+using ProcGenFun.Mazes;
 
 public class Maze
 {

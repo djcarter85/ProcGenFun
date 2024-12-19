@@ -1,5 +1,6 @@
-﻿namespace ProcGenFun;
+namespace ProcGenFun.Mazes;
 
+using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;

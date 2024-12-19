@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun;
+﻿namespace ProcGenFun.Mazes;
 
 public class Grid
 {
@@ -25,7 +25,7 @@ public class Grid
     public Cell? AdjacentCellOrNull(Cell cell, Direction direction)
     {
         var potentialAdjacentCell = AdjacentCell(cell, direction);
-        return this.IsValid(potentialAdjacentCell) ? potentialAdjacentCell : null;
+        return IsValid(potentialAdjacentCell) ? potentialAdjacentCell : null;
     }
 
     private static Cell AdjacentCell(Cell cell, Direction direction) =>
