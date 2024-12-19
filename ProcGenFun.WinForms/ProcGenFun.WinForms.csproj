@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AnimatedGif" Version="1.0.5" />
     <PackageReference Include="ScottPlot.WinForms" Version="5.0.47" />
   </ItemGroup>
 

@@ -1,11 +1,13 @@
-﻿namespace ProcGenFun.WinForms;
+namespace ProcGenFun.WinForms;
 
+using AnimatedGif;
 using RandN;
+using RandN.Extensions;
 using Svg;
 
 public partial class MazeForm : Form
 {
-    private const string OutputPath = @"C:\a\mazes\maze.svg";
+    private static readonly Grid Grid = new(width: 16, height: 10);
 
     private readonly IRng rng;
 
@@ -16,15 +18,52 @@ public partial class MazeForm : Form
         InitializeComponent();
     }
 
-    private void GenerateAndSaveButton_Click(object sender, EventArgs e)
+    private void GenerateButton_Click(object sender, EventArgs e)
     {
-        var grid = new Grid(width: 16, height: 10);
-        var mazeDist = BinaryTree.MazeDist(grid);
+        var imageDist =
+            from maze in BinaryTree.MazeDist(Grid)
+            let svg = MazeImage.CreateSvg(maze)
+            select svg.Draw();
+
+        var image = imageDist.Sample(this.rng);
+
+        this.pictureBox.Image = image;
+        this.pictureBox.Size = image.Size;
+    }
+
+    private void SaveImagesButton_Click(object sender, EventArgs e)
+    {
+        var folderBrowserDialog = new FolderBrowserDialog();
+
+        var dialogResult = folderBrowserDialog.ShowDialog();
+
+        if (dialogResult == DialogResult.OK)
+        {
+            var folderPath = folderBrowserDialog.SelectedPath;
+
+            SaveMazeWithAllWallsImage(folderPath);
+
+            SaveMazeImage(folderPath);
+        }
+    }
+
+    private static void SaveMazeWithAllWallsImage(string folderPath)
+    {
+        var mazeWithAllWalls = Maze.WithAllWalls(Grid);
+
+        File.WriteAllText(
+            path: Path.Combine(folderPath, "maze-all-walls.svg"),
+            MazeImage.CreateSvg(mazeWithAllWalls).GetXML());
+    }
+
+    private void SaveMazeImage(string folderPath)
+    {
+        var mazeDist = BinaryTree.MazeDist(Grid);
 
         var maze = mazeDist.Sample(this.rng);
 
-        var svg = MazeImage.CreateSvg(maze);
-
-        File.WriteAllText(path: OutputPath, svg.GetXML());
+        File.WriteAllText(
+            path: Path.Combine(folderPath, "binary-tree.svg"),
+            MazeImage.CreateSvg(maze).GetXML());
     }
 }
