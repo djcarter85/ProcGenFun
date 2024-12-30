@@ -1,5 +1,6 @@
 namespace ProcGenFun.Mazes;
 
+using System.Collections.Immutable;
 using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
@@ -7,16 +8,35 @@ using RandN.Extensions;
 
 public static class BinaryTree
 {
-    public static IDistribution<Maze> MazeDist(Grid grid)
+    public static IDistribution<Maze> MazeDist(Grid grid) =>
+        from state in StateDist(grid)
+        select state.Current;
+
+    public static IDistribution<BinaryTreeHistory> HistoryDist(Grid grid) =>
+        from state in StateDist(grid)
+        select new BinaryTreeHistory(
+            Initial: state.Initial,
+            Steps: state.Steps,
+            Final: state.Current);
+
+    private static IDistribution<BinaryTreeState> StateDist(Grid grid)
     {
-        var mazeDist = InitialMazeDist(grid);
+        var stateDist =
+            from maze in InitialMazeDist(grid)
+            select new BinaryTreeState(Initial: maze, Steps: [], Current: maze);
 
         foreach (var cell in grid.Cells)
         {
-            mazeDist = mazeDist.SelectMany(m => NextStepDist(m, grid, cell));
+            stateDist = stateDist.SelectMany(state =>
+                from maze in NextStepDist(state.Current, grid, cell)
+                select state with
+                {
+                    Steps = state.Steps.Add(new BinaryTreeStep(cell, maze)),
+                    Current = maze
+                });
         }
 
-        return mazeDist;
+        return stateDist;
     }
 
     private static IDistribution<Maze> InitialMazeDist(Grid grid)
@@ -42,4 +62,6 @@ public static class BinaryTree
 
     private static IEnumerable<Direction> GetValidDirections(Cell cell, Grid grid) =>
         new[] { Direction.South, Direction.East }.Where(dir => grid.CanRemoveWall(cell, dir));
+
+    private record BinaryTreeState(Maze Initial, ImmutableList<BinaryTreeStep> Steps, Maze Current);
 }
