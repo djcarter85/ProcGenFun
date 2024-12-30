@@ -43,9 +43,15 @@ public partial class MazeForm : Form
         {
             var folderPath = folderBrowserDialog.SelectedPath;
 
+            var historyDist = BinaryTree.HistoryDist(Grid);
+
+            var history = historyDist.Sample(this.rng);
+
             SaveMazeWithAllWallsImage(folderPath);
 
-            SaveMazeImage(folderPath);
+            SaveMazeImage(folderPath, history.Final);
+
+            SaveMazeAnimation(folderPath, history);
         }
     }
 
@@ -58,14 +64,30 @@ public partial class MazeForm : Form
             MazeImage.CreateSvg(mazeWithAllWalls).GetXML());
     }
 
-    private void SaveMazeImage(string folderPath)
+    private static void SaveMazeImage(string folderPath, Maze maze)
     {
-        var mazeDist = BinaryTree.MazeDist(Grid);
-
-        var maze = mazeDist.Sample(this.rng);
-
         File.WriteAllText(
             path: Path.Combine(folderPath, "binary-tree.svg"),
             MazeImage.CreateSvg(maze).GetXML());
+    }
+
+    private static void SaveMazeAnimation(string folderPath, BinaryTreeHistory history)
+    {
+        using var gif = AnimatedGif.Create(Path.Combine(folderPath, "maze-animation.gif"), delay: 75);
+
+        void AddFrame(Maze maze, Cell? highlightedCell = null, int delay = -1) =>
+            gif.AddFrame(
+                MazeImage.CreateSvg(maze, highlightedCell: highlightedCell).Draw(),
+                quality: GifQuality.Bit8,
+                delay: delay);
+
+        AddFrame(history.Initial, delay: 1000);
+
+        foreach (var snapshot in history.Steps)
+        {
+            AddFrame(snapshot.Maze, highlightedCell: snapshot.Cell);
+        }
+
+        AddFrame(history.Final, delay: 1000);
     }
 }
