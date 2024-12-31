@@ -6,6 +6,17 @@ using RandN.Extensions;
 
 public static class UniformDistribution
 {
+    public static IDistribution<T> CreateOrThrow<T>(IEnumerable<T> items)
+    {
+        if (TryCreate(items, out var dist))
+        {
+            return dist;
+        }
+
+        throw new InvalidOperationException(
+            "There are no items from which to create a uniform distribution.");
+    }
+
     public static bool TryCreate<T>(IEnumerable<T> items, out IDistribution<T> dist)
     {
         var list = items.ToList();
