@@ -18,12 +18,23 @@ public partial class MazeForm : Form
         this.rng = rng;
 
         InitializeComponent();
+
+        this.mazeAlgorithmCombo.Items.Add(MazeAlgorithm.BinaryTree);
+        this.mazeAlgorithmCombo.Items.Add(MazeAlgorithm.Sidewinder);
+        this.mazeAlgorithmCombo.SelectedIndex = 0;
     }
 
     private void GenerateButton_Click(object sender, EventArgs e)
     {
+        var mazeDist = (MazeAlgorithm)this.mazeAlgorithmCombo.SelectedItem switch
+        {
+            MazeAlgorithm.BinaryTree => BinaryTree.MazeDist(Grid),
+            MazeAlgorithm.Sidewinder => Sidewinder.MazeDist(Grid),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
         var imageDist =
-            from maze in BinaryTree.MazeDist(Grid)
+            from maze in mazeDist
             let svg = MazeImage.CreateSvg(maze)
             select svg.Draw();
 
