@@ -31,14 +31,16 @@
             this.generateButton = new Button();
             this.saveImagesButton = new Button();
             this.pictureBox = new PictureBox();
+            this.mazeAlgorithmCombo = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)this.pictureBox).BeginInit();
             this.SuspendLayout();
             // 
             // generateButton
             // 
-            this.generateButton.Location = new Point(12, 12);
+            this.generateButton.Location = new Point(238, 16);
+            this.generateButton.Margin = new Padding(3, 4, 3, 4);
             this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new Size(149, 30);
+            this.generateButton.Size = new Size(170, 40);
             this.generateButton.TabIndex = 0;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
@@ -47,9 +49,10 @@
             // saveImagesButton
             // 
             this.saveImagesButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.saveImagesButton.Location = new Point(603, 12);
+            this.saveImagesButton.Location = new Point(689, 16);
+            this.saveImagesButton.Margin = new Padding(3, 4, 3, 4);
             this.saveImagesButton.Name = "saveImagesButton";
-            this.saveImagesButton.Size = new Size(149, 30);
+            this.saveImagesButton.Size = new Size(170, 40);
             this.saveImagesButton.TabIndex = 1;
             this.saveImagesButton.Text = "Save images";
             this.saveImagesButton.UseVisualStyleBackColor = true;
@@ -57,20 +60,32 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new Point(12, 48);
+            this.pictureBox.Location = new Point(14, 64);
+            this.pictureBox.Margin = new Padding(3, 4, 3, 4);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new Size(100, 50);
+            this.pictureBox.Size = new Size(114, 67);
             this.pictureBox.TabIndex = 2;
             this.pictureBox.TabStop = false;
             // 
+            // mazeAlgorithmCombo
+            // 
+            this.mazeAlgorithmCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.mazeAlgorithmCombo.FormattingEnabled = true;
+            this.mazeAlgorithmCombo.Location = new Point(12, 23);
+            this.mazeAlgorithmCombo.Name = "mazeAlgorithmCombo";
+            this.mazeAlgorithmCombo.Size = new Size(220, 28);
+            this.mazeAlgorithmCombo.TabIndex = 3;
+            // 
             // MazeForm
             // 
-            this.AutoScaleDimensions = new SizeF(7F, 15F);
+            this.AutoScaleDimensions = new SizeF(8F, 20F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(764, 538);
+            this.ClientSize = new Size(873, 717);
+            this.Controls.Add(this.mazeAlgorithmCombo);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.saveImagesButton);
             this.Controls.Add(this.generateButton);
+            this.Margin = new Padding(3, 4, 3, 4);
             this.Name = "MazeForm";
             this.Text = "ProcGen Fun: Mazes";
             ((System.ComponentModel.ISupportInitialize)this.pictureBox).EndInit();
@@ -82,5 +97,6 @@
         private Button generateButton;
         private Button saveImagesButton;
         private PictureBox pictureBox;
+        private ComboBox mazeAlgorithmCombo;
     }
 }
