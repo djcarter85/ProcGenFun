@@ -82,7 +82,7 @@
 
         foreach (var step in history.Steps)
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCell: step.Cell));
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: [step.Cell]));
         }
 
         images.Add(MazeImage.CreateSvg(history.Final));
