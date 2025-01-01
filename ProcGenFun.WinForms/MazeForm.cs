@@ -55,6 +55,9 @@ public partial class MazeForm : Form
         {
             var folderPath = folderBrowserDialog.SelectedPath;
 
+            Directory.Delete(folderPath, true);
+            Directory.CreateDirectory(folderPath);
+
             switch ((MazeAlgorithm)this.mazeAlgorithmCombo.SelectedItem)
             {
                 case MazeAlgorithm.BinaryTree:
@@ -87,6 +90,12 @@ public partial class MazeForm : Form
                         SaveMazeImage(folderPath, history.Current);
 
                         SaveMazeAnimation(
+                            folderPath,
+                            history.Initial,
+                            history.Steps.Select(s => new MazeHighlight(s.Maze, s.Run)),
+                            history.Current);
+
+                        SaveMazeImages(
                             folderPath,
                             history.Initial,
                             history.Steps.Select(s => new MazeHighlight(s.Maze, s.Run)),
@@ -139,5 +148,28 @@ public partial class MazeForm : Form
         }
 
         AddFrame(final, delay: 1000);
+    }
+
+    private static void SaveMazeImages(
+        string folderPath,
+        Maze initial,
+        IEnumerable<MazeHighlight> steps,
+        Maze final)
+    {
+        void SaveImage(Maze maze, string suffix, IReadOnlyList<Cell>? highlightedCells = null) =>
+            File.WriteAllText(
+                Path.Combine(folderPath, $"maze_{suffix}.svg"),
+                MazeImage.CreateSvg(maze, highlightedCells: highlightedCells ?? []).GetXML());
+
+        SaveImage(initial, suffix: "A");
+
+        int i = 0;
+        foreach (var step in steps)
+        {
+            SaveImage(step.Maze, suffix: $"B_{i:0000}", highlightedCells: step.HighlightedCells);
+            i++;
+        }
+
+        SaveImage(final, suffix: "C");
     }
 }
