@@ -8,32 +8,43 @@ using RandN.Extensions;
 
 public static class Sidewinder
 {
-    public static IDistribution<Maze> MazeDist(Grid grid)
+    public static IDistribution<Maze> MazeDist(Grid grid) =>
+        HistoryDist(grid).Select(h => h.Current);
+
+    public static IDistribution<SidewinderHistory> HistoryDist(Grid grid)
     {
         var initialMaze = Maze.WithAllWalls(grid);
 
-        IDistribution<Maze> mazeDist = Singleton.New(initialMaze);
+        IDistribution<SidewinderHistory> historyDist =
+            Singleton.New(new SidewinderHistory(initialMaze, [], initialMaze));
 
         foreach (var y in grid.RowIndices)
         {
-            mazeDist = mazeDist.SelectMany(m => RowDist(m, grid, y));
+            historyDist = historyDist.SelectMany(h => RowDist(h, grid, y));
         }
 
-        return mazeDist;
+        return historyDist;
     }
 
-    private static IDistribution<Maze> RowDist(Maze maze, Grid grid, int y)
+    private static IDistribution<SidewinderHistory> RowDist(SidewinderHistory history, Grid grid, int y)
     {
-        var initialState = new RowState(maze, Run: []);
+        var initialState = new RowState(history.Current, Run: []);
 
-        IDistribution<RowState> stateDist = Singleton.New(initialState);
+        IDistribution<RollingRowState> rollingStateDist = Singleton.New(new RollingRowState([], initialState));
 
         foreach (var x in grid.ColumnIndices)
         {
-            stateDist = stateDist.SelectMany(s => CellDist(s, grid, new Cell(x, y)));
+            rollingStateDist =
+                from rollingState in rollingStateDist
+                from state in CellDist(rollingState.Current, grid, new Cell(x, y))
+                select new RollingRowState(rollingState.Previous.Add(state), state);
         }
 
-        return stateDist.Select(s => s.Maze);
+        return rollingStateDist.Select(
+            rollingState => new SidewinderHistory(
+                history.Initial,
+                history.Steps.AddRange(rollingState.Previous.Select(x => new SidewinderStep(x.Maze, x.Run))),
+                rollingState.Current.Maze));
     }
 
     private static IDistribution<RowState> CellDist(RowState rowState, Grid grid, Cell cell)
@@ -63,7 +74,7 @@ public static class Sidewinder
         from cellToRemoveSouthWallFrom in UniformDistribution.CreateOrThrow(rowState.Run.Add(cell))
         select CloseRun(rowState, cellToRemoveSouthWallFrom);
 
-    private static RowState CloseRun(RowState rowState, Cell cellToRemoveSouthWallFrom) => 
+    private static RowState CloseRun(RowState rowState, Cell cellToRemoveSouthWallFrom) =>
         new(rowState.Maze.RemoveWall(cellToRemoveSouthWallFrom, Direction.South), []);
 
     private static IEnumerable<Action> GetValidActions(Grid grid, Cell cell)
@@ -80,6 +91,8 @@ public static class Sidewinder
     }
 
     private record RowState(Maze Maze, ImmutableList<Cell> Run);
+
+    private record RollingRowState(ImmutableList<RowState> Previous, RowState Current);
 
     private enum Action { RemoveEastWall, CloseRun }
 }
