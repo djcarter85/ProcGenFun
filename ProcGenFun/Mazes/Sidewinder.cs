@@ -37,13 +37,13 @@ public static class Sidewinder
             rollingStateDist =
                 from rollingState in rollingStateDist
                 from state in CellDist(rollingState.Current, grid, new Cell(x, y))
-                select new RollingRowState(rollingState.Previous.Add(state), state);
+                select new RollingRowState(rollingState.Previous.Add(rollingState.Current), state);
         }
 
         return rollingStateDist.Select(
             rollingState => new SidewinderHistory(
                 history.Initial,
-                history.Steps.AddRange(rollingState.Previous.Select(x => new SidewinderStep(x.Maze, x.Run))),
+                history.Steps.AddRange(rollingState.All.Select(x => new SidewinderStep(x.Maze, x.Run))),
                 rollingState.Current.Maze));
     }
 
@@ -92,7 +92,10 @@ public static class Sidewinder
 
     private record RowState(Maze Maze, ImmutableList<Cell> Run);
 
-    private record RollingRowState(ImmutableList<RowState> Previous, RowState Current);
+    private record RollingRowState(ImmutableList<RowState> Previous, RowState Current)
+    {
+        public ImmutableList<RowState> All => this.Previous.Add(this.Current);
+    }
 
     private enum Action { RemoveEastWall, CloseRun }
 }
