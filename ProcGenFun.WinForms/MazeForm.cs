@@ -75,17 +75,17 @@ public partial class MazeForm : Form
     {
         using var gif = AnimatedGif.Create(Path.Combine(folderPath, "maze-animation.gif"), delay: 75);
 
-        void AddFrame(Maze maze, Cell? highlightedCell = null, int delay = -1) =>
+        void AddFrame(Maze maze, IReadOnlyList<Cell>? highlightedCells = null, int delay = -1) =>
             gif.AddFrame(
-                MazeImage.CreateSvg(maze, highlightedCell: highlightedCell).Draw(),
+                MazeImage.CreateSvg(maze, highlightedCells: highlightedCells ?? []).Draw(),
                 quality: GifQuality.Bit8,
                 delay: delay);
 
         AddFrame(history.Initial, delay: 1000);
 
-        foreach (var snapshot in history.Steps)
+        foreach (var step in history.Steps)
         {
-            AddFrame(snapshot.Maze, highlightedCell: snapshot.Cell);
+            AddFrame(step.Maze, highlightedCells: [step.Cell]);
         }
 
         AddFrame(history.Final, delay: 1000);
