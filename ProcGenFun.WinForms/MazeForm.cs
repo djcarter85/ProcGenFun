@@ -55,19 +55,49 @@ public partial class MazeForm : Form
         {
             var folderPath = folderBrowserDialog.SelectedPath;
 
-            var historyDist = BinaryTree.HistoryDist(Grid);
+            switch ((MazeAlgorithm)this.mazeAlgorithmCombo.SelectedItem)
+            {
+                case MazeAlgorithm.BinaryTree:
+                    {
+                        var historyDist = BinaryTree.HistoryDist(Grid);
 
-            var history = historyDist.Sample(this.rng);
+                        var history = historyDist.Sample(this.rng);
 
-            SaveMazeWithAllWallsImage(folderPath);
+                        SaveMazeWithAllWallsImage(folderPath);
 
-            SaveMazeImage(folderPath, history.Final);
+                        SaveMazeImage(folderPath, history.Final);
 
-            SaveMazeAnimation(
-                folderPath,
-                history.Initial,
-                history.Steps.Select(s => new MazeHighlight(s.Maze, [s.Cell])),
-                history.Final);
+                        SaveMazeAnimation(
+                            folderPath,
+                            history.Initial,
+                            history.Steps.Select(s => new MazeHighlight(s.Maze, [s.Cell])),
+                            history.Final);
+                    }
+
+                    break;
+
+                case MazeAlgorithm.Sidewinder:
+                    {
+                        var historyDist = Sidewinder.HistoryDist(Grid);
+
+                        var history = historyDist.Sample(this.rng);
+
+                        SaveMazeWithAllWallsImage(folderPath);
+
+                        SaveMazeImage(folderPath, history.Current);
+
+                        SaveMazeAnimation(
+                            folderPath,
+                            history.Initial,
+                            history.Steps.Select(s => new MazeHighlight(s.Maze, s.Run)),
+                            history.Current);
+                    }
+
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
