@@ -6,6 +6,7 @@ using ProcGenFun.Mazes;
 using RandN;
 using RandN.Extensions;
 using Svg;
+using System.Collections.Immutable;
 
 public partial class MazeForm : Form
 {
@@ -62,7 +63,7 @@ public partial class MazeForm : Form
 
             SaveMazeImage(folderPath, history.Final);
 
-            SaveMazeAnimation(folderPath, history);
+            SaveMazeAnimation(folderPath, history.Initial, history.Steps, history.Final);
         }
     }
 
@@ -82,7 +83,11 @@ public partial class MazeForm : Form
             MazeImage.CreateSvg(maze).GetXML());
     }
 
-    private static void SaveMazeAnimation(string folderPath, BinaryTreeHistory history)
+    private static void SaveMazeAnimation(
+        string folderPath, 
+        Maze initial,
+        IEnumerable<BinaryTreeStep> steps,
+        Maze final)
     {
         using var gif = AnimatedGif.Create(Path.Combine(folderPath, "maze-animation.gif"), delay: 75);
 
@@ -92,13 +97,13 @@ public partial class MazeForm : Form
                 quality: GifQuality.Bit8,
                 delay: delay);
 
-        AddFrame(history.Initial, delay: 1000);
+        AddFrame(initial, delay: 1000);
 
-        foreach (var snapshot in history.Steps)
+        foreach (var snapshot in steps)
         {
             AddFrame(snapshot.Maze, highlightedCell: snapshot.Cell);
         }
 
-        AddFrame(history.Final, delay: 1000);
+        AddFrame(final, delay: 1000);
     }
 }
