@@ -34,16 +34,21 @@ public static class Sidewinder
 
         foreach (var x in grid.ColumnIndices)
         {
+            var cell = new Cell(x, y);
+
             rollingStateDist =
                 from rollingState in rollingStateDist
-                from state in CellDist(rollingState.Current, grid, new Cell(x, y))
-                select new RollingRowState(rollingState.Previous.Add(rollingState.Current), state);
+                from state in CellDist(rollingState.Current, grid, cell)
+                select new RollingRowState(
+                    // TODO: it would be nice if CellDist could also return us how the run looked before removing the wall
+                    rollingState.Previous.Add(rollingState.Current with { Run = rollingState.Current.Run.Add(cell) }),
+                    state);
         }
 
         return rollingStateDist.Select(
             rollingState => new SidewinderHistory(
                 history.Initial,
-                history.Steps.AddRange(rollingState.All.Select(x => new SidewinderStep(x.Maze, x.Run))),
+                history.Steps.AddRange(rollingState.Previous.Select(x => new SidewinderStep(x.Maze, x.Run))),
                 rollingState.Current.Maze));
     }
 
