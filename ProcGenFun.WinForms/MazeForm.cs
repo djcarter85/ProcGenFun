@@ -7,12 +7,16 @@ using RandN;
 using RandN.Extensions;
 using Svg;
 using System.Collections.Immutable;
+using System.Windows.Forms.VisualStyles;
 
 public partial class MazeForm : Form
 {
     private static readonly Grid Grid = new(width: 16, height: 10);
 
     private readonly IRng rng;
+
+    private IReadOnlyList<Image>? images;
+    private int selectedImageIndex;
 
     public MazeForm(IRng rng)
     {
@@ -27,22 +31,68 @@ public partial class MazeForm : Form
 
     private void GenerateButton_Click(object sender, EventArgs e)
     {
-        var mazeDist = (MazeAlgorithm)this.mazeAlgorithmCombo.SelectedItem switch
+        var imagesDist = (MazeAlgorithm)this.mazeAlgorithmCombo.SelectedItem switch
         {
-            MazeAlgorithm.BinaryTree => BinaryTree.MazeDist(Grid),
-            MazeAlgorithm.Sidewinder => Sidewinder.MazeDist(Grid),
+            MazeAlgorithm.BinaryTree => from history in BinaryTree.HistoryDist(Grid) select GetImages(history),
+            MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(Grid) select GetImages(history),
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        var imageDist =
-            from maze in mazeDist
-            let svg = MazeImage.CreateSvg(maze)
-            select svg.Draw();
+        this.images = imagesDist.Sample(this.rng);
 
-        var image = imageDist.Sample(this.rng);
+        this.DisplayImage(index: 0);
+    }
 
-        this.pictureBox.Image = image;
-        this.pictureBox.Size = image.Size;
+    private void DisplayImage(int index)
+    {
+        if (this.images != null)
+        {
+            this.selectedImageIndex = index;
+
+            var image = this.images[index];
+
+            this.pictureBox.Image = image;
+            this.pictureBox.Size = image.Size;
+
+            this.firstButton.Enabled = index != 0;
+            this.previousButton.Enabled = index != 0;
+            this.nextButton.Enabled = index != this.images.Count - 1;
+            this.lastButton.Enabled = index != this.images.Count - 1;
+
+            this.label1.Text = $"{index + 1} of {this.images.Count}";
+        }
+    }
+
+    private static IReadOnlyList<Image> GetImages(BinaryTreeHistory history)
+    {
+        var images = new List<Image>();
+
+        images.Add(MazeImage.CreateSvg(history.Initial).Draw());
+
+        foreach (var step in history.Steps)
+        {
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: [step.Cell]).Draw());
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Final).Draw());
+
+        return images;
+    }
+
+    private static IReadOnlyList<Image> GetImages(SidewinderHistory history)
+    {
+        var images = new List<Image>();
+
+        images.Add(MazeImage.CreateSvg(history.Initial).Draw());
+
+        foreach (var step in history.Steps)
+        {
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.Run).Draw());
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Current).Draw());
+
+        return images;
     }
 
     private void SaveImagesButton_Click(object sender, EventArgs e)
@@ -171,5 +221,25 @@ public partial class MazeForm : Form
         }
 
         SaveImage(final, suffix: "C");
+    }
+
+    private void firstButton_Click(object sender, EventArgs e)
+    {
+        this.DisplayImage(0);
+    }
+
+    private void previousButton_Click(object sender, EventArgs e)
+    {
+        this.DisplayImage(this.selectedImageIndex - 1);
+    }
+
+    private void nextButton_Click(object sender, EventArgs e)
+    {
+        this.DisplayImage(this.selectedImageIndex + 1);
+    }
+
+    private void lastButton_Click(object sender, EventArgs e)
+    {
+        this.DisplayImage(this.images.Count - 1);
     }
 }
