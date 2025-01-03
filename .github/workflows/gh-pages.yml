@@ -29,7 +29,7 @@ jobs:
 
       # Publish the site
       - name: Publish
-        run: dotnet publish ./ProcGenFun.Blazor/ProcGenFun.Blazor.csproj -c:Release -o:publish -p:GHPages=true
+        run: dotnet publish ./ProcGenFun.Blazor/ProcGenFun.Blazor.csproj -c:Release -o:publish -p:GHPages=true -p:GHPagesBase=/
 
       # Deploy the site
       - name: Deploy
