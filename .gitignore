@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Tailwind CSS (auto-generated)
+ProcGenFun.Blazor/wwwroot/css/tailwind.css
