@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcGenFun.Blazor", "ProcGenFun.Blazor\ProcGenFun.Blazor.csproj", "{F53DD81D-1601-4F34-8D67-30C9C1DAAB57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF247C4D-8B56-4351-AC81-C14CD39467AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F53DD81D-1601-4F34-8D67-30C9C1DAAB57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F53DD81D-1601-4F34-8D67-30C9C1DAAB57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F53DD81D-1601-4F34-8D67-30C9C1DAAB57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F53DD81D-1601-4F34-8D67-30C9C1DAAB57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
