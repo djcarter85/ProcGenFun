@@ -1,0 +1,9 @@
+<a href="@Href" class="text-blue-500 underline hover:no-underline">@ChildContent</a>
+
+@code {
+    [Parameter]
+    public required string Href { get; set; }
+
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+}
