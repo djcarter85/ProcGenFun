@@ -25,37 +25,51 @@
         @onclick="GenerateHistogram">Generate Histogram</button>
 </div>
 
-@if (values != null)
+@if (histogram != null)
 {
-    foreach (var value in values)
-    {
-        <p>@value</p>
-    }
+    var minX = histogram.Buckets.Min(b => b.Centre) - histogram.BucketWidth;
+    var maxX = histogram.Buckets.Max(b => b.Centre) + histogram.BucketWidth;
+    var width = maxX - minX;
+
+    var maxHeight = histogram.Buckets.Max(b => b.Count) * 1.1;
+
+    var viewBox = $"{minX} -{maxHeight} {width} {maxHeight}";
+    <svg width="200" height="200" viewBox="@viewBox" class="border bg-blue-200 border-blue-500 w-full" preserveAspectRatio="none">
+        @foreach (var bucket in histogram.Buckets)
+        {
+            var x = bucket.Centre - histogram.BucketWidth / 2;
+            var y = -bucket.Count;
+            <rect x="@x" y="@y" width="@histogram.BucketWidth" height="@bucket.Count" class="fill-blue-600" />
+        }
+    </svg>
 }
 
 @code {
     private readonly IRng rng = StandardRng.Create();
 
     private DistributionType distributionType = DistributionType.Uniform;
-
-    private IReadOnlyList<double>? values = null;
+    private Histogram? histogram;
 
     public void GenerateHistogram()
     {
-        var valuesDist = GetSelectedDist().Repeat(10).Select(v => v.ToList());
+        var histogramDist = GetSelectedHistogramDist();
 
-        values = valuesDist.Sample(this.rng);
+        this.histogram = histogramDist.Sample(this.rng);
     }
 
-    private IDistribution<double> GetSelectedDist()
-    {
-        return this.distributionType switch
+    private IDistribution<Histogram> GetSelectedHistogramDist() =>
+        this.distributionType switch
         {
-            DistributionType.Uniform => Uniform.New(0d, 1d),
-            DistributionType.Normal => Normal.New(),
+            DistributionType.Uniform =>
+                Uniform.New(0d, 1d)
+                    .Repeat(count: 100_000)
+                    .Select(v => Histogram.New(v, min: 0, max: 1)),
+            DistributionType.Normal =>
+                Normal.New()
+                    .Repeat(count: 100_000)
+                    .Select(v => Histogram.New(v, min: -4, max: 4)),
             _ => throw new ArgumentOutOfRangeException(),
         };
-    }
 
     public enum DistributionType
     {
