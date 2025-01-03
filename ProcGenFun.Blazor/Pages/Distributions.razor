@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using ProcGenFun
+@using ProcGenFun.Blazor.Components
+
+@page "/distributions"
+
+<PageTitle>Distributions</PageTitle>
+
+<Title>Distributions</Title>
+
+<div class="mb-4 flex flex-col md:flex-row gap-x-8 gap-y-3 items-center">
+    <div class="flex flex-row gap-2">
+        <div>Distribution type:</div>
+
+        <select @bind="distributionType">
+            <option value="@DistributionType.Uniform">Uniform</option>
+            <option value="@DistributionType.Normal">Normal</option>
+        </select>
+    </div>
+
+    <button class="px-5 py-2 bg-blue-800 text-gray-50 hover:bg-blue-600 rounded-lg"
+        @onclick="GenerateHistogram">Generate Histogram</button>
+</div>
+
+@code {
+    private DistributionType distributionType = DistributionType.Uniform;
+
+    public void GenerateHistogram()
+    {
+    }
+
+    public enum DistributionType
+    {
+        Uniform,
+        Normal
+    }
+}
