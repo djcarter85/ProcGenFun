@@ -1,6 +1,9 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using ProcGenFun
 @using ProcGenFun.Blazor.Components
+@using RandN
+@using RandN.Distributions
+@using RandN.Extensions
 
 @page "/distributions"
 
@@ -22,11 +25,36 @@
         @onclick="GenerateHistogram">Generate Histogram</button>
 </div>
 
+@if (values != null)
+{
+    foreach (var value in values)
+    {
+        <p>@value</p>
+    }
+}
+
 @code {
+    private readonly IRng rng = StandardRng.Create();
+
     private DistributionType distributionType = DistributionType.Uniform;
+
+    private IReadOnlyList<double>? values = null;
 
     public void GenerateHistogram()
     {
+        var valuesDist = GetSelectedDist().Repeat(10).Select(v => v.ToList());
+
+        values = valuesDist.Sample(this.rng);
+    }
+
+    private IDistribution<double> GetSelectedDist()
+    {
+        return this.distributionType switch
+        {
+            DistributionType.Uniform => Uniform.New(0d, 1d),
+            DistributionType.Normal => Normal.New(),
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
 
     public enum DistributionType

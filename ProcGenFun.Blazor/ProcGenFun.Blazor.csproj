@@ -14,6 +14,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.11" PrivateAssets="all" />
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="3.0.0" />
+    <PackageReference Include="RandN" Version="0.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProcGenFun\ProcGenFun.csproj" />
   </ItemGroup>
 
 </Project>
