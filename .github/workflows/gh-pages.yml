@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Install .NET WebAssembly Tools
-        run: dotnet workload install wasm-tools
 
       # Install NPM dependencies
       - name: Install NPM dependencies
