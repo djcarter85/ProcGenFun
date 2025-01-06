@@ -27,6 +27,11 @@ jobs:
         working-directory: ./ProcGenFun.Blazor
         run: npm i
 
+      # Compile Tailwind CSS
+      - name: Compile Tailwind CSS
+        working-directory: ./ProcGenFun.Blazor
+        run: npx tailwindcss -i ./Styles/tailwind.css -o ./wwwroot/css/tailwind.css
+
       # Publish the site
       - name: Publish
         run: dotnet publish ./ProcGenFun.Blazor/ProcGenFun.Blazor.csproj -c:Release -o:publish -p:GHPages=true -p:GHPagesBase=/
