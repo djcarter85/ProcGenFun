@@ -1,0 +1,92 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using ProcGenFun
+@using ProcGenFun.Blazor.Components
+@using ProcGenFun.Distributions
+@using ProcGenFun.Mazes
+@using RandN
+@using RandN.Distributions
+@using RandN.Extensions
+@using Svg
+
+@page "/mazes"
+
+<PageTitle>Mazes</PageTitle>
+
+<Title>Mazes</Title>
+
+<Button Text="Generate Maze" OnClick="GenerateMaze" />
+
+@if (images != null)
+{
+    <div class="mt-4">
+        <Button Text="&laquo;" OnClick="GoToFirstImage" />
+        <Button Text="&lt;" OnClick="GoToPreviousImage" />
+        <Button Text="&gt;" OnClick="GoToNextImage" />
+        <Button Text="&raquo;" OnClick="GoToLastImage" />
+
+        <span>@(this.selectedImageIndex + 1) of @this.images.Count</span>
+    </div>
+
+    <div>@((MarkupString)this.images[this.selectedImageIndex].GetXML())</div>
+}
+
+@code {
+    private readonly IRng rng = StandardRng.Create();
+
+    private int selectedImageIndex = 0;
+    private IReadOnlyList<SvgDocument>? images = null;
+
+    public void GenerateMaze()
+    {
+        var grid = new Grid(16, 10);
+
+        var historyDist = BinaryTree.HistoryDist(grid);
+
+        var imagesDist = from h in historyDist select GetImages(h);
+
+        this.images = imagesDist.Sample(this.rng);
+        GoToLastImage();
+    }
+
+    public void GoToFirstImage()
+    {
+        this.selectedImageIndex = 0;
+    }
+
+    public void GoToPreviousImage()
+    {
+        if (this.selectedImageIndex > 0)
+        {
+            this.selectedImageIndex--;
+        }
+    }
+
+    public void GoToNextImage()
+    {
+        if (this.selectedImageIndex < this.images!.Count - 1)
+        {
+            this.selectedImageIndex++;
+        }
+    }
+
+    public void GoToLastImage()
+    {
+        this.selectedImageIndex = this.images!.Count - 1;
+    }
+
+    private IReadOnlyList<SvgDocument> GetImages(BinaryTreeHistory history)
+    {
+        var images = new List<SvgDocument>();
+
+        images.Add(MazeImage.CreateSvg(history.Initial));
+
+        foreach (var step in history.Steps)
+        {
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCell: step.Cell));
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Final));
+
+        return images;
+    }
+}
