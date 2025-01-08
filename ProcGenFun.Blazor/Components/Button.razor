@@ -1,0 +1,13 @@
+<button
+    class="px-5 py-2 bg-blue-800 text-gray-50 hover:bg-blue-600 rounded-lg"
+    @onclick="OnClick">
+    @Text
+</button>
+
+@code {
+    [Parameter]
+    public required string Text { get; set; }
+
+    [Parameter]
+    public required Action OnClick { get; set; }
+}
