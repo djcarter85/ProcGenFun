@@ -14,7 +14,19 @@
 
 <Title>Mazes</Title>
 
-<Button Text="Generate Maze" OnClick="GenerateMaze" />
+<div class="mb-4 flex flex-col md:flex-row gap-x-8 gap-y-3 items-center">
+    <div class="flex flex-row gap-2">
+        <div>Maze algorithm:</div>
+
+        <select @bind="mazeAlgorithm">
+            <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
+            <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
+        </select>
+    </div>
+
+    <Button Text="Generate Maze" OnClick="GenerateMaze" />
+</div>
+
 
 @if (images != null)
 {
@@ -33,6 +45,8 @@
 @code {
     private readonly IRng rng = StandardRng.Create();
 
+    private MazeAlgorithm mazeAlgorithm = MazeAlgorithm.BinaryTree;
+
     private int selectedImageIndex = 0;
     private IReadOnlyList<SvgDocument>? images = null;
 
@@ -40,9 +54,12 @@
     {
         var grid = new Grid(16, 10);
 
-        var historyDist = BinaryTree.HistoryDist(grid);
-
-        var imagesDist = from h in historyDist select GetImages(h);
+        var imagesDist = this.mazeAlgorithm switch
+        {
+            MazeAlgorithm.BinaryTree => from history in BinaryTree.HistoryDist(grid) select GetImages(history),
+            MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(grid) select GetImages(history),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         this.images = imagesDist.Sample(this.rng);
         GoToLastImage();
@@ -88,5 +105,27 @@
         images.Add(MazeImage.CreateSvg(history.Final));
 
         return images;
+    }
+
+    private static IReadOnlyList<SvgDocument> GetImages(SidewinderHistory history)
+    {
+        var images = new List<SvgDocument>();
+
+        images.Add(MazeImage.CreateSvg(history.Initial));
+
+        foreach (var step in HighlightedMazesCreator.FromSidewinderHistory(history))
+        {
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.HighlightedCells));
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Current));
+
+        return images;
+    }
+
+    public enum MazeAlgorithm
+    {
+        BinaryTree,
+        Sidewinder
     }
 }
