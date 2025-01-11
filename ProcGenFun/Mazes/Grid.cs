@@ -20,7 +20,7 @@ public class Grid
     public IEnumerable<Cell> Cells { get; }
 
     public IEnumerable<int> ColumnIndices => Enumerable.Range(0, this.Width);
-    
+
     public IEnumerable<int> RowIndices => Enumerable.Range(0, this.Height);
 
     public bool CanRemoveWall(Cell cell, Direction direction) =>
@@ -31,6 +31,10 @@ public class Grid
         var potentialAdjacentCell = AdjacentCell(cell, direction);
         return IsValid(potentialAdjacentCell) ? potentialAdjacentCell : null;
     }
+
+    public IEnumerable<Direction> NeighbouringDirections(Cell cell) =>
+        new[] { Direction.North, Direction.East, Direction.South, Direction.West }
+            .Where(d => this.AdjacentCellOrNull(cell, d) != null)!;
 
     private static Cell AdjacentCell(Cell cell, Direction direction) =>
         direction switch

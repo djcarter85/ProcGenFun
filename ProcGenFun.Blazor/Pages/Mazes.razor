@@ -21,6 +21,7 @@
         <select @bind="mazeAlgorithm">
             <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
             <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
+            <option value="@MazeAlgorithm.RecursiveBacktracker">Recursive Backtracker</option>
         </select>
     </div>
 
@@ -58,6 +59,7 @@
         {
             MazeAlgorithm.BinaryTree => from history in BinaryTree.HistoryDist(grid) select GetImages(history),
             MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(grid) select GetImages(history),
+            MazeAlgorithm.RecursiveBacktracker => from maze in RecursiveBacktracker.MazeDist(grid) select GetImages(maze),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -123,9 +125,19 @@
         return images;
     }
 
+    private static IReadOnlyList<SvgDocument> GetImages(Maze maze)
+    {
+        var images = new List<SvgDocument>();
+
+        images.Add(MazeImage.CreateSvg(maze));
+
+        return images;
+    }
+
     public enum MazeAlgorithm
     {
         BinaryTree,
-        Sidewinder
+        Sidewinder,
+        RecursiveBacktracker
     }
 }
