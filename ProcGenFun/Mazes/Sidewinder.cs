@@ -16,7 +16,7 @@ public static class Sidewinder
         var initialMaze = Maze.WithAllWalls(grid);
 
         IDistribution<SidewinderHistory> historyDist =
-            Singleton.New(new SidewinderHistory(initialMaze, [], initialMaze));
+            Singleton.New(new SidewinderHistory(Initial: initialMaze, Steps: [], Current: initialMaze));
 
         foreach (var y in grid.RowIndices)
         {
@@ -30,7 +30,8 @@ public static class Sidewinder
     {
         var initialState = new RowState(history.Current, Run: []);
 
-        IDistribution<RollingRowState> rollingStateDist = Singleton.New(new RollingRowState([], initialState));
+        IDistribution<RollingRowState> rollingStateDist = Singleton.New(
+            new RollingRowState(Previous: [], Current: initialState));
 
         foreach (var x in grid.ColumnIndices)
         {
