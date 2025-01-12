@@ -2,4 +2,4 @@
 
 namespace ProcGenFun.Mazes;
 
-public record ABState(Maze Maze, Cell CurrentCell, ImmutableList<Cell> Visited);
+public record ABState(Maze Maze, Cell CurrentCell, ImmutableList<Cell> VisitedCells);

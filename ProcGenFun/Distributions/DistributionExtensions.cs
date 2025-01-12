@@ -57,9 +57,9 @@ public static class DistributionExtensions
 
             while (!this.shouldStopDist(history.Current).Sample(rng))
             {
-                var nextState = this.nextStepDist(history.Current).Sample(rng);
+                var newCurrent = this.nextStepDist(history.Current).Sample(rng);
 
-                history = new History<T>(history.Previous.Add(history.Current), nextState);
+                history = new History<T>(history.Previous.Add(history.Current), newCurrent);
             }
 
             return history.Previous.Append(history.Current);

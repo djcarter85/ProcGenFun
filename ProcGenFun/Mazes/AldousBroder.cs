@@ -4,7 +4,6 @@ using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
-using System.Diagnostics.CodeAnalysis;
 
 public static class AldousBroder
 {
@@ -21,27 +20,19 @@ public static class AldousBroder
             new ABState(
                 Maze: Maze.WithAllWalls(grid),
                 CurrentCell: initialCell,
-                Visited: [initialCell]);
+                VisitedCells: [initialCell]);
 
-    private static bool ShouldStop(Grid grid, ABState state) => state.Visited.Count == grid.Cells.Count();
+    private static bool ShouldStop(Grid grid, ABState state) => state.VisitedCells.Count == grid.Cells.Count();
 
-    private static IDistribution<ABState> NextStepDist(Grid grid, ABState state)
-    {
-        var neighbouringDirections = grid.NeighbouringDirections(state.CurrentCell);
-
-        var directionDist = UniformDistribution.CreateOrThrow(neighbouringDirections);
-
-        return
-            from direction in directionDist
-            let newCell = grid.AdjacentCellOrNull(state.CurrentCell, direction)!
-            let alreadyVisitedNewCell = state.Visited.Contains(newCell)
-            select
-                alreadyVisitedNewCell ?
-                state with { CurrentCell = newCell } :
-                new ABState(
-                    Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
-                    CurrentCell: newCell,
-                    Visited: state.Visited.Add(newCell));
-
-    }
+    private static IDistribution<ABState> NextStepDist(Grid grid, ABState state) =>
+        from direction in UniformDistribution.CreateOrThrow(grid.NeighbouringDirections(state.CurrentCell))
+        let newCurrentCell = grid.AdjacentCellOrNull(state.CurrentCell, direction)!
+        let alreadyVisitedNewCurrentCell = state.VisitedCells.Contains(newCurrentCell)
+        select
+            alreadyVisitedNewCurrentCell ?
+            state with { CurrentCell = newCurrentCell } :
+            new ABState(
+                Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
+                CurrentCell: newCurrentCell,
+                VisitedCells: state.VisitedCells.Add(newCurrentCell));
 }

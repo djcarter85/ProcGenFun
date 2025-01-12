@@ -143,7 +143,7 @@
                 MazeImage.CreateSvg(
                     maze,
                     highlightedCells: [step.CurrentCell],
-                    secondaryHighlightedCells: step.Stack.Except([step.CurrentCell])));
+                    secondaryHighlightedCells: step.PreviousCells.Except([step.CurrentCell])));
         }
 
         images.Add(MazeImage.CreateSvg(maze));
@@ -165,7 +165,7 @@
                 MazeImage.CreateSvg(
                     maze,
                     highlightedCells: [step.CurrentCell],
-                    secondaryHighlightedCells: step.Visited.Except([step.CurrentCell])));
+                    secondaryHighlightedCells: step.VisitedCells.Except([step.CurrentCell])));
         }
 
         images.Add(MazeImage.CreateSvg(maze));
