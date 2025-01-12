@@ -59,7 +59,8 @@
         {
             MazeAlgorithm.BinaryTree => from history in BinaryTree.HistoryDist(grid) select GetImages(history),
             MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(grid) select GetImages(history),
-            MazeAlgorithm.RecursiveBacktracker => from maze in RecursiveBacktracker.MazeDist(grid) select GetImages(maze),
+            MazeAlgorithm.RecursiveBacktracker =>
+                from history in RecursiveBacktracker.HistoryDist(grid) select GetImages(grid, history),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -125,11 +126,18 @@
         return images;
     }
 
-    private static IReadOnlyList<SvgDocument> GetImages(Maze maze)
+    private static IReadOnlyList<SvgDocument> GetImages(Grid grid, History history)
     {
         var images = new List<SvgDocument>();
 
-        images.Add(MazeImage.CreateSvg(maze));
+        images.Add(MazeImage.CreateSvg(Maze.WithAllWalls(grid)));
+
+        foreach (var step in history.Previous)
+        {
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: [step.CurrentCell]));
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Current.Maze));
 
         return images;
     }
