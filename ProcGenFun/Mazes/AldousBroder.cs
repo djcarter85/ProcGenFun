@@ -8,67 +8,40 @@ using System.Diagnostics.CodeAnalysis;
 
 public static class AldousBroder
 {
-    public static IDistribution<History<ABState>> HistoryDist(Grid grid) => new AldousBroderHistoryDistribution(grid);
+    public static IDistribution<IEnumerable<ABState>> HistoryDist(Grid grid) =>
+        InitialStateDist(grid)
+            .Iterate(
+                state => Singleton.New(ShouldStop(grid, state)),
+                state => NextStepDist(grid, state));
 
-    private class AldousBroderHistoryDistribution : IDistribution<History<ABState>>
+
+    private static IDistribution<ABState> InitialStateDist(Grid grid) =>
+        from initialCell in UniformDistribution.CreateOrThrow(grid.Cells)
+        select
+            new ABState(
+                Maze: Maze.WithAllWalls(grid),
+                CurrentCell: initialCell,
+                Visited: [initialCell]);
+
+    private static bool ShouldStop(Grid grid, ABState state) => state.Visited.Count == grid.Cells.Count();
+
+    private static IDistribution<ABState> NextStepDist(Grid grid, ABState state)
     {
-        private Grid grid;
+        var neighbouringDirections = grid.NeighbouringDirections(state.CurrentCell);
 
-        public AldousBroderHistoryDistribution(Grid grid)
-        {
-            this.grid = grid;
-        }
+        var directionDist = UniformDistribution.CreateOrThrow(neighbouringDirections);
 
-        public History<ABState> Sample<TRng>(TRng rng) where TRng : notnull, IRng
-        {
-            var initialState = InitialStateDist().Sample(rng);
-
-            var history = new History<ABState>([], Current: initialState);
-
-            while (!ShouldStop(history.Current))
-            {
-                var nextState = NextStepDist(history.Current).Sample(rng);
-
-                history = new History<ABState>(history.Previous.Add(history.Current), nextState);
-            }
-
-            return history;
-        }
-
-        private IDistribution<ABState> InitialStateDist() =>
-            from initialCell in UniformDistribution.CreateOrThrow(this.grid.Cells)
+        return
+            from direction in directionDist
+            let newCell = grid.AdjacentCellOrNull(state.CurrentCell, direction)!
+            let alreadyVisitedNewCell = state.Visited.Contains(newCell)
             select
+                alreadyVisitedNewCell ?
+                state with { CurrentCell = newCell } :
                 new ABState(
-                    Maze: Maze.WithAllWalls(this.grid),
-                    CurrentCell: initialCell,
-                    Visited: [initialCell]);
+                    Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
+                    CurrentCell: newCell,
+                    Visited: state.Visited.Add(newCell));
 
-        private bool ShouldStop(ABState state) => state.Visited.Count == this.grid.Cells.Count();
-
-        private IDistribution<ABState> NextStepDist(ABState state)
-        {
-            var neighbouringDirections = this.grid.NeighbouringDirections(state.CurrentCell);
-
-            var directionDist = UniformDistribution.CreateOrThrow(neighbouringDirections);
-
-            return
-                from direction in directionDist
-                let newCell = this.grid.AdjacentCellOrNull(state.CurrentCell, direction)!
-                let alreadyVisitedNewCell = state.Visited.Contains(newCell)
-                select
-                    alreadyVisitedNewCell ?
-                    state with { CurrentCell = newCell } :
-                    new ABState(
-                        Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
-                        CurrentCell: newCell,
-                        Visited: state.Visited.Add(newCell));
-
-        }
-
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out History<ABState> result) where TRng : notnull, IRng
-        {
-            result = Sample(rng);
-            return true;
-        }
     }
 }

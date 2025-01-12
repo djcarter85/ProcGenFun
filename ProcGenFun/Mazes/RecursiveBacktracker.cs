@@ -4,76 +4,48 @@ using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
-using System.Diagnostics.CodeAnalysis;
 
 public static class RecursiveBacktracker
 {
-    public static IDistribution<History<RBState>> HistoryDist(Grid grid) => new RecursiveBacktrackerMazeDist(grid);
+    public static IDistribution<IEnumerable<RBState>> HistoryDist(Grid grid) =>
+        InitialStateDist(grid)
+            .Iterate(
+                state => Singleton.New(ShouldStop(grid, state)),
+                state => NextStepDist(grid, state));
 
-    private class RecursiveBacktrackerMazeDist : IDistribution<History<RBState>>
+    private static IDistribution<RBState> InitialStateDist(Grid grid) =>
+        from initialCell in UniformDistribution.CreateOrThrow(grid.Cells)
+        select
+            new RBState(
+                Maze: Maze.WithAllWalls(grid),
+                CurrentCell: initialCell,
+                Stack: [],
+                Visited: [initialCell]);
+
+    private static bool ShouldStop(Grid grid, RBState state) => 
+        state.Visited.Count == grid.Cells.Count() && state.Stack.IsEmpty;
+
+    private static IDistribution<RBState> NextStepDist(Grid grid, RBState state)
     {
-        private Grid grid;
+        var neighbouringDirections = grid.NeighbouringDirections(state.CurrentCell)
+                .Where(d => !state.Visited.Contains(grid.AdjacentCellOrNull(state.CurrentCell, d)!));
 
-        public RecursiveBacktrackerMazeDist(Grid grid)
+        if (UniformDistribution.TryCreate(neighbouringDirections, out var directionDist))
         {
-            this.grid = grid;
+            return
+                from direction in directionDist
+                let ccc = grid.AdjacentCellOrNull(state.CurrentCell, direction)!
+                select
+                    new RBState(
+                        Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
+                        CurrentCell: ccc,
+                        Stack: state.Stack.Push(state.CurrentCell),
+                        Visited: state.Visited.Add(ccc));
         }
-
-        public History<RBState> Sample<TRng>(TRng rng) where TRng : notnull, IRng
+        else
         {
-            var initialState = InitialStateDist().Sample(rng);
-
-            var history = new History<RBState>([], Current: initialState);
-
-            while (!ShouldStop(history.Current))
-            {
-                var nextState = NextStepDist(history.Current).Sample(rng);
-
-                history = new History<RBState>(history.Previous.Add(history.Current), nextState);
-            }
-
-            return history;
-        }
-
-        private IDistribution<RBState> InitialStateDist() =>
-            from initialCell in UniformDistribution.CreateOrThrow(this.grid.Cells)
-            select
-                new RBState(
-                    Maze: Maze.WithAllWalls(this.grid),
-                    CurrentCell: initialCell,
-                    Stack: [],
-                    Visited: [initialCell]);
-
-        private bool ShouldStop(RBState state) => state.Visited.Count == this.grid.Cells.Count() && state.Stack.IsEmpty;
-
-        private IDistribution<RBState> NextStepDist(RBState state)
-        {
-            var neighbouringDirections = this.grid.NeighbouringDirections(state.CurrentCell)
-                    .Where(d => !state.Visited.Contains(this.grid.AdjacentCellOrNull(state.CurrentCell, d)!));
-
-            if (UniformDistribution.TryCreate(neighbouringDirections, out var directionDist))
-            {
-                return
-                    from direction in directionDist
-                    let ccc = this.grid.AdjacentCellOrNull(state.CurrentCell, direction)!
-                    select
-                        new RBState(
-                            Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
-                            CurrentCell: ccc,
-                            Stack: state.Stack.Push(state.CurrentCell),
-                            Visited: state.Visited.Add(ccc));
-            }
-            else
-            {
-                var foo = state.Stack.Pop(out var bar);
-                return Singleton.New(state with { CurrentCell = bar, Stack = foo });
-            }
-        }
-
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out History<RBState> result) where TRng : notnull, IRng
-        {
-            result = Sample(rng);
-            return true;
+            var foo = state.Stack.Pop(out var bar);
+            return Singleton.New(state with { CurrentCell = bar, Stack = foo });
         }
     }
 }
