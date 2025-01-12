@@ -126,7 +126,7 @@
         return images;
     }
 
-    private static IReadOnlyList<SvgDocument> GetImages(Grid grid, History history)
+    private static IReadOnlyList<SvgDocument> GetImages(Grid grid, History<RBState> history)
     {
         var images = new List<SvgDocument>();
 
@@ -134,9 +134,14 @@
 
         foreach (var step in history.Previous)
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: [step.CurrentCell]));
+            images.Add(
+                MazeImage.CreateSvg(
+                    step.Maze,
+                    highlightedCells: [step.CurrentCell],
+                    secondaryHighlightedCells: step.Stack.Except([step.CurrentCell])));
         }
 
+        images.Add(MazeImage.CreateSvg(history.Current.Maze, highlightedCells: [history.Current.CurrentCell]));
         images.Add(MazeImage.CreateSvg(history.Current.Maze));
 
         return images;

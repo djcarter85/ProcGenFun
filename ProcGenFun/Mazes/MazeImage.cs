@@ -13,10 +13,14 @@ public static class MazeImage
     private const int cellHeight = 25;
 
     private static readonly Color cellColor = Theme.White;
-    private static readonly Color highlightColor = Theme.Blue300;
+    private static readonly Color highlightColor = Theme.Blue500;
+    private static readonly Color secondaryHighlightColor = Theme.Blue300;
     private static readonly Color wallColor = Theme.Blue900;
 
-    public static SvgDocument CreateSvg(Maze maze, IReadOnlyList<Cell>? highlightedCells = null)
+    public static SvgDocument CreateSvg(
+        Maze maze, 
+        IReadOnlyList<Cell>? highlightedCells = null, 
+        IEnumerable<Cell>? secondaryHighlightedCells = null)
     {
         var imageWidth = ImageWidth(maze.Grid);
         var imageHeight = ImageHeight(maze.Grid);
@@ -35,6 +39,14 @@ public static class MazeImage
             foreach (var highlightedCell in highlightedCells)
             {
                 svgDocument.Children.Add(DrawCell(highlightedCell, color: highlightColor));
+            }
+        }
+
+        if (secondaryHighlightedCells != null)
+        {
+            foreach (var secondaryHighlightedCell in secondaryHighlightedCells)
+            {
+                svgDocument.Children.Add(DrawCell(secondaryHighlightedCell, color: secondaryHighlightColor));
             }
         }
 

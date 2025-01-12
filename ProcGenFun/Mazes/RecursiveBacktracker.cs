@@ -4,14 +4,13 @@ using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 public static class RecursiveBacktracker
 {
-    public static IDistribution<History> HistoryDist(Grid grid) => new RecursiveBacktrackerMazeDist(grid);
+    public static IDistribution<History<RBState>> HistoryDist(Grid grid) => new RecursiveBacktrackerMazeDist(grid);
 
-    private class RecursiveBacktrackerMazeDist : IDistribution<History>
+    private class RecursiveBacktrackerMazeDist : IDistribution<History<RBState>>
     {
         private Grid grid;
 
@@ -20,34 +19,34 @@ public static class RecursiveBacktracker
             this.grid = grid;
         }
 
-        public History Sample<TRng>(TRng rng) where TRng : notnull, IRng
+        public History<RBState> Sample<TRng>(TRng rng) where TRng : notnull, IRng
         {
             var initialState = InitialStateDist().Sample(rng);
 
-            var history = new History([], Current: initialState);
+            var history = new History<RBState>([], Current: initialState);
 
             while (!ShouldStop(history.Current))
             {
                 var nextState = NextStepDist(history.Current).Sample(rng);
 
-                history = new History(history.Previous.Add(history.Current), nextState);
+                history = new History<RBState>(history.Previous.Add(history.Current), nextState);
             }
 
             return history;
         }
 
-        private IDistribution<State> InitialStateDist() =>
+        private IDistribution<RBState> InitialStateDist() =>
             from initialCell in UniformDistribution.CreateOrThrow(this.grid.Cells)
             select
-                new State(
+                new RBState(
                     Maze: Maze.WithAllWalls(this.grid),
                     CurrentCell: initialCell,
-                    Stack: [initialCell],
+                    Stack: [],
                     Visited: [initialCell]);
 
-        private static bool ShouldStop(State state) => state.Stack.IsEmpty;
+        private bool ShouldStop(RBState state) => state.Visited.Count == this.grid.Cells.Count() && state.Stack.IsEmpty;
 
-        private IDistribution<State> NextStepDist(State state)
+        private IDistribution<RBState> NextStepDist(RBState state)
         {
             var neighbouringDirections = this.grid.NeighbouringDirections(state.CurrentCell)
                     .Where(d => !state.Visited.Contains(this.grid.AdjacentCellOrNull(state.CurrentCell, d)!));
@@ -58,10 +57,10 @@ public static class RecursiveBacktracker
                     from direction in directionDist
                     let ccc = this.grid.AdjacentCellOrNull(state.CurrentCell, direction)!
                     select
-                        new State(
+                        new RBState(
                             Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
                             CurrentCell: ccc,
-                            Stack: state.Stack.Push(ccc),
+                            Stack: state.Stack.Push(state.CurrentCell),
                             Visited: state.Visited.Add(ccc));
             }
             else
@@ -71,14 +70,10 @@ public static class RecursiveBacktracker
             }
         }
 
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out History result) where TRng : notnull, IRng
+        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out History<RBState> result) where TRng : notnull, IRng
         {
             result = Sample(rng);
             return true;
         }
     }
 }
-
-public record State(Maze Maze, Cell CurrentCell, ImmutableStack<Cell> Stack, ImmutableList<Cell> Visited);
-
-public record History(ImmutableList<State> Previous, State Current);
