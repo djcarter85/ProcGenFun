@@ -21,6 +21,7 @@
         <select @bind="mazeAlgorithm">
             <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
             <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
+            <option value="@MazeAlgorithm.AldousBroder">Aldous Broder</option>
             <option value="@MazeAlgorithm.RecursiveBacktracker">Recursive Backtracker</option>
         </select>
     </div>
@@ -61,6 +62,8 @@
             MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(grid) select GetImages(history),
             MazeAlgorithm.RecursiveBacktracker =>
                 from history in RecursiveBacktracker.HistoryDist(grid) select GetImages(grid, history),
+            MazeAlgorithm.AldousBroder =>
+                from history in AldousBroder.HistoryDist(grid) select GetImages(grid, history),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -147,10 +150,32 @@
         return images;
     }
 
+    private static IReadOnlyList<SvgDocument> GetImages(Grid grid, History<ABState> history)
+    {
+        var images = new List<SvgDocument>();
+
+        images.Add(MazeImage.CreateSvg(Maze.WithAllWalls(grid)));
+
+        foreach (var step in history.Previous)
+        {
+            images.Add(
+                MazeImage.CreateSvg(
+                    step.Maze,
+                    highlightedCells: [step.CurrentCell],
+                    secondaryHighlightedCells: step.Visited.Except([step.CurrentCell])));
+        }
+
+        images.Add(MazeImage.CreateSvg(history.Current.Maze, highlightedCells: [history.Current.CurrentCell]));
+        images.Add(MazeImage.CreateSvg(history.Current.Maze));
+
+        return images;
+    }
+
     public enum MazeAlgorithm
     {
         BinaryTree,
         Sidewinder,
+        AldousBroder,
         RecursiveBacktracker
     }
 }
