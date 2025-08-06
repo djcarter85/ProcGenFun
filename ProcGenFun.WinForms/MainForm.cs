@@ -22,4 +22,9 @@ public partial class MainForm : Form
     {
         new MazeForm(this.rng).Show();
     }
+
+    private void BirthdaysButton_Click(object sender, EventArgs e)
+    {
+        new BirthdaysForm(this.rng).Show();
+    }
 }
