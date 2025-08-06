@@ -2,9 +2,17 @@
 
 using RandN;
 using System.Diagnostics.CodeAnalysis;
+using RandN.Extensions;
 
 public static class DistributionExtensions
 {
+    public static IDistribution<double> EstimateProbability<T>(
+        this IDistribution<T> dist,
+        Func<T, bool> predicate,
+        int sampleCount) =>
+        from samples in dist.Repeat(sampleCount)
+        select (double)samples.Count(predicate) / sampleCount;
+
     public static IDistribution<IEnumerable<T>> Repeat<T>(this IDistribution<T> dist, int count) =>
         new RepeatDistribution<T>(dist, count);
 
