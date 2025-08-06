@@ -16,9 +16,12 @@ public partial class BirthdaysForm : Form
 
     private void BirthdaysButton_Click(object sender, EventArgs e)
     {
-        var probabilityDist = Birthdays.BirthdaySetDist()
+        var probabilityDist = Birthdays.BirthdaySetDist(size: (int)this.groupSizeUpDown.Value)
             .EstimateProbability(
-                Birthdays.ThreePeopleShareBirthdayOnCamp,
+                x => Birthdays.PeopleShareBirthday(
+                    x,
+                    sharedBirthdayCount: (int)this.sharedBirthdaysUpDown.Value,
+                    sharedBirthdayMustOccurDuringCamp: this.occurOnCampCheckBox.Checked),
                 sampleCount: 1_000_000);
 
         var probability = probabilityDist.Sample(this.rng);

@@ -8,17 +8,26 @@ using RandN.Extensions;
 
 public static class Birthdays
 {
-    public static bool ThreePeopleShareBirthdayOnCamp(
-        IEnumerable<LocalDate> birthdays) =>
-        birthdays
-            .Where(b =>
-                b >= new LocalDate(2025, 07, 26) &&
-                b <= new LocalDate(2025, 08, 03))
-            .GroupBy(b => b)
-            .Any(g => g.Count() >= 3);
+    public static bool PeopleShareBirthday(
+        IEnumerable<LocalDate> birthdays, 
+        int sharedBirthdayCount,
+        bool sharedBirthdayMustOccurDuringCamp)
+    {
+        if (sharedBirthdayMustOccurDuringCamp)
+        {
+            birthdays = birthdays
+                .Where(b =>
+                    b >= new LocalDate(2025, 07, 26) &&
+                    b <= new LocalDate(2025, 08, 03));
+        }
 
-    public static IDistribution<IEnumerable<LocalDate>> BirthdaySetDist() =>
-        BirthdayDist().Repeat(71);
+        return birthdays
+            .GroupBy(b => b)
+            .Any(g => g.Count() >= sharedBirthdayCount);
+    }
+
+    public static IDistribution<IEnumerable<LocalDate>> BirthdaySetDist(int size) =>
+        BirthdayDist().Repeat(size);
 
     public static IDistribution<LocalDate> BirthdayDist() =>
         from offset in Uniform.New(0, 365)
