@@ -13,6 +13,20 @@ public static class DistributionExtensions
         from samples in dist.Repeat(sampleCount)
         select (double)samples.Count(predicate) / sampleCount;
 
+    public static IDistribution<IReadOnlyDictionary<T, double>> EstimateProbabilityDensities<T>(
+        this IDistribution<T> dist,
+        int sampleCount)
+        where T : notnull =>
+        from samples in dist.Repeat(sampleCount)
+        select GetProbabilityDensities(sampleCount, samples);
+
+    private static IReadOnlyDictionary<T, double> GetProbabilityDensities<T>(
+        int sampleCount, IEnumerable<T> samples)
+        where T : notnull =>
+        samples
+            .GroupBy(s => s)
+            .ToDictionary(g => g.Key, g => (double)g.Count() / sampleCount);
+
     public static IDistribution<IEnumerable<T>> Repeat<T>(this IDistribution<T> dist, int count) =>
         new RepeatDistribution<T>(dist, count);
 
