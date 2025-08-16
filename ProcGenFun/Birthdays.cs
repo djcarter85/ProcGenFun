@@ -1,15 +1,16 @@
 ﻿namespace ProcGenFun;
 
+using System.Globalization;
+using CsvHelper;
 using NodaTime;
+using NodaTime.Text;
 using ProcGenFun.Distributions;
 using RandN;
-using RandN.Distributions;
-using RandN.Extensions;
 
 public static class Birthdays
 {
     public static bool PeopleShareBirthday(
-        IEnumerable<LocalDate> birthdays, 
+        IEnumerable<AnnualDate> birthdays,
         int sharedBirthdayCount,
         bool sharedBirthdayMustOccurDuringCamp)
     {
@@ -17,8 +18,8 @@ public static class Birthdays
         {
             birthdays = birthdays
                 .Where(b =>
-                    b >= new LocalDate(2025, 07, 26) &&
-                    b <= new LocalDate(2025, 08, 03));
+                    b >= new AnnualDate(07, 26) &&
+                    b <= new AnnualDate(08, 03));
         }
 
         return birthdays
@@ -26,10 +27,29 @@ public static class Birthdays
             .Any(g => g.Count() >= sharedBirthdayCount);
     }
 
-    public static IDistribution<IEnumerable<LocalDate>> BirthdaySetDist(int size) =>
+    public static IDistribution<IEnumerable<AnnualDate>> BirthdaySetDist(int size) =>
         BirthdayDist().Repeat(size);
 
-    public static IDistribution<LocalDate> BirthdayDist() =>
-        from offset in Uniform.New(0, 365)
-        select new LocalDate(2025, 01, 01).PlusDays(offset);
+    public static IDistribution<AnnualDate> BirthdayDist() =>
+        WeightedDiscreteDistribution.New(GetBirthdayWeights());
+
+    private static IReadOnlyList<Weighting<AnnualDate>> GetBirthdayWeights()
+    {
+        using var streamReader = new StreamReader("BirthdayWeights.csv");
+        using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        var pattern = AnnualDatePattern.CreateWithInvariantCulture("MM-dd");
+
+        return csvReader
+            .GetRecords<CsvBirthdayWeight>()
+            .Select(x => new Weighting<AnnualDate>(pattern.Parse(x.Date).GetValueOrThrow(), x.Weight))
+            .ToList();
+    }
+
+    private class CsvBirthdayWeight
+    {
+        public string Date { get; set; } = null!;
+
+        public int Weight { get; set; }
+    }
 }
