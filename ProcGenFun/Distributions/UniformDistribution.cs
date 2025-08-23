@@ -6,6 +6,16 @@ using RandN.Extensions;
 
 public static class UniformDistribution
 {
+    public static IDistribution<T> Create<T>(IEnumerable<T> items)
+    {
+        if (!TryCreate(items, out var dist))
+        {
+            throw new ArgumentException("There must be at least one item");
+        }
+
+        return dist;
+    }
+
     public static bool TryCreate<T>(IEnumerable<T> items, out IDistribution<T> dist)
     {
         var list = items.ToList();
