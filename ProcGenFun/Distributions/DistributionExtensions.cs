@@ -3,6 +3,7 @@
 using RandN;
 using System.Diagnostics.CodeAnalysis;
 using RandN.Extensions;
+using RandN.Distributions;
 
 public static class DistributionExtensions
 {
@@ -34,24 +35,14 @@ public static class DistributionExtensions
             throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be non-negative");
         }
 
-        return new RepeatDistribution<T>(dist, count);
-    }
-
-    private class RepeatDistribution<T>(IDistribution<T> dist, int count) : IDistribution<IEnumerable<T>>
-    {
-        public IEnumerable<T> Sample<TRng>(TRng rng) where TRng : notnull, IRng
+        if (count == 0)
         {
-            for (int i = 0; i < count; i++)
-            {
-                yield return dist.Sample(rng);
-            }
+            return Singleton.New(Enumerable.Empty<T>());
         }
 
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out IEnumerable<T> result) where TRng : notnull, IRng
-        {
-            // Assume we're working with distributions which always generate a valid value.
-            result = Sample(rng);
-            return true;
-        }
+        return
+            from values in dist.Repeat(count - 1)
+            from value in dist
+            select values.Append(value);
     }
 }
