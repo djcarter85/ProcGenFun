@@ -27,4 +27,9 @@ public partial class MainForm : Form
     {
         new BirthdaysForm(this.rng).Show();
     }
+
+    private void DiceButton_Click(object sender, EventArgs e)
+    {
+        new DiceForm(this.rng).Show();
+    }
 }

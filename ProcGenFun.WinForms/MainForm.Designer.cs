@@ -28,53 +28,61 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.visualiseDistributionsButton = new Button();
-            this.mazesButton = new Button();
-            this.birthdaysButton = new Button();
+            visualiseDistributionsButton = new Button();
+            mazesButton = new Button();
+            birthdaysButton = new Button();
+            diceButton = new Button();
             SuspendLayout();
             // 
             // visualiseDistributionsButton
             // 
-            this.visualiseDistributionsButton.Location = new Point(14, 16);
-            this.visualiseDistributionsButton.Margin = new Padding(3, 4, 3, 4);
-            this.visualiseDistributionsButton.Name = "visualiseDistributionsButton";
-            this.visualiseDistributionsButton.Size = new Size(122, 67);
-            this.visualiseDistributionsButton.TabIndex = 0;
-            this.visualiseDistributionsButton.Text = "Visualise Distributions";
-            this.visualiseDistributionsButton.UseVisualStyleBackColor = true;
-            this.visualiseDistributionsButton.Click += VisualiseDistributionsButton_Click;
+            visualiseDistributionsButton.Location = new Point(12, 12);
+            visualiseDistributionsButton.Name = "visualiseDistributionsButton";
+            visualiseDistributionsButton.Size = new Size(107, 50);
+            visualiseDistributionsButton.TabIndex = 0;
+            visualiseDistributionsButton.Text = "Visualise Distributions";
+            visualiseDistributionsButton.UseVisualStyleBackColor = true;
+            visualiseDistributionsButton.Click += VisualiseDistributionsButton_Click;
             // 
             // mazesButton
             // 
-            this.mazesButton.Location = new Point(143, 16);
-            this.mazesButton.Margin = new Padding(3, 4, 3, 4);
-            this.mazesButton.Name = "mazesButton";
-            this.mazesButton.Size = new Size(122, 67);
-            this.mazesButton.TabIndex = 1;
-            this.mazesButton.Text = "Mazes";
-            this.mazesButton.UseVisualStyleBackColor = true;
-            this.mazesButton.Click += MazesButton_Click;
+            mazesButton.Location = new Point(125, 12);
+            mazesButton.Name = "mazesButton";
+            mazesButton.Size = new Size(107, 50);
+            mazesButton.TabIndex = 1;
+            mazesButton.Text = "Mazes";
+            mazesButton.UseVisualStyleBackColor = true;
+            mazesButton.Click += MazesButton_Click;
             // 
             // birthdaysButton
             // 
-            this.birthdaysButton.Location = new Point(271, 16);
-            this.birthdaysButton.Margin = new Padding(3, 4, 3, 4);
-            this.birthdaysButton.Name = "birthdaysButton";
-            this.birthdaysButton.Size = new Size(122, 67);
-            this.birthdaysButton.TabIndex = 2;
-            this.birthdaysButton.Text = "Birthdays";
-            this.birthdaysButton.UseVisualStyleBackColor = true;
-            this.birthdaysButton.Click += BirthdaysButton_Click;
+            birthdaysButton.Location = new Point(237, 12);
+            birthdaysButton.Name = "birthdaysButton";
+            birthdaysButton.Size = new Size(107, 50);
+            birthdaysButton.TabIndex = 2;
+            birthdaysButton.Text = "Birthdays";
+            birthdaysButton.UseVisualStyleBackColor = true;
+            birthdaysButton.Click += BirthdaysButton_Click;
+            // 
+            // diceButton
+            // 
+            diceButton.Location = new Point(350, 12);
+            diceButton.Name = "diceButton";
+            diceButton.Size = new Size(107, 50);
+            diceButton.TabIndex = 3;
+            diceButton.Text = "Dice";
+            diceButton.UseVisualStyleBackColor = true;
+            diceButton.Click += DiceButton_Click;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new SizeF(8F, 20F);
+            this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(408, 99);
-            this.Controls.Add(this.birthdaysButton);
-            this.Controls.Add(this.mazesButton);
-            this.Controls.Add(this.visualiseDistributionsButton);
-            this.Margin = new Padding(3, 4, 3, 4);
+            this.ClientSize = new Size(466, 74);
+            this.Controls.Add(diceButton);
+            this.Controls.Add(birthdaysButton);
+            this.Controls.Add(mazesButton);
+            this.Controls.Add(visualiseDistributionsButton);
             this.Name = "MainForm";
             this.Text = "ProcGen Fun";
             ResumeLayout(false);
@@ -85,5 +93,6 @@
         private Button visualiseDistributionsButton;
         private Button mazesButton;
         private Button birthdaysButton;
+        private Button diceButton;
     }
 }
