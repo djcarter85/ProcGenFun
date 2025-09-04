@@ -27,8 +27,15 @@ public static class DistributionExtensions
             .GroupBy(s => s)
             .ToDictionary(g => g.Key, g => (double)g.Count() / sampleCount);
 
-    public static IDistribution<IEnumerable<T>> Repeat<T>(this IDistribution<T> dist, int count) =>
-        new RepeatDistribution<T>(dist, count);
+    public static IDistribution<IEnumerable<T>> Repeat<T>(this IDistribution<T> dist, int count)
+    {
+        if (count < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be non-negative");
+        }
+
+        return new RepeatDistribution<T>(dist, count);
+    }
 
     private class RepeatDistribution<T>(IDistribution<T> dist, int count) : IDistribution<IEnumerable<T>>
     {
