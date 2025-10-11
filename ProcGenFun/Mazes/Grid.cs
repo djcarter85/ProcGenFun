@@ -20,11 +20,14 @@ public class Grid
     public IEnumerable<Cell> Cells { get; }
 
     public IEnumerable<int> ColumnIndices => Enumerable.Range(0, this.Width);
-    
+
     public IEnumerable<int> RowIndices => Enumerable.Range(0, this.Height);
 
     public bool CanRemoveWall(Cell cell, Direction direction) =>
         this.AdjacentCellOrNull(cell, direction) != null;
+
+    public bool AdjacentCellExists(Cell cell, Direction direction) =>
+        IsValid(AdjacentCell(cell, direction));
 
     public Cell? AdjacentCellOrNull(Cell cell, Direction direction)
     {
