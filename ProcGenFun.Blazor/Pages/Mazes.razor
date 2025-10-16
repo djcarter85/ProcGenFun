@@ -80,9 +80,9 @@
 
         images.Add(MazeImage.CreateSvg(history.Initial));
 
-        foreach (var step in history.Steps)
+        foreach (var step in history.Steps.Select(s => new HighlightedMaze(s.Maze, [s.Cell])))
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: [step.Cell]));
+            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.HighlightedCells));
         }
 
         images.Add(MazeImage.CreateSvg(history.Final));
