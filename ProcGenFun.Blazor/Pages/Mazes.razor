@@ -80,7 +80,7 @@
 
         images.Add(MazeImage.CreateSvg(history.Initial));
 
-        foreach (var step in history.Steps.Select(s => new HighlightedMaze(s.Maze, [s.Cell])))
+        foreach (var step in HighlightedMazesCreator.FromBinaryTreeHistory(history))
         {
             images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.HighlightedCells));
         }

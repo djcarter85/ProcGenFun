@@ -54,7 +54,7 @@ public partial class MazeForm : Form
             SaveMazeAnimation(
                 folderPath,
                 history.Initial,
-                history.Steps.Select(s => new HighlightedMaze(Maze: s.Maze, HighlightedCells: [s.Cell])),
+                HighlightedMazesCreator.FromBinaryTreeHistory(history),
                 history.Final);
         }
     }
