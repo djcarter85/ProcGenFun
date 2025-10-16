@@ -56,8 +56,18 @@
 
         var imagesDist = this.mazeAlgorithm switch
         {
-            MazeAlgorithm.BinaryTree => from history in BinaryTree.HistoryDist(grid) select GetImages(history),
-            MazeAlgorithm.Sidewinder => from history in Sidewinder.HistoryDist(grid) select GetImages(history),
+            MazeAlgorithm.BinaryTree =>
+                from history in BinaryTree.HistoryDist(grid)
+                select GetImages(
+                    history.Initial,
+                    HighlightedMazesCreator.FromBinaryTreeHistory(history),
+                    history.Final),
+            MazeAlgorithm.Sidewinder =>
+                from history in Sidewinder.HistoryDist(grid)
+                select GetImages(
+                    history.Initial,
+                    HighlightedMazesCreator.FromSidewinderHistory(history),
+                    history.Current),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -91,34 +101,18 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(BinaryTreeHistory history)
+    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<HighlightedMaze> steps, Maze final)
     {
         var images = new List<SvgDocument>();
 
-        images.Add(MazeImage.CreateSvg(history.Initial));
+        images.Add(MazeImage.CreateSvg(initial));
 
-        foreach (var step in HighlightedMazesCreator.FromBinaryTreeHistory(history))
+        foreach (var step in steps)
         {
             images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.HighlightedCells));
         }
 
-        images.Add(MazeImage.CreateSvg(history.Final));
-
-        return images;
-    }
-
-    private static IReadOnlyList<SvgDocument> GetImages(SidewinderHistory history)
-    {
-        var images = new List<SvgDocument>();
-
-        images.Add(MazeImage.CreateSvg(history.Initial));
-
-        foreach (var step in HighlightedMazesCreator.FromSidewinderHistory(history))
-        {
-            images.Add(MazeImage.CreateSvg(step.Maze, highlightedCells: step.HighlightedCells));
-        }
-
-        images.Add(MazeImage.CreateSvg(history.Current));
+        images.Add(MazeImage.CreateSvg(final));
 
         return images;
     }
