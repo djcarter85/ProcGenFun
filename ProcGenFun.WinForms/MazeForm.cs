@@ -18,12 +18,18 @@ public partial class MazeForm : Form
         this.rng = rng;
 
         InitializeComponent();
+
+        this.algorithmCombo.SelectedIndex = 0;
     }
 
     private void GenerateButton_Click(object sender, EventArgs e)
     {
+        var mazeDist = algorithmCombo.SelectedIndex == 0 ?
+            BinaryTree.MazeDist(Grid) :
+            Sidewinder.MazeDist(Grid);
+
         var imageDist =
-            from maze in BinaryTree.MazeDist(Grid)
+            from maze in mazeDist
             let svg = MazeImage.CreateSvg(maze)
             select svg.Draw();
 
@@ -43,19 +49,38 @@ public partial class MazeForm : Form
         {
             var folderPath = folderBrowserDialog.SelectedPath;
 
-            var historyDist = BinaryTree.HistoryDist(Grid);
+            if (algorithmCombo.SelectedIndex == 0)
+            {
+                var historyDist = BinaryTree.HistoryDist(Grid);
 
-            var history = historyDist.Sample(this.rng);
+                var history = historyDist.Sample(this.rng);
 
-            SaveMazeWithAllWallsImage(folderPath);
+                SaveMazeWithAllWallsImage(folderPath);
 
-            SaveMazeImage(folderPath, history.Final);
+                SaveMazeImage(folderPath, history.Final);
 
-            SaveMazeAnimation(
-                folderPath,
-                history.Initial,
-                HighlightedMazesCreator.FromBinaryTreeHistory(history),
-                history.Final);
+                SaveMazeAnimation(
+                    folderPath,
+                    history.Initial,
+                    HighlightedMazesCreator.FromBinaryTreeHistory(history),
+                    history.Final);
+            }
+            else
+            {
+                var historyDist = Sidewinder.HistoryDist(Grid);
+
+                var history = historyDist.Sample(this.rng);
+
+                SaveMazeWithAllWallsImage(folderPath);
+
+                SaveMazeImage(folderPath, history.Current);
+
+                SaveMazeAnimation(
+                    folderPath,
+                    history.Initial,
+                    HighlightedMazesCreator.FromSidewinderHistory(history),
+                    history.Current);
+            }
         }
     }
 
@@ -71,7 +96,7 @@ public partial class MazeForm : Form
     private static void SaveMazeImage(string folderPath, Maze maze)
     {
         File.WriteAllText(
-            path: Path.Combine(folderPath, "binary-tree.svg"),
+            path: Path.Combine(folderPath, "maze.svg"),
             MazeImage.CreateSvg(maze).GetXML());
     }
 

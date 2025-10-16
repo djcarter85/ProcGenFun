@@ -28,53 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.generateButton = new Button();
-            this.saveImagesButton = new Button();
-            this.pictureBox = new PictureBox();
-            ((System.ComponentModel.ISupportInitialize)this.pictureBox).BeginInit();
-            this.SuspendLayout();
+            generateButton = new Button();
+            saveImagesButton = new Button();
+            pictureBox = new PictureBox();
+            algorithmCombo = new ComboBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            SuspendLayout();
             // 
             // generateButton
             // 
-            this.generateButton.Location = new Point(12, 12);
-            this.generateButton.Name = "generateButton";
-            this.generateButton.Size = new Size(149, 30);
-            this.generateButton.TabIndex = 0;
-            this.generateButton.Text = "Generate";
-            this.generateButton.UseVisualStyleBackColor = true;
-            this.generateButton.Click += this.GenerateButton_Click;
+            generateButton.Location = new Point(207, 12);
+            generateButton.Name = "generateButton";
+            generateButton.Size = new Size(149, 30);
+            generateButton.TabIndex = 0;
+            generateButton.Text = "Generate";
+            generateButton.UseVisualStyleBackColor = true;
+            generateButton.Click += GenerateButton_Click;
             // 
             // saveImagesButton
             // 
-            this.saveImagesButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.saveImagesButton.Location = new Point(603, 12);
-            this.saveImagesButton.Name = "saveImagesButton";
-            this.saveImagesButton.Size = new Size(149, 30);
-            this.saveImagesButton.TabIndex = 1;
-            this.saveImagesButton.Text = "Save images";
-            this.saveImagesButton.UseVisualStyleBackColor = true;
-            this.saveImagesButton.Click += this.SaveImagesButton_Click;
+            saveImagesButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            saveImagesButton.Location = new Point(603, 12);
+            saveImagesButton.Name = "saveImagesButton";
+            saveImagesButton.Size = new Size(149, 30);
+            saveImagesButton.TabIndex = 1;
+            saveImagesButton.Text = "Save images";
+            saveImagesButton.UseVisualStyleBackColor = true;
+            saveImagesButton.Click += SaveImagesButton_Click;
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new Point(12, 48);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new Size(100, 50);
-            this.pictureBox.TabIndex = 2;
-            this.pictureBox.TabStop = false;
+            pictureBox.Location = new Point(12, 48);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(100, 50);
+            pictureBox.TabIndex = 2;
+            pictureBox.TabStop = false;
+            // 
+            // algorithmCombo
+            // 
+            algorithmCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            algorithmCombo.FormattingEnabled = true;
+            algorithmCombo.Items.AddRange(new object[] { "Binary Tree", "Sidewinder" });
+            algorithmCombo.Location = new Point(12, 15);
+            algorithmCombo.Name = "algorithmCombo";
+            algorithmCombo.Size = new Size(189, 23);
+            algorithmCombo.TabIndex = 3;
             // 
             // MazeForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(764, 538);
-            this.Controls.Add(this.pictureBox);
-            this.Controls.Add(this.saveImagesButton);
-            this.Controls.Add(this.generateButton);
+            this.Controls.Add(algorithmCombo);
+            this.Controls.Add(pictureBox);
+            this.Controls.Add(saveImagesButton);
+            this.Controls.Add(generateButton);
             this.Name = "MazeForm";
             this.Text = "ProcGen Fun: Mazes";
-            ((System.ComponentModel.ISupportInitialize)this.pictureBox).EndInit();
-            this.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -82,5 +94,6 @@
         private Button generateButton;
         private Button saveImagesButton;
         private PictureBox pictureBox;
+        private ComboBox algorithmCombo;
     }
 }

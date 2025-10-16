@@ -47,7 +47,7 @@ public static class Sidewinder
                 history.Initial,
                 history.Steps.AddRange(
                     rollingState.Previous.Select(
-                        x => new SidewinderStep(Maze: x.Maze, RunBeforeWallRemoved: x.RunBeforeWallRemoved))),
+                        x => new SidewinderStep(Maze: x.Maze, RunBeforeWallRemoved: x.RunBeforeWallRemoved, Run: x.Run))),
                 rollingState.Current.Maze);
     }
 
@@ -64,7 +64,7 @@ public static class Sidewinder
         }
         else
         {
-            return Singleton.New(rowState with { RunBeforeWallRemoved = runBeforeWallRemoved });
+            return Singleton.New(rowState with { RunBeforeWallRemoved = runBeforeWallRemoved, Run = runBeforeWallRemoved });
         }
     }
 
