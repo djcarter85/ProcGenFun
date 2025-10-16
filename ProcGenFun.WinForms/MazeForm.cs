@@ -51,7 +51,11 @@ public partial class MazeForm : Form
 
             SaveMazeImage(folderPath, history.Final);
 
-            SaveMazeAnimation(folderPath, history);
+            SaveMazeAnimation(
+                folderPath,
+                history.Initial,
+                history.Steps.Select(s => new HighlightedMaze(Maze: s.Maze, HighlightedCells: [s.Cell])),
+                history.Final);
         }
     }
 
@@ -71,7 +75,11 @@ public partial class MazeForm : Form
             MazeImage.CreateSvg(maze).GetXML());
     }
 
-    private static void SaveMazeAnimation(string folderPath, BinaryTreeHistory history)
+    private static void SaveMazeAnimation(
+        string folderPath,
+        Maze initial,
+        IEnumerable<HighlightedMaze> steps,
+        Maze final)
     {
         using var gif = AnimatedGif.Create(Path.Combine(folderPath, "maze-animation.gif"), delay: 75);
 
@@ -81,13 +89,13 @@ public partial class MazeForm : Form
                 quality: GifQuality.Bit8,
                 delay: delay);
 
-        AddFrame(history.Initial, delay: 1000);
+        AddFrame(initial, delay: 1000);
 
-        foreach (var step in history.Steps)
+        foreach (var step in steps)
         {
-            AddFrame(step.Maze, highlightedCells: [step.Cell]);
+            AddFrame(step.Maze, highlightedCells: step.HighlightedCells);
         }
 
-        AddFrame(history.Final, delay: 1000);
+        AddFrame(final, delay: 1000);
     }
 }
