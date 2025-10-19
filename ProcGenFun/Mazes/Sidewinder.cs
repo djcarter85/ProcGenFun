@@ -72,18 +72,17 @@ public static class Sidewinder
         Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Action action) =>
         action switch
         {
-            Action.RemoveEastWall => RemoveEastWallDist(maze, runBeforeWallRemoved, cell),
+            Action.RemoveEastWall => Singleton.New(RemoveEastWall(maze, runBeforeWallRemoved, cell)),
             Action.CloseRun => CloseRunDist(maze, runBeforeWallRemoved, cell),
             _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };
 
-    private static IDistribution<RowState> RemoveEastWallDist(
+    private static RowState RemoveEastWall(
         Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell) =>
-        Singleton.New(
-            new RowState(
-                Maze: maze.RemoveWall(cell, Direction.East),
-                RunBeforeWallRemoved: runBeforeWallRemoved,
-                Run: runBeforeWallRemoved));
+        new RowState(
+            Maze: maze.RemoveWall(cell, Direction.East),
+            RunBeforeWallRemoved: runBeforeWallRemoved,
+            Run: runBeforeWallRemoved);
 
     private static IDistribution<RowState> CloseRunDist(
         Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell) =>
