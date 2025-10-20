@@ -10,18 +10,21 @@ using System.Diagnostics.CodeAnalysis;
 public static class RecursiveBacktracker
 {
     public static IDistribution<Maze> MazeDist(Grid grid) =>
-        from state in new RecursiveBacktrackerDist(grid)
+        from state in new RecursiveBacktrackerDist<State>(
+            InitialStateDist(grid),
+            StopConditionDist,
+            s => NextStateDist(grid, s))
         select state.Maze;
 
     private static IDistribution<State> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
         select new State(
-            Maze: Maze.WithAllWalls(grid), 
+            Maze: Maze.WithAllWalls(grid),
             CurrentCell: cell,
             Path: ImmutableStack<Cell>.Empty.Push(cell),
             Visited: ImmutableHashSet<Cell>.Empty.Add(cell));
 
-    private static bool StopCondition(Grid grid, State state) => state.Path.IsEmpty;
+    private static IDistribution<bool> StopConditionDist(State state) => Singleton.New(state.Path.IsEmpty);
 
     private static IDistribution<State> NextStateDist(Grid grid, State state)
     {
@@ -46,29 +49,38 @@ public static class RecursiveBacktracker
         }
     }
 
-    private class RecursiveBacktrackerDist : IDistribution<State>
+    // todo more general name and extract
+    // maybe a helper function for creating?
+    private class RecursiveBacktrackerDist<T> : IDistribution<T>
     {
-        private Grid grid;
+        private readonly IDistribution<T> initialStateDist;
+        private readonly Func<T, IDistribution<bool>> stopConditionDist;
+        private readonly Func<T, IDistribution<T>> nextStateDist;
 
-        public RecursiveBacktrackerDist(Grid grid)
+        public RecursiveBacktrackerDist(
+            IDistribution<T> initialStateDist,
+            Func<T, IDistribution<bool>> stopConditionDist,
+            Func<T, IDistribution<T>> nextStateDist)
         {
-            this.grid = grid;
+            this.initialStateDist = initialStateDist;
+            this.stopConditionDist = stopConditionDist;
+            this.nextStateDist = nextStateDist;
         }
 
-        public State Sample<TRng>(TRng rng)
+        public T Sample<TRng>(TRng rng)
             where TRng : notnull, IRng
         {
-            var state = InitialStateDist(this.grid).Sample(rng);
+            var state = this.initialStateDist.Sample(rng);
 
-            while (!StopCondition(this.grid, state))
+            while (!stopConditionDist(state).Sample(rng))
             {
-                state = NextStateDist(this.grid, state).Sample(rng);
+                state = nextStateDist(state).Sample(rng);
             }
 
             return state;
         }
 
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out State result)
+        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out T result)
             where TRng : notnull, IRng
         {
             throw new NotImplementedException();
