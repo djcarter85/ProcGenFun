@@ -59,7 +59,7 @@ public partial class MazeForm : Form
 
                 SaveMazeImage(folderPath, history.Final);
 
-                SaveMazeAnimation(
+                SaveMazeAnimationAndFrames(
                     folderPath,
                     history.Initial,
                     HighlightedMazesCreator.FromBinaryTreeHistory(history),
@@ -75,7 +75,7 @@ public partial class MazeForm : Form
 
                 SaveMazeImage(folderPath, history.Current);
 
-                SaveMazeAnimation(
+                SaveMazeAnimationAndFrames(
                     folderPath,
                     history.Initial,
                     HighlightedMazesCreator.FromSidewinderHistory(history),
@@ -100,19 +100,31 @@ public partial class MazeForm : Form
             MazeImage.CreateSvg(maze).GetXML());
     }
 
-    private static void SaveMazeAnimation(
+    private static void SaveMazeAnimationAndFrames(
         string folderPath,
         Maze initial,
         IEnumerable<HighlightedMaze> steps,
         Maze final)
     {
+        var framesPath = Path.Combine(folderPath, "frames");
+        Directory.CreateDirectory(framesPath);
+
         using var gif = AnimatedGif.Create(Path.Combine(folderPath, "maze-animation.gif"), delay: 75);
 
-        void AddFrame(Maze maze, IReadOnlyList<Cell>? highlightedCells = null, int delay = -1) =>
+        var index = 0;
+
+        void AddFrame(Maze maze, IReadOnlyList<Cell>? highlightedCells = null, int delay = -1)
+        {
+            var svgDocument = MazeImage.CreateSvg(maze, highlightedCells: highlightedCells ?? []);
+
+            File.WriteAllText(
+                Path.Combine(framesPath, $"frame_{index++:0000}.svg"),
+                svgDocument.GetXML());
             gif.AddFrame(
-                MazeImage.CreateSvg(maze, highlightedCells: highlightedCells ?? []).Draw(),
+                svgDocument.Draw(),
                 quality: GifQuality.Bit8,
                 delay: delay);
+        }
 
         AddFrame(initial, delay: 1000);
 
