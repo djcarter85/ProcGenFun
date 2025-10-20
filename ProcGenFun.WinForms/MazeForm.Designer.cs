@@ -68,7 +68,7 @@
             // 
             algorithmCombo.DropDownStyle = ComboBoxStyle.DropDownList;
             algorithmCombo.FormattingEnabled = true;
-            algorithmCombo.Items.AddRange(new object[] { "Binary Tree", "Sidewinder" });
+            algorithmCombo.Items.AddRange(new object[] { "Binary Tree", "Sidewinder", "Recursive Backtracker" });
             algorithmCombo.Location = new Point(12, 15);
             algorithmCombo.Name = "algorithmCombo";
             algorithmCombo.Size = new Size(189, 23);
