@@ -24,9 +24,13 @@ public partial class MazeForm : Form
 
     private void GenerateButton_Click(object sender, EventArgs e)
     {
-        var mazeDist = algorithmCombo.SelectedIndex == 0 ?
-            BinaryTree.MazeDist(Grid) :
-            Sidewinder.MazeDist(Grid);
+        var mazeDist = algorithmCombo.SelectedIndex switch
+        {
+            0 => BinaryTree.MazeDist(Grid),
+            1 => Sidewinder.MazeDist(Grid),
+            2 => RecursiveBacktracker.MazeDist(Grid),
+            _ => throw new NotImplementedException(),
+        };
 
         var imageDist =
             from maze in mazeDist
