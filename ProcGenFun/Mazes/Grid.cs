@@ -2,6 +2,9 @@ namespace ProcGenFun.Mazes;
 
 public class Grid
 {
+    private static readonly IEnumerable<Direction> AllDirections =
+        [Direction.North, Direction.East, Direction.South, Direction.West];
+
     public Grid(int width, int height)
     {
         this.Width = width;
@@ -34,6 +37,12 @@ public class Grid
         var potentialAdjacentCell = AdjacentCell(cell, direction);
         return IsValid(potentialAdjacentCell) ? potentialAdjacentCell : null;
     }
+
+    public IEnumerable<Neighbour> GetNeighbours(Cell cell) =>
+        from direction in AllDirections
+        let adjacentCellOrNull = AdjacentCellOrNull(cell, direction)
+        where adjacentCellOrNull != null
+        select new Neighbour(Cell: adjacentCellOrNull, Direction: direction);
 
     private static Cell AdjacentCell(Cell cell, Direction direction) =>
         direction switch
