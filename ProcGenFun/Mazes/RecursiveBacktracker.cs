@@ -5,16 +5,18 @@ using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 
 public static class RecursiveBacktracker
 {
     public static IDistribution<Maze> MazeDist(Grid grid) =>
-        from state in new RecursiveBacktrackerDist<State>(
-            InitialStateDist(grid),
-            StopConditionDist,
-            s => NextStateDist(grid, s))
-        select state.Maze;
+        from history in HistoryDist(grid)
+        select history.Last().Maze;
+
+    private static IDistribution<IEnumerable<State>> HistoryDist(Grid grid) =>
+        from initial in InitialStateDist(grid)
+        from randomWalk in RandomWalk.New(initial, s => NextStateDist(grid, s))
+        // TODO this might need to also include the last one?
+        select randomWalk.TakeWhile(s => !StopCondition(s));
 
     private static IDistribution<State> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
@@ -24,7 +26,7 @@ public static class RecursiveBacktracker
             Path: ImmutableStack<Cell>.Empty.Push(cell),
             Visited: ImmutableHashSet<Cell>.Empty.Add(cell));
 
-    private static IDistribution<bool> StopConditionDist(State state) => Singleton.New(state.Path.IsEmpty);
+    private static bool StopCondition(State state) => state.Path.IsEmpty;
 
     private static IDistribution<State> NextStateDist(Grid grid, State state)
     {
@@ -46,44 +48,6 @@ public static class RecursiveBacktracker
         {
             // todo extract method and make it clearly deterministic
             return Singleton.New(state with { Path = state.Path.Pop(out var cell), CurrentCell = cell });
-        }
-    }
-
-    // todo more general name and extract
-    // maybe a helper function for creating?
-    private class RecursiveBacktrackerDist<T> : IDistribution<T>
-    {
-        private readonly IDistribution<T> initialStateDist;
-        private readonly Func<T, IDistribution<bool>> stopConditionDist;
-        private readonly Func<T, IDistribution<T>> nextStateDist;
-
-        public RecursiveBacktrackerDist(
-            IDistribution<T> initialStateDist,
-            Func<T, IDistribution<bool>> stopConditionDist,
-            Func<T, IDistribution<T>> nextStateDist)
-        {
-            this.initialStateDist = initialStateDist;
-            this.stopConditionDist = stopConditionDist;
-            this.nextStateDist = nextStateDist;
-        }
-
-        public T Sample<TRng>(TRng rng)
-            where TRng : notnull, IRng
-        {
-            var state = this.initialStateDist.Sample(rng);
-
-            while (!stopConditionDist(state).Sample(rng))
-            {
-                state = nextStateDist(state).Sample(rng);
-            }
-
-            return state;
-        }
-
-        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out T result)
-            where TRng : notnull, IRng
-        {
-            throw new NotImplementedException();
         }
     }
 
