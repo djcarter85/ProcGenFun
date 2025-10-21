@@ -15,4 +15,7 @@ public static class HighlightedMazesCreator
             previousMaze = step.Maze;
         }
     }
+
+    public static IEnumerable<HighlightedMaze> FromRecursiveBacktrackerHistory(IReadOnlyList<RecursiveBacktrackerState> history) => 
+        history.Select(s => new HighlightedMaze(s.Maze, []));
 }

@@ -12,23 +12,23 @@ public static class RecursiveBacktracker
         from history in HistoryDist(grid)
         select history.Last().Maze;
 
-    private static IDistribution<IEnumerable<State>> HistoryDist(Grid grid) =>
+    public static IDistribution<IReadOnlyList<RecursiveBacktrackerState>> HistoryDist(Grid grid) =>
         from initial in InitialStateDist(grid)
         from randomWalk in RandomWalk.New(initial, s => NextStateDist(grid, s))
         // TODO this might need to also include the last one?
-        select randomWalk.TakeWhile(s => !StopCondition(s));
+        select (IReadOnlyList<RecursiveBacktrackerState>)randomWalk.TakeWhile(s => !StopCondition(s)).ToList();
 
-    private static IDistribution<State> InitialStateDist(Grid grid) =>
+    private static IDistribution<RecursiveBacktrackerState> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
-        select new State(
+        select new RecursiveBacktrackerState(
             Maze: Maze.WithAllWalls(grid),
             CurrentCell: cell,
             Path: ImmutableStack<Cell>.Empty.Push(cell),
             Visited: ImmutableHashSet<Cell>.Empty.Add(cell));
 
-    private static bool StopCondition(State state) => state.Path.IsEmpty;
+    private static bool StopCondition(RecursiveBacktrackerState state) => state.Path.IsEmpty;
 
-    private static IDistribution<State> NextStateDist(Grid grid, State state)
+    private static IDistribution<RecursiveBacktrackerState> NextStateDist(Grid grid, RecursiveBacktrackerState state)
     {
         // todo mix of null checks and directions, not great
         var adjacentUnvisitedCellDirections = grid.AdjacentDirections(state.CurrentCell)
@@ -38,7 +38,7 @@ public static class RecursiveBacktracker
             return
                 from direction in adjacentDirectionDist
                 let cell = grid.AdjacentCellOrNull(state.CurrentCell, direction)
-                select new State(
+                select new RecursiveBacktrackerState(
                     Maze: state.Maze.RemoveWall(state.CurrentCell, direction),
                     CurrentCell: cell,
                     Path: state.Path.Push(cell),
@@ -50,6 +50,4 @@ public static class RecursiveBacktracker
             return Singleton.New(state with { Path = state.Path.Pop(out var cell), CurrentCell = cell });
         }
     }
-
-    private record State(Maze Maze, Cell CurrentCell, ImmutableStack<Cell> Path, ImmutableHashSet<Cell> Visited);
 }
