@@ -66,7 +66,7 @@ public partial class MazeForm : Form
                 SaveMazeAnimationAndFrames(
                     folderPath,
                     history.Initial,
-                    HighlightedMazesCreator.FromBinaryTreeHistory(history),
+                    ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final);
             }
             else if (algorithmCombo.SelectedIndex == 1)
@@ -82,7 +82,7 @@ public partial class MazeForm : Form
                 SaveMazeAnimationAndFrames(
                     folderPath,
                     history.Initial,
-                    HighlightedMazesCreator.FromSidewinderHistory(history),
+                    ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current);
             }
             else
@@ -98,7 +98,7 @@ public partial class MazeForm : Form
                 SaveMazeAnimationAndFrames(
                     folderPath,
                     history.First().Maze,
-                    HighlightedMazesCreator.FromRecursiveBacktrackerHistory(history),
+                    ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze);
             }
         }
@@ -123,7 +123,7 @@ public partial class MazeForm : Form
     private static void SaveMazeAnimationAndFrames(
         string folderPath,
         Maze initial,
-        IEnumerable<HighlightedMaze> steps,
+        IEnumerable<ColouredMaze> steps,
         Maze final)
     {
         var framesPath = Path.Combine(folderPath, "frames");
@@ -150,7 +150,7 @@ public partial class MazeForm : Form
 
         foreach (var step in steps)
         {
-            AddFrame(step.Maze, step.GetCellColor);
+            AddFrame(step.Maze, step.GetCellColour);
         }
 
         AddFrame(final, CellColours.Base(), delay: 1000);

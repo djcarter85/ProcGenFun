@@ -60,13 +60,13 @@
                 from history in BinaryTree.HistoryDist(grid)
                 select GetImages(
                     history.Initial,
-                    HighlightedMazesCreator.FromBinaryTreeHistory(history),
+                    ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final),
             MazeAlgorithm.Sidewinder =>
                 from history in Sidewinder.HistoryDist(grid)
                 select GetImages(
                     history.Initial,
-                    HighlightedMazesCreator.FromSidewinderHistory(history),
+                    ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current),
             _ => throw new ArgumentOutOfRangeException()
         };
@@ -101,7 +101,7 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<HighlightedMaze> steps, Maze final)
+    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<ColouredMaze> steps, Maze final)
     {
         var images = new List<SvgDocument>();
 
@@ -109,7 +109,7 @@
 
         foreach (var step in steps)
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, step.GetCellColor));
+            images.Add(MazeImage.CreateSvg(step.Maze, step.GetCellColour));
         }
 
         images.Add(MazeImage.CreateSvg(final, CellColours.Base()));
