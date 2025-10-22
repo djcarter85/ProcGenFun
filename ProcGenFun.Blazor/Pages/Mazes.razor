@@ -21,6 +21,7 @@
         <select @bind="mazeAlgorithm">
             <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
             <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
+            <option value="@MazeAlgorithm.RecursiveBacktracker">Recursive Backtracker</option>
         </select>
     </div>
 
@@ -68,6 +69,12 @@
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current),
+            MazeAlgorithm.RecursiveBacktracker =>
+                from history in RecursiveBacktracker.HistoryDist(grid)
+                select GetImages(
+                    history.First().Maze,
+                    ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
+                    history.Last().Maze),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -120,6 +127,7 @@
     public enum MazeAlgorithm
     {
         BinaryTree,
-        Sidewinder
+        Sidewinder,
+        RecursiveBacktracker
     }
 }
