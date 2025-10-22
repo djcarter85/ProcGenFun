@@ -69,7 +69,7 @@ public partial class MazeForm : Form
                     HighlightedMazesCreator.FromBinaryTreeHistory(history),
                     history.Final);
             }
-            else
+            else if (algorithmCombo.SelectedIndex == 1)
             {
                 var historyDist = Sidewinder.HistoryDist(Grid);
 
@@ -84,6 +84,22 @@ public partial class MazeForm : Form
                     history.Initial,
                     HighlightedMazesCreator.FromSidewinderHistory(history),
                     history.Current);
+            }
+            else
+            {
+                var historyDist = RecursiveBacktracker.HistoryDist(Grid);
+
+                var history = historyDist.Sample(this.rng);
+
+                SaveMazeWithAllWallsImage(folderPath);
+
+                SaveMazeImage(folderPath, history.Last().Maze);
+
+                SaveMazeAnimationAndFrames(
+                    folderPath,
+                    history.First().Maze,
+                    HighlightedMazesCreator.FromRecursiveBacktrackerHistory(history),
+                    history.Last().Maze);
             }
         }
     }
