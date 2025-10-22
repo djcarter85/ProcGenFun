@@ -34,7 +34,7 @@ public partial class MazeForm : Form
 
         var imageDist =
             from maze in mazeDist
-            let svg = MazeImage.CreateSvg(maze)
+            let svg = MazeImage.CreateSvg(maze, CellColours.Base())
             select svg.Draw();
 
         var image = imageDist.Sample(this.rng);
@@ -94,14 +94,14 @@ public partial class MazeForm : Form
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            MazeImage.CreateSvg(mazeWithAllWalls).GetXML());
+            MazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base()).GetXML());
     }
 
     private static void SaveMazeImage(string folderPath, Maze maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
-            MazeImage.CreateSvg(maze).GetXML());
+            MazeImage.CreateSvg(maze, CellColours.Base()).GetXML());
     }
 
     private static void SaveMazeAnimationAndFrames(
@@ -117,9 +117,9 @@ public partial class MazeForm : Form
 
         var index = 0;
 
-        void AddFrame(Maze maze, IReadOnlyList<Cell>? highlightedCells = null, int delay = -1)
+        void AddFrame(Maze maze, Func<Cell, Color> getCellColor, int delay = -1)
         {
-            var svgDocument = MazeImage.CreateSvg(maze, highlightedCells: highlightedCells ?? []);
+            var svgDocument = MazeImage.CreateSvg(maze, getCellColor);
 
             File.WriteAllText(
                 Path.Combine(framesPath, $"frame_{index++:0000}.svg"),
@@ -130,13 +130,13 @@ public partial class MazeForm : Form
                 delay: delay);
         }
 
-        AddFrame(initial, delay: 1000);
+        AddFrame(initial, CellColours.Base(), delay: 1000);
 
         foreach (var step in steps)
         {
-            AddFrame(step.Maze, highlightedCells: step.HighlightedCells);
+            AddFrame(step.Maze, step.GetCellColor);
         }
 
-        AddFrame(final, delay: 1000);
+        AddFrame(final, CellColours.Base(), delay: 1000);
     }
 }

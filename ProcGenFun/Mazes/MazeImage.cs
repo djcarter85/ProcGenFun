@@ -16,7 +16,7 @@ public static class MazeImage
     private static readonly Color highlightColor = Theme.Blue300;
     private static readonly Color wallColor = Theme.Blue900;
 
-    public static SvgDocument CreateSvg(Maze maze, IReadOnlyList<Cell>? highlightedCells = null)
+    public static SvgDocument CreateSvg(Maze maze, Func<Cell, Color> getCellColor)
     {
         var imageWidth = ImageWidth(maze.Grid);
         var imageHeight = ImageHeight(maze.Grid);
@@ -28,14 +28,9 @@ public static class MazeImage
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
         };
 
-        svgDocument.Children.Add(DrawCells(maze));
-
-        if (highlightedCells != null)
+        foreach (var cell in maze.Grid.Cells)
         {
-            foreach (var highlightedCell in highlightedCells)
-            {
-                svgDocument.Children.Add(DrawCell(highlightedCell, color: highlightColor));
-            }
+            svgDocument.Children.Add(DrawCell(cell, color: getCellColor(cell)));
         }
 
         svgDocument.Children.Add(DrawWalls(maze));

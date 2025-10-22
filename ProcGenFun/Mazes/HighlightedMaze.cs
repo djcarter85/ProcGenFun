@@ -1,3 +1,5 @@
 ﻿namespace ProcGenFun.Mazes;
 
-public record HighlightedMaze(Maze Maze, IReadOnlyList<Cell> HighlightedCells);
+using System.Drawing;
+
+public record HighlightedMaze(Maze Maze, Func<Cell, Color> GetCellColor);

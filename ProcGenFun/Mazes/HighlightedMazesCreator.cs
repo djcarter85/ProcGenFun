@@ -3,15 +3,15 @@
 public static class HighlightedMazesCreator
 {
     public static IEnumerable<HighlightedMaze> FromBinaryTreeHistory(BinaryTreeHistory history) =>
-        history.Steps.Select(s => new HighlightedMaze(Maze: s.Maze, HighlightedCells: [s.Cell]));
+        history.Steps.Select(s => new HighlightedMaze(Maze: s.Maze, CellColours.Highlighted([s.Cell])));
 
     public static IEnumerable<HighlightedMaze> FromSidewinderHistory(SidewinderHistory history)
     {
         var previousMaze = history.Initial;
         foreach (var step in history.Steps)
         {
-            yield return new HighlightedMaze(Maze: previousMaze, HighlightedCells: step.RunBeforeWallRemoved);
-            yield return new HighlightedMaze(Maze: step.Maze, HighlightedCells: step.Run);
+            yield return new HighlightedMaze(Maze: previousMaze, CellColours.Highlighted(step.RunBeforeWallRemoved));
+            yield return new HighlightedMaze(Maze: step.Maze, CellColours.Highlighted(step.Run));
             previousMaze = step.Maze;
         }
     }
