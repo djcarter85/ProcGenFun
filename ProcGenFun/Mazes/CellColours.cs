@@ -14,5 +14,7 @@ public static class CellColours
         c => c == currentCell ? Theme.Blue300 :
             path.Contains(c) ? Theme.Blue100 :
             visitedCells.Contains(c) ? Theme.White :
-            Theme.Grey300;
+            RBUnvisited()(c);
+
+    public static Func<Cell, Color> RBUnvisited() => _ => Theme.Grey300;
 }

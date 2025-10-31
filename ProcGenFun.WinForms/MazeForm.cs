@@ -67,7 +67,8 @@ public partial class MazeForm : Form
                     folderPath,
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
-                    history.Final);
+                    history.Final,
+                    CellColours.Base());
             }
             else if (algorithmCombo.SelectedIndex == 1)
             {
@@ -83,7 +84,8 @@ public partial class MazeForm : Form
                     folderPath,
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
-                    history.Current);
+                    history.Current,
+                    CellColours.Base());
             }
             else
             {
@@ -99,7 +101,8 @@ public partial class MazeForm : Form
                     folderPath,
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
-                    history.Last().Maze);
+                    history.Last().Maze,
+                    CellColours.RBUnvisited());
             }
         }
     }
@@ -124,7 +127,8 @@ public partial class MazeForm : Form
         string folderPath,
         Maze initial,
         IEnumerable<ColouredMaze> steps,
-        Maze final)
+        Maze final,
+        Func<Cell, Color> initialCellColours)
     {
         var framesPath = Path.Combine(folderPath, "frames");
         Directory.CreateDirectory(framesPath);
@@ -146,7 +150,7 @@ public partial class MazeForm : Form
                 delay: delay);
         }
 
-        AddFrame(initial, CellColours.Base(), delay: 1000);
+        AddFrame(initial, initialCellColours, delay: 1000);
 
         foreach (var step in steps)
         {
