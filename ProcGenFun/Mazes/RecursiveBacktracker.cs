@@ -15,14 +15,20 @@ public static class RecursiveBacktracker
     public static IDistribution<IReadOnlyList<RecursiveBacktrackerState>> HistoryDist(Grid grid) =>
         from initial in InitialStateDist(grid)
         from randomWalk in RandomWalk.New(initial, s => NextStateDist(grid, s))
-        select randomWalk.TakeWhile(s => !s.Path.IsEmpty).ToReadOnly();
+        select randomWalk.TakeWhile(s => !StopIteration(s, grid)).ToReadOnly();
+
+    private static bool StopIteration(RecursiveBacktrackerState state, Grid grid) => 
+        AllCellsVisited(state, grid) && state.Path.IsEmpty;
+
+    private static bool AllCellsVisited(RecursiveBacktrackerState state, Grid grid) =>
+        state.Visited.Count == grid.CellCount;
 
     private static IDistribution<RecursiveBacktrackerState> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
         select new RecursiveBacktrackerState(
             Maze: Maze.WithAllWalls(grid),
             CurrentCell: cell,
-            Path: ImmutableStack<Cell>.Empty.Push(cell),
+            Path: ImmutableStack<Cell>.Empty,
             Visited: ImmutableHashSet<Cell>.Empty.Add(cell));
 
     private static IDistribution<RecursiveBacktrackerState> NextStateDist(Grid grid, RecursiveBacktrackerState state)
@@ -40,7 +46,7 @@ public static class RecursiveBacktracker
         select new RecursiveBacktrackerState(
             Maze: state.Maze.RemoveWall(state.CurrentCell, neighbour.Direction),
             CurrentCell: neighbour.Cell,
-            Path: state.Path.Push(neighbour.Cell),
+            Path: state.Path.Push(state.CurrentCell),
             Visited: state.Visited.Add(neighbour.Cell));
 
     private static RecursiveBacktrackerState Backtrack(RecursiveBacktrackerState state) =>
