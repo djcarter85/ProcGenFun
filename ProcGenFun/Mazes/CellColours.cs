@@ -12,9 +12,9 @@ public static class CellColours
 
     public static Func<Cell, Color> RB(Cell currentCell, IEnumerable<Cell> visitedCells, IEnumerable<Cell> path) =>
         c => c == currentCell ? Theme.Blue300 :
-            path.Contains(c) ? Theme.Blue100 :
+            path.Contains(c) ? Theme.Amber100 :
             visitedCells.Contains(c) ? Theme.White :
             RBUnvisited()(c);
 
-    public static Func<Cell, Color> RBUnvisited() => _ => Theme.Grey300;
+    public static Func<Cell, Color> RBUnvisited() => _ => Theme.Grey200;
 }
