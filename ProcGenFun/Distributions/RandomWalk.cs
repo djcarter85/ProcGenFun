@@ -8,26 +8,18 @@ public static class RandomWalk
     public static IDistribution<IEnumerable<T>> New<T>(T initial, Func<T, IDistribution<T>> stepDist) =>
         new RandomWalkDistribution<T>(initial, stepDist);
 
-    private class RandomWalkDistribution<T> : IDistribution<IEnumerable<T>>
+    private class RandomWalkDistribution<T>(T initial, Func<T, IDistribution<T>> stepDist) 
+        : IDistribution<IEnumerable<T>>
     {
-        private readonly T initial;
-        private readonly Func<T, IDistribution<T>> stepDist;
-
-        public RandomWalkDistribution(T initial, Func<T, IDistribution<T>> stepDist)
-        {
-            this.initial = initial;
-            this.stepDist = stepDist;
-        }
-
         public IEnumerable<T> Sample<TRng>(TRng rng)
             where TRng : notnull, IRng
         {
-            var state = this.initial;
+            var state = initial;
 
             while (true)
             {
                 yield return state;
-                state = this.stepDist(state).Sample(rng);
+                state = stepDist(state).Sample(rng);
             }
         }
 
