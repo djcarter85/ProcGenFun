@@ -32,4 +32,9 @@ public partial class MainForm : Form
     {
         new DiceForm(this.rng).Show();
     }
+
+    private void RandomWalkButton_Click(object sender, EventArgs e)
+    {
+        new RandomWalkForm(this.rng).Show();
+    }
 }
