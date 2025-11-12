@@ -28,8 +28,8 @@ public static class RecursiveBacktracker
         select new RecursiveBacktrackerState(
             Maze: Maze.WithAllWalls(grid),
             CurrentCell: cell,
-            Path: ImmutableStack<Cell>.Empty,
-            Visited: ImmutableHashSet<Cell>.Empty.Add(cell));
+            Path: [],
+            Visited: [cell]);
 
     private static IDistribution<RecursiveBacktrackerState> NextStateDist(Grid grid, RecursiveBacktrackerState state)
     {
