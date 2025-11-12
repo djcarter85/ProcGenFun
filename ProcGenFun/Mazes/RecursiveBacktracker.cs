@@ -41,8 +41,8 @@ public static class RecursiveBacktracker
     }
 
     private static IDistribution<RecursiveBacktrackerState> ProceedDist(
-        RecursiveBacktrackerState state, IDistribution<Neighbour> nextCellDist) =>
-        from neighbour in nextCellDist
+        RecursiveBacktrackerState state, IDistribution<Neighbour> unvisitedNeighbourDist) =>
+        from neighbour in unvisitedNeighbourDist
         select new RecursiveBacktrackerState(
             Maze: state.Maze.RemoveWall(state.CurrentCell, neighbour.Direction),
             CurrentCell: neighbour.Cell,
