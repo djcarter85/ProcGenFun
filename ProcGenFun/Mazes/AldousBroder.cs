@@ -17,14 +17,14 @@ public static class AldousBroder
         select randomWalk.TakeWhile(s => !StopIteration(s, grid)).ToReadOnly();
 
     private static bool StopIteration(AldousBroderState state, Grid grid) =>
-        state.Visited.Count == grid.CellCount;
+        state.PreviouslyVisited.Count == grid.CellCount;
 
     private static IDistribution<AldousBroderState> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
         select new AldousBroderState(
             Maze: Maze.WithAllWalls(grid),
             CurrentCell: cell,
-            Visited: [cell]);
+            PreviouslyVisited: []);
 
     private static IDistribution<AldousBroderState> NextStateDist(Grid grid, AldousBroderState state)
     {
@@ -32,10 +32,10 @@ public static class AldousBroder
         return
             from neighbour in UniformDistribution.Create(neighbours)
             select new AldousBroderState(
-                Maze: state.Visited.Contains(neighbour.Cell) ?
+                Maze: state.PreviouslyVisited.Contains(neighbour.Cell) ?
                     state.Maze :
                     state.Maze.RemoveWall(state.CurrentCell, neighbour.Direction),
                 CurrentCell: neighbour.Cell,
-                Visited: state.Visited.Add(neighbour.Cell));
+                PreviouslyVisited: state.PreviouslyVisited.Add(state.CurrentCell));
     }
 }

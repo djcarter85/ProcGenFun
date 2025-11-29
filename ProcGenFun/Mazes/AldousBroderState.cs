@@ -2,4 +2,4 @@
 
 using System.Collections.Immutable;
 
-public record AldousBroderState(Maze Maze, Cell CurrentCell, ImmutableHashSet<Cell> Visited);
+public record AldousBroderState(Maze Maze, Cell CurrentCell, ImmutableHashSet<Cell> PreviouslyVisited);

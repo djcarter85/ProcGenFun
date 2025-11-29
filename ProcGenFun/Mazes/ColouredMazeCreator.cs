@@ -26,5 +26,5 @@ public static class ColouredMazeCreator
         IReadOnlyList<AldousBroderState> history) =>
         history.Select(step => new ColouredMaze(
             Maze: step.Maze,
-            CellColours.AB(currentCell: step.CurrentCell, visitedCells: step.Visited)));
+            CellColours.AB(currentCell: step.CurrentCell, visitedCells: step.PreviouslyVisited)));
 }
