@@ -29,6 +29,7 @@ public partial class MazeForm : Form
             0 => BinaryTree.MazeDist(Grid),
             1 => Sidewinder.MazeDist(Grid),
             2 => RecursiveBacktracker.MazeDist(Grid),
+            3 => AldousBroder.MazeDist(Grid),
             _ => throw new NotImplementedException(),
         };
 
@@ -87,7 +88,7 @@ public partial class MazeForm : Form
                     history.Current,
                     CellColours.Base());
             }
-            else
+            else if (algorithmCombo.SelectedIndex == 2)
             {
                 var historyDist = RecursiveBacktracker.HistoryDist(Grid);
 
@@ -103,6 +104,26 @@ public partial class MazeForm : Form
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
                     CellColours.RBUnvisited());
+            }
+            else
+            {
+                // Use a smaller grid for Aldous-Broder as performance is a lot worse than the other algorithms.
+                var grid = new Grid(width: 8, height: 8);
+
+                var historyDist = AldousBroder.HistoryDist(grid);
+
+                var history = historyDist.Sample(this.rng);
+
+                SaveMazeWithAllWallsImage(folderPath, grid);
+
+                SaveMazeImage(folderPath, history.Last().Maze);
+
+                SaveMazeAnimationAndFrames(
+                    folderPath,
+                    history.First().Maze,
+                    ColouredMazeCreator.FromAldousBroderHistory(history),
+                    history.Last().Maze,
+                    CellColours.ABUnvisited());
             }
         }
     }

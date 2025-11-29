@@ -21,4 +21,10 @@ public static class ColouredMazeCreator
         history.Select(step => new ColouredMaze(
             Maze: step.Maze,
             CellColours.RB(currentCell: step.CurrentCell, visitedCells: step.Visited, path: step.Path)));
+
+    public static IEnumerable<ColouredMaze> FromAldousBroderHistory(
+        IReadOnlyList<AldousBroderState> history) =>
+        history.Select(step => new ColouredMaze(
+            Maze: step.Maze,
+            CellColours.AB(currentCell: step.CurrentCell, visitedCells: step.Visited)));
 }

@@ -17,4 +17,11 @@ public static class CellColours
             RBUnvisited()(c);
 
     public static Func<Cell, Color> RBUnvisited() => _ => Theme.Grey200;
+
+    public static Func<Cell, Color> AB(Cell currentCell, IEnumerable<Cell> visitedCells) =>
+        c => c == currentCell ? Theme.Blue300 :
+            visitedCells.Contains(c) ? Theme.White :
+            ABUnvisited()(c);
+
+    public static Func<Cell, Color> ABUnvisited() => _ => Theme.Grey200;
 }
