@@ -59,7 +59,7 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveMazeWithAllWallsImage(folderPath, Grid);
 
                 SaveMazeImage(folderPath, history.Final);
 
@@ -76,7 +76,7 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveMazeWithAllWallsImage(folderPath, Grid);
 
                 SaveMazeImage(folderPath, history.Current);
 
@@ -93,7 +93,7 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveMazeWithAllWallsImage(folderPath, Grid);
 
                 SaveMazeImage(folderPath, history.Last().Maze);
 
@@ -107,9 +107,9 @@ public partial class MazeForm : Form
         }
     }
 
-    private static void SaveMazeWithAllWallsImage(string folderPath)
+    private static void SaveMazeWithAllWallsImage(string folderPath, Grid grid)
     {
-        var mazeWithAllWalls = Maze.WithAllWalls(Grid);
+        var mazeWithAllWalls = Maze.WithAllWalls(grid);
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
