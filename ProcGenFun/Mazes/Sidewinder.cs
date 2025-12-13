@@ -60,7 +60,7 @@ public static class Sidewinder
             Maze maze = rowState.Maze;
             return
                 from action in actionDist
-                from newRowState in ApplyAction(maze, runBeforeWallRemoved, cell, action, maze.Grid)
+                from newRowState in ApplyAction(maze, runBeforeWallRemoved, cell, action, grid)
                 select newRowState;
         }
         else

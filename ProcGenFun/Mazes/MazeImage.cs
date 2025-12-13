@@ -31,7 +31,7 @@ public static class MazeImage
             svgDocument.Children.Add(DrawCell(cell, color: getCellColor(cell)));
         }
 
-        svgDocument.Children.Add(DrawWalls(maze, maze.Grid));
+        svgDocument.Children.Add(DrawWalls(maze, grid));
 
         return svgDocument;
     }
