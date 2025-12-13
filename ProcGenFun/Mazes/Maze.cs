@@ -5,39 +5,39 @@ using ProcGenFun.Mazes;
 
 public class Maze
 {
-    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Cell>> cellWalls;
+    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix;
 
-    private Maze(Grid grid, ImmutableSortedDictionary<Cell, ImmutableList<Cell>> cellWalls)
+    private Maze(Grid grid, ImmutableSortedDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix)
     {
         this.Grid = grid;
-        this.cellWalls = cellWalls;
+        this.adjacencyMatrix = adjacencyMatrix;
     }
 
     public Grid Grid { get; }
 
-    public IEnumerable<Cell> Cells => this.cellWalls.Keys;
+    public IEnumerable<Cell> Cells => this.adjacencyMatrix.Keys;
 
     public static Maze WithAllWalls(Grid grid)
     {
-        var cellWalls = ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty
+        var adjacencyMatrix = ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty
             .WithComparers(Cell.Comparer);
 
         foreach (var cell in grid.Cells)
         {
-            cellWalls = cellWalls.Add(cell, []);
+            adjacencyMatrix = adjacencyMatrix.Add(cell, []);
         }
 
-        return new Maze(grid, cellWalls);
+        return new Maze(grid, adjacencyMatrix);
     }
 
-    public bool WallExists(Cell cell, Cell cell2) => !this.cellWalls[cell].Contains(cell2);
+    public bool WallExists(Cell cell, Cell cell2) => !this.adjacencyMatrix[cell].Contains(cell2);
 
     public Maze RemoveWall(Cell cell, Cell cell2)
     {
         return new Maze(
             this.Grid,
-            this.cellWalls
-                .SetItem(cell, this.cellWalls[cell].Add(cell2))
-                .SetItem(cell2, this.cellWalls[cell2].Add(cell)));
+            this.adjacencyMatrix
+                .SetItem(cell, this.adjacencyMatrix[cell].Add(cell2))
+                .SetItem(cell2, this.adjacencyMatrix[cell2].Add(cell)));
     }
 }
