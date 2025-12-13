@@ -1,13 +1,13 @@
-﻿namespace ProcGenFun;
+namespace ProcGenFun;
 
 using System.Collections.Immutable;
 using ProcGenFun.Mazes;
 
 public class Maze
 {
-    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Direction>> cellWalls;
+    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Cell>> cellWalls;
 
-    private Maze(Grid grid, ImmutableSortedDictionary<Cell, ImmutableList<Direction>> cellWalls)
+    private Maze(Grid grid, ImmutableSortedDictionary<Cell, ImmutableList<Cell>> cellWalls)
     {
         this.Grid = grid;
         this.cellWalls = cellWalls;
@@ -19,32 +19,25 @@ public class Maze
 
     public static Maze WithAllWalls(Grid grid)
     {
-        var cellWalls = ImmutableSortedDictionary<Cell, ImmutableList<Direction>>.Empty
+        var cellWalls = ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty
             .WithComparers(Cell.Comparer);
 
         foreach (var cell in grid.Cells)
         {
-            cellWalls = cellWalls.Add(cell, [Direction.North, Direction.East, Direction.South, Direction.West]);
+            cellWalls = cellWalls.Add(cell, []);
         }
 
         return new Maze(grid, cellWalls);
     }
 
-    public bool WallExists(Cell cell, Direction direction) => this.cellWalls[cell].Contains(direction);
+    public bool WallExists(Cell cell, Cell cell2) => !this.cellWalls[cell].Contains(cell2);
 
-    public Maze RemoveWall(Cell cell, Direction direction)
+    public Maze RemoveWall(Cell cell, Cell cell2)
     {
-        var adjacentCell = this.Grid.AdjacentCellOrNull(cell, direction);
-
-        if (adjacentCell == null)
-        {
-            throw new InvalidOperationException($"{direction} wall cannot be removed.");
-        }
-
         return new Maze(
             this.Grid,
             this.cellWalls
-                .SetItem(cell, this.cellWalls[cell].Remove(direction))
-                .SetItem(adjacentCell, this.cellWalls[adjacentCell].Remove(direction.Opposite())));
+                .SetItem(cell, this.cellWalls[cell].Add(cell2))
+                .SetItem(cell2, this.cellWalls[cell2].Add(cell)));
     }
 }

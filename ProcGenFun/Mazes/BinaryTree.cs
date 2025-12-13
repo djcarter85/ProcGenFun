@@ -52,7 +52,7 @@ public static class BinaryTree
 
         if (UniformDistribution.TryCreate(validDirections, out var directionDist))
         {
-            return directionDist.Select(dir => maze.RemoveWall(cell, dir));
+            return directionDist.Select(dir => maze.RemoveWall(cell, grid.AdjacentCellOrNull(cell, dir)!));
         }
         else
         {

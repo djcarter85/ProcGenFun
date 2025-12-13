@@ -102,8 +102,19 @@ public static class MazeImage
         }
     }
 
-    private static bool WallExists(Maze maze, Cell cell, Direction direction) => 
-        maze.WallExists(cell, direction);
+    private static bool WallExists(Maze maze, Cell cell, Direction direction)
+    {
+        var adjacentCell = maze.Grid.AdjacentCellOrNull(cell, direction);
+
+        if (adjacentCell == null)
+        {
+            // If there isn't an adjacent cell, then it must mean we're at the edge of the maze, and walls exist around
+            // the entire boundary.
+            return true;
+        }
+
+        return maze.WallExists(cell, adjacentCell);
+    }
 
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
         wallExists ? new SvgLineSegment(false, endpoint) : new SvgMoveToSegment(false, endpoint);
