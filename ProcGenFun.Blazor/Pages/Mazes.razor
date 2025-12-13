@@ -119,8 +119,7 @@
 
         foreach (var step in steps)
         {
-            Maze maze = step.Maze;
-            images.Add(MazeImage.CreateSvg(maze, step.GetCellColour, grid));
+            images.Add(MazeImage.CreateSvg(step.Maze, step.GetCellColour, grid));
         }
 
         images.Add(MazeImage.CreateSvg(final, CellColours.Base(), grid));
