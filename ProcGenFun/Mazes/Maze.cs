@@ -5,9 +5,9 @@ using ProcGenFun.Mazes;
 
 public class Maze
 {
-    private readonly ImmutableDictionary<Cell, ImmutableList<Direction>> cellWalls;
+    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Direction>> cellWalls;
 
-    private Maze(Grid grid, ImmutableDictionary<Cell, ImmutableList<Direction>> cellWalls)
+    private Maze(Grid grid, ImmutableSortedDictionary<Cell, ImmutableList<Direction>> cellWalls)
     {
         this.Grid = grid;
         this.cellWalls = cellWalls;
@@ -15,11 +15,12 @@ public class Maze
 
     public Grid Grid { get; }
 
-    public IEnumerable<Cell> Cells => this.Grid.Cells;
+    public IEnumerable<Cell> Cells => this.cellWalls.Keys;
 
     public static Maze WithAllWalls(Grid grid)
     {
-        var cellWalls = ImmutableDictionary<Cell, ImmutableList<Direction>>.Empty;
+        var cellWalls = ImmutableSortedDictionary<Cell, ImmutableList<Direction>>.Empty
+            .WithComparers(Cell.Comparer);
 
         foreach (var cell in grid.Cells)
         {
