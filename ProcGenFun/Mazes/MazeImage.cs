@@ -12,8 +12,6 @@ public static class MazeImage
     private const int cellWidth = 25;
     private const int cellHeight = 25;
 
-    private static readonly Color cellColor = Theme.White;
-    private static readonly Color highlightColor = Theme.Blue300;
     private static readonly Color wallColor = Theme.Blue900;
 
     public static SvgDocument CreateSvg(Maze maze, Func<Cell, Color> getCellColor)
@@ -37,16 +35,6 @@ public static class MazeImage
 
         return svgDocument;
     }
-
-    private static SvgRectangle DrawCells(Maze maze) =>
-        new SvgRectangle
-        {
-            Fill = new SvgColourServer(cellColor),
-            X = Left(new Cell(0, 0)),
-            Y = Top(new Cell(0, 0)),
-            Width = maze.Grid.Width * cellWidth,
-            Height = maze.Grid.Height * cellHeight
-        };
 
     private static SvgRectangle DrawCell(Cell cell, Color color) =>
         new SvgRectangle
