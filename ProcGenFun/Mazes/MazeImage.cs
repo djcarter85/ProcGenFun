@@ -68,7 +68,7 @@ public static class MazeImage
 
         foreach (var cell in maze.Cells.Where(c => c.Y == 0))
         {
-            yield return WallOrBlank(maze.WallExists(cell, Direction.North), TopRight(cell));
+            yield return WallOrBlank(WallExists(maze, cell, Direction.North), TopRight(cell));
         }
 
         foreach (var grouping in maze.Cells.GroupBy(c => c.Y))
@@ -77,7 +77,7 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(cell, Direction.South), BottomRight(cell));
+                yield return WallOrBlank(WallExists(maze, cell, Direction.South), BottomRight(cell));
             }
         }
     }
@@ -88,7 +88,7 @@ public static class MazeImage
 
         foreach (var cell in maze.Cells.Where(c => c.X == 0))
         {
-            yield return WallOrBlank(maze.WallExists(cell, Direction.West), BottomLeft(cell));
+            yield return WallOrBlank(WallExists(maze, cell, Direction.West), BottomLeft(cell));
         }
 
         foreach (var grouping in maze.Cells.GroupBy(c => c.X))
@@ -97,10 +97,13 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(cell, Direction.East), BottomRight(cell));
+                yield return WallOrBlank(WallExists(maze, cell, Direction.East), BottomRight(cell));
             }
         }
     }
+
+    private static bool WallExists(Maze maze, Cell cell, Direction direction) => 
+        maze.WallExists(cell, direction);
 
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
         wallExists ? new SvgLineSegment(false, endpoint) : new SvgMoveToSegment(false, endpoint);
