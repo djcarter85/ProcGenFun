@@ -17,7 +17,7 @@ public class Maze
 
     public IEnumerable<Cell> Cells => this.adjacencyMatrix.Keys;
 
-    public static Maze WithAllWalls(Grid grid) =>
+    public static Maze WithNoEdges(Grid grid) =>
         new(
             grid,
             grid.Cells.Aggregate(

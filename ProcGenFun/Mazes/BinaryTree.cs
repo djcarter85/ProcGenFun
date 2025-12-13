@@ -41,7 +41,7 @@ public static class BinaryTree
 
     private static IDistribution<Maze> InitialMazeDist(Grid grid)
     {
-        var initialState = Maze.WithAllWalls(grid);
+        var initialState = Maze.WithNoEdges(grid);
 
         return Singleton.New(initialState);
     }
