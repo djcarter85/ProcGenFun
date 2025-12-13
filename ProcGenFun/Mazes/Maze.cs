@@ -26,12 +26,10 @@ public class Maze
 
     public bool WallExists(Cell cell1, Cell cell2) => !this.adjacencyMatrix[cell1].Contains(cell2);
 
-    public Maze AddEdge(Cell cell1, Cell cell2)
-    {
-        return new Maze(
+    public Maze AddEdge(Cell cell1, Cell cell2) =>
+        new(
             this.Grid,
             this.adjacencyMatrix
                 .SetItem(cell1, this.adjacencyMatrix[cell1].Add(cell2))
                 .SetItem(cell2, this.adjacencyMatrix[cell2].Add(cell1)));
-    }
 }
