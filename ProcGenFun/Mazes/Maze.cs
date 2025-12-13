@@ -24,14 +24,14 @@ public class Maze
                 ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty.WithComparers(Cell.Comparer),
                 (current, cell) => current.Add(cell, [])));
 
-    public bool WallExists(Cell cell, Cell cell2) => !this.adjacencyMatrix[cell].Contains(cell2);
+    public bool WallExists(Cell cell1, Cell cell2) => !this.adjacencyMatrix[cell1].Contains(cell2);
 
-    public Maze RemoveWall(Cell cell, Cell cell2)
+    public Maze RemoveWall(Cell cell1, Cell cell2)
     {
         return new Maze(
             this.Grid,
             this.adjacencyMatrix
-                .SetItem(cell, this.adjacencyMatrix[cell].Add(cell2))
-                .SetItem(cell2, this.adjacencyMatrix[cell2].Add(cell)));
+                .SetItem(cell1, this.adjacencyMatrix[cell1].Add(cell2))
+                .SetItem(cell2, this.adjacencyMatrix[cell2].Add(cell1)));
     }
 }
