@@ -17,18 +17,12 @@ public class Maze
 
     public IEnumerable<Cell> Cells => this.adjacencyMatrix.Keys;
 
-    public static Maze WithAllWalls(Grid grid)
-    {
-        var adjacencyMatrix = ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty
-            .WithComparers(Cell.Comparer);
-
-        foreach (var cell in grid.Cells)
-        {
-            adjacencyMatrix = adjacencyMatrix.Add(cell, []);
-        }
-
-        return new Maze(grid, adjacencyMatrix);
-    }
+    public static Maze WithAllWalls(Grid grid) =>
+        new(
+            grid,
+            grid.Cells.Aggregate(
+                ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty.WithComparers(Cell.Comparer),
+                (current, cell) => current.Add(cell, [])));
 
     public bool WallExists(Cell cell, Cell cell2) => !this.adjacencyMatrix[cell].Contains(cell2);
 
