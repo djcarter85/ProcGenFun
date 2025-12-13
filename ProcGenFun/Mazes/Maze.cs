@@ -24,7 +24,9 @@ public class Maze
                 ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty.WithComparers(Cell.Comparer),
                 (current, cell) => current.Add(cell, [])));
 
-    public bool WallExists(Cell cell1, Cell cell2) => !this.adjacencyMatrix[cell1].Contains(cell2);
+    public bool WallExists(Cell cell1, Cell cell2) => !EdgeExistsBetween(cell1, cell2);
+
+    public bool EdgeExistsBetween(Cell cell1, Cell cell2) => this.adjacencyMatrix[cell1].Contains(cell2);
 
     public Maze AddEdge(Cell cell1, Cell cell2) =>
         new(
