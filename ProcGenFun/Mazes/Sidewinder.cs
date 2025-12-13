@@ -80,7 +80,7 @@ public static class Sidewinder
     private static RowState RemoveEastWall(
         Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell) =>
         new RowState(
-            Maze: maze.RemoveWall(cell, maze.Grid.AdjacentCellOrNull(cell, Direction.East)!),
+            Maze: maze.AddEdge(cell, maze.Grid.AdjacentCellOrNull(cell, Direction.East)!),
             RunBeforeWallRemoved: runBeforeWallRemoved,
             Run: runBeforeWallRemoved);
 
@@ -88,7 +88,7 @@ public static class Sidewinder
         Maze maze, ImmutableList<Cell> runBeforeWallRemoved) =>
         from cellToRemoveSouthWallFrom in UniformDistribution.Create(runBeforeWallRemoved)
         select new RowState(
-            Maze: maze.RemoveWall(
+            Maze: maze.AddEdge(
                 cellToRemoveSouthWallFrom,
                 maze.Grid.AdjacentCellOrNull(cellToRemoveSouthWallFrom, Direction.South)!),
             RunBeforeWallRemoved: runBeforeWallRemoved,

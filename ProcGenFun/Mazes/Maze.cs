@@ -26,7 +26,7 @@ public class Maze
 
     public bool WallExists(Cell cell1, Cell cell2) => !this.adjacencyMatrix[cell1].Contains(cell2);
 
-    public Maze RemoveWall(Cell cell1, Cell cell2)
+    public Maze AddEdge(Cell cell1, Cell cell2)
     {
         return new Maze(
             this.Grid,

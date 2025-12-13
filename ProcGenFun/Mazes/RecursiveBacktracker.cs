@@ -44,7 +44,7 @@ public static class RecursiveBacktracker
         RecursiveBacktrackerState state, IDistribution<Neighbour> unvisitedNeighbourDist) =>
         from neighbour in unvisitedNeighbourDist
         select new RecursiveBacktrackerState(
-            Maze: state.Maze.RemoveWall(state.CurrentCell, neighbour.Cell),
+            Maze: state.Maze.AddEdge(state.CurrentCell, neighbour.Cell),
             CurrentCell: neighbour.Cell,
             Path: state.Path.Push(state.CurrentCell),
             Visited: state.Visited.Add(neighbour.Cell));
