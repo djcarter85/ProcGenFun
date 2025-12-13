@@ -62,19 +62,22 @@
                 select GetImages(
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
-                    history.Final),
+                    history.Final,
+                    grid),
             MazeAlgorithm.Sidewinder =>
                 from history in Sidewinder.HistoryDist(grid)
                 select GetImages(
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
-                    history.Current),
+                    history.Current,
+                    grid),
             MazeAlgorithm.RecursiveBacktracker =>
                 from history in RecursiveBacktracker.HistoryDist(grid)
                 select GetImages(
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
-                    history.Last().Maze),
+                    history.Last().Maze,
+                    grid),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -108,19 +111,19 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<ColouredMaze> steps, Maze final)
+    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<ColouredMaze> steps, Maze final, Grid grid)
     {
         var images = new List<SvgDocument>();
 
-        images.Add(MazeImage.CreateSvg(initial, CellColours.Base(), initial.Grid));
+        images.Add(MazeImage.CreateSvg(initial, CellColours.Base(), grid));
 
         foreach (var step in steps)
         {
             Maze maze = step.Maze;
-            images.Add(MazeImage.CreateSvg(maze, step.GetCellColour, maze.Grid));
+            images.Add(MazeImage.CreateSvg(maze, step.GetCellColour, grid));
         }
 
-        images.Add(MazeImage.CreateSvg(final, CellColours.Base(), final.Grid));
+        images.Add(MazeImage.CreateSvg(final, CellColours.Base(), grid));
 
         return images;
     }
