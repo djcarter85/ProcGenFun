@@ -113,7 +113,7 @@ public static class MazeImage
             return true;
         }
 
-        return maze.WallExists(cell, adjacentCell);
+        return !maze.EdgeExistsBetween(cell, adjacentCell);
     }
 
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
