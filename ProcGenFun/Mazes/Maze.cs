@@ -15,6 +15,8 @@ public class Maze
 
     public Grid Grid { get; }
 
+    public IEnumerable<Cell> Cells => this.Grid.Cells;
+
     public static Maze WithAllWalls(Grid grid)
     {
         var cellWalls = ImmutableDictionary<Cell, ImmutableList<Direction>>.Empty;
@@ -28,7 +30,7 @@ public class Maze
     }
 
     public bool WallExists(Cell cell, Direction direction) => this.cellWalls[cell].Contains(direction);
-    
+
     public Maze RemoveWall(Cell cell, Direction direction)
     {
         var adjacentCell = this.Grid.AdjacentCellOrNull(cell, direction);
