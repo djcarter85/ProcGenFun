@@ -31,7 +31,7 @@ public static class MazeImage
             svgDocument.Children.Add(DrawCell(cell, color: getCellColor(cell)));
         }
 
-        svgDocument.Children.Add(DrawWalls(maze));
+        svgDocument.Children.Add(DrawWalls(maze, maze.Grid));
 
         return svgDocument;
     }
@@ -46,10 +46,10 @@ public static class MazeImage
             Height = cellHeight
         };
 
-    private static SvgPath DrawWalls(Maze maze)
+    private static SvgPath DrawWalls(Maze maze, Grid grid)
     {
         var pathData = new SvgPathSegmentList();
-        foreach (var segment in HorizontalWalls(maze).Concat(VerticalWalls(maze)))
+        foreach (var segment in HorizontalWalls(maze, grid).Concat(VerticalWalls(maze, grid)))
         {
             pathData.Add(segment);
         }
@@ -62,13 +62,13 @@ public static class MazeImage
         };
     }
 
-    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze maze)
+    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze maze, Grid grid)
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 
         foreach (var cell in maze.Cells.Where(c => c.Y == 0))
         {
-            yield return WallOrBlank(WallExists(maze, cell, Direction.North), TopRight(cell));
+            yield return WallOrBlank(WallExists(maze, cell, Direction.North, grid), TopRight(cell));
         }
 
         foreach (var grouping in maze.Cells.GroupBy(c => c.Y))
@@ -77,18 +77,18 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(WallExists(maze, cell, Direction.South), BottomRight(cell));
+                yield return WallOrBlank(WallExists(maze, cell, Direction.South, grid), BottomRight(cell));
             }
         }
     }
 
-    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze maze)
+    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze maze, Grid grid)
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 
         foreach (var cell in maze.Cells.Where(c => c.X == 0))
         {
-            yield return WallOrBlank(WallExists(maze, cell, Direction.West), BottomLeft(cell));
+            yield return WallOrBlank(WallExists(maze, cell, Direction.West, grid), BottomLeft(cell));
         }
 
         foreach (var grouping in maze.Cells.GroupBy(c => c.X))
@@ -97,14 +97,14 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(WallExists(maze, cell, Direction.East), BottomRight(cell));
+                yield return WallOrBlank(WallExists(maze, cell, Direction.East, grid), BottomRight(cell));
             }
         }
     }
 
-    private static bool WallExists(Maze maze, Cell cell, Direction direction)
+    private static bool WallExists(Maze maze, Cell cell, Direction direction, Grid grid)
     {
-        var adjacentCell = maze.Grid.AdjacentCellOrNull(cell, direction);
+        var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 
         if (adjacentCell == null)
         {
