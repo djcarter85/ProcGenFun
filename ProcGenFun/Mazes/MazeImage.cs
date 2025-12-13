@@ -14,10 +14,10 @@ public static class MazeImage
 
     private static readonly Color wallColor = Theme.Blue900;
 
-    public static SvgDocument CreateSvg(Maze maze, Func<Cell, Color> getCellColor)
+    public static SvgDocument CreateSvg(Maze maze, Func<Cell, Color> getCellColor, Grid grid)
     {
-        var imageWidth = ImageWidth(maze.Grid);
-        var imageHeight = ImageHeight(maze.Grid);
+        var imageWidth = ImageWidth(grid);
+        var imageHeight = ImageHeight(grid);
 
         var svgDocument = new SvgDocument
         {

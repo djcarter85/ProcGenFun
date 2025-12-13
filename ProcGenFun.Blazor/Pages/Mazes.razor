@@ -112,14 +112,15 @@
     {
         var images = new List<SvgDocument>();
 
-        images.Add(MazeImage.CreateSvg(initial, CellColours.Base()));
+        images.Add(MazeImage.CreateSvg(initial, CellColours.Base(), initial.Grid));
 
         foreach (var step in steps)
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, step.GetCellColour));
+            Maze maze = step.Maze;
+            images.Add(MazeImage.CreateSvg(maze, step.GetCellColour, maze.Grid));
         }
 
-        images.Add(MazeImage.CreateSvg(final, CellColours.Base()));
+        images.Add(MazeImage.CreateSvg(final, CellColours.Base(), final.Grid));
 
         return images;
     }

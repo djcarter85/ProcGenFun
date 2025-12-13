@@ -28,15 +28,15 @@ public partial class MazeForm : Form
         {
             0 =>
                 from maze in BinaryTree.MazeDist(Grid)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), maze.Grid)
                 select svg.Draw(),
             1 =>
                 from maze in Sidewinder.MazeDist(Grid)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), maze.Grid)
                 select svg.Draw(),
             2 =>
                 from maze in RecursiveBacktracker.MazeDist(Grid)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), maze.Grid)
                 select svg.Draw(),
             _ => throw new NotImplementedException(),
         };
@@ -117,14 +117,14 @@ public partial class MazeForm : Form
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            MazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base()).GetXML());
+            MazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), mazeWithAllWalls.Grid).GetXML());
     }
 
     private static void SaveMazeImage(string folderPath, Maze maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
-            MazeImage.CreateSvg(maze, CellColours.Base()).GetXML());
+            MazeImage.CreateSvg(maze, CellColours.Base(), maze.Grid).GetXML());
     }
 
     private static void SaveMazeAnimationAndFrames(
@@ -143,7 +143,7 @@ public partial class MazeForm : Form
 
         void AddFrame(Maze maze, Func<Cell, Color> getCellColor, int delay = -1)
         {
-            var svgDocument = MazeImage.CreateSvg(maze, getCellColor);
+            var svgDocument = MazeImage.CreateSvg(maze, getCellColor, maze.Grid);
 
             File.WriteAllText(
                 Path.Combine(framesPath, $"frame_{index++:0000}.svg"),
