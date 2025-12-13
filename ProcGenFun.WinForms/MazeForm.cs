@@ -24,18 +24,22 @@ public partial class MazeForm : Form
 
     private void GenerateButton_Click(object sender, EventArgs e)
     {
-        var mazeDist = algorithmCombo.SelectedIndex switch
+        var imageDist = algorithmCombo.SelectedIndex switch
         {
-            0 => BinaryTree.MazeDist(Grid),
-            1 => Sidewinder.MazeDist(Grid),
-            2 => RecursiveBacktracker.MazeDist(Grid),
+            0 =>
+                from maze in BinaryTree.MazeDist(Grid)
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                select svg.Draw(),
+            1 =>
+                from maze in Sidewinder.MazeDist(Grid)
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                select svg.Draw(),
+            2 =>
+                from maze in RecursiveBacktracker.MazeDist(Grid)
+                let svg = MazeImage.CreateSvg(maze, CellColours.Base())
+                select svg.Draw(),
             _ => throw new NotImplementedException(),
         };
-
-        var imageDist =
-            from maze in mazeDist
-            let svg = MazeImage.CreateSvg(maze, CellColours.Base())
-            select svg.Draw();
 
         var image = imageDist.Sample(this.rng);
 
