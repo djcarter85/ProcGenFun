@@ -2,4 +2,4 @@
 
 using System.Collections.Immutable;
 
-public record SidewinderStep(Maze<Cell> Maze, ImmutableList<Cell> RunBeforeWallRemoved, ImmutableList<Cell> Run);
+public record SidewinderStep(Maze<RectCell> Maze, ImmutableList<RectCell> RunBeforeWallRemoved, ImmutableList<RectCell> Run);

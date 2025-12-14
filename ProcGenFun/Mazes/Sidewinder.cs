@@ -8,10 +8,10 @@ using RandN.Extensions;
 
 public static class Sidewinder
 {
-    public static IDistribution<Maze<Cell>> MazeDist(Grid grid) =>
+    public static IDistribution<Maze<RectCell>> MazeDist(RectGrid grid) =>
         HistoryDist(grid).Select(h => h.Current);
 
-    public static IDistribution<SidewinderHistory> HistoryDist(Grid grid)
+    public static IDistribution<SidewinderHistory> HistoryDist(RectGrid grid)
     {
         var initialMaze = Maze.WithNoEdges(grid.Cells);
 
@@ -26,7 +26,7 @@ public static class Sidewinder
         return historyDist;
     }
 
-    private static IDistribution<SidewinderHistory> RowDist(SidewinderHistory history, Grid grid, int y)
+    private static IDistribution<SidewinderHistory> RowDist(SidewinderHistory history, RectGrid grid, int y)
     {
         var initialState = new RowState(Maze: history.Current, RunBeforeWallRemoved: [], Run: []);
 
@@ -37,7 +37,7 @@ public static class Sidewinder
         {
             rollingStateDist =
                 from rollingState in rollingStateDist
-                from state in CellDist(rollingState.Current, grid, new Cell(x, y))
+                from state in CellDist(rollingState.Current, grid, new RectCell(x, y))
                 select new RollingRowState(rollingState.Previous.Add(state), state);
         }
 
@@ -51,13 +51,13 @@ public static class Sidewinder
                 rollingState.Current.Maze);
     }
 
-    private static IDistribution<RowState> CellDist(RowState rowState, Grid grid, Cell cell)
+    private static IDistribution<RowState> CellDist(RowState rowState, RectGrid grid, RectCell cell)
     {
         var runBeforeWallRemoved = rowState.Run.Add(cell);
         var validActions = GetValidActions(grid, cell);
         if (UniformDistribution.TryCreate(validActions, out var actionDist))
         {
-            Maze<Cell> maze = rowState.Maze;
+            Maze<RectCell> maze = rowState.Maze;
             return
                 from action in actionDist
                 from newRowState in ApplyAction(maze, runBeforeWallRemoved, cell, action, grid)
@@ -70,7 +70,7 @@ public static class Sidewinder
     }
 
     private static IDistribution<RowState> ApplyAction(
-        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Action action, Grid grid) =>
+        Maze<RectCell> maze, ImmutableList<RectCell> runBeforeWallRemoved, RectCell cell, Action action, RectGrid grid) =>
         action switch
         {
             Action.RemoveEastWall => Singleton.New(RemoveEastWall(maze, runBeforeWallRemoved, cell, grid)),
@@ -79,34 +79,34 @@ public static class Sidewinder
         };
 
     private static RowState RemoveEastWall(
-        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Grid grid) =>
+        Maze<RectCell> maze, ImmutableList<RectCell> runBeforeWallRemoved, RectCell cell, RectGrid grid) =>
         new RowState(
-            Maze: maze.RemoveWall(grid, cell, Direction.East),
+            Maze: maze.RemoveWall(grid, cell, RectDirection.East),
             RunBeforeWallRemoved: runBeforeWallRemoved,
             Run: runBeforeWallRemoved);
 
     private static IDistribution<RowState> CloseRunDist(
-        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Grid grid) =>
+        Maze<RectCell> maze, ImmutableList<RectCell> runBeforeWallRemoved, RectGrid grid) =>
         from cellToRemoveSouthWallFrom in UniformDistribution.Create(runBeforeWallRemoved)
         select new RowState(
-            Maze: maze.RemoveWall(grid, cellToRemoveSouthWallFrom, Direction.South),
+            Maze: maze.RemoveWall(grid, cellToRemoveSouthWallFrom, RectDirection.South),
             RunBeforeWallRemoved: runBeforeWallRemoved,
             Run: []);
 
-    private static IEnumerable<Action> GetValidActions(Grid grid, Cell cell)
+    private static IEnumerable<Action> GetValidActions(RectGrid grid, RectCell cell)
     {
-        if (grid.AdjacentCellExists(cell, Direction.East))
+        if (grid.AdjacentCellExists(cell, RectDirection.East))
         {
             yield return Action.RemoveEastWall;
         }
 
-        if (grid.AdjacentCellExists(cell, Direction.South))
+        if (grid.AdjacentCellExists(cell, RectDirection.South))
         {
             yield return Action.CloseRun;
         }
     }
 
-    private record RowState(Maze<Cell> Maze, ImmutableList<Cell> RunBeforeWallRemoved, ImmutableList<Cell> Run);
+    private record RowState(Maze<RectCell> Maze, ImmutableList<RectCell> RunBeforeWallRemoved, ImmutableList<RectCell> Run);
 
     private record RollingRowState(ImmutableList<RowState> Previous, RowState Current);
 

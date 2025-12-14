@@ -53,7 +53,7 @@
 
     public void GenerateMaze()
     {
-        var grid = new Grid(16, 10);
+        var grid = new RectGrid(16, 10);
 
         var imagesDist = this.mazeAlgorithm switch
         {
@@ -111,18 +111,18 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(Maze<Cell> initial, IEnumerable<ColouredMaze> steps, Maze<Cell> final, Grid grid)
+    private IReadOnlyList<SvgDocument> GetImages(Maze<RectCell> initial, IEnumerable<ColouredMaze> steps, Maze<RectCell> final, RectGrid grid)
     {
         var images = new List<SvgDocument>();
 
-        images.Add(MazeImage.CreateSvg(initial, CellColours.Base(), grid));
+        images.Add(RectMazeImage.CreateSvg(initial, CellColours.Base(), grid));
 
         foreach (var step in steps)
         {
-            images.Add(MazeImage.CreateSvg(step.Maze, step.GetCellColour, grid));
+            images.Add(RectMazeImage.CreateSvg(step.Maze, step.GetCellColour, grid));
         }
 
-        images.Add(MazeImage.CreateSvg(final, CellColours.Base(), grid));
+        images.Add(RectMazeImage.CreateSvg(final, CellColours.Base(), grid));
 
         return images;
     }

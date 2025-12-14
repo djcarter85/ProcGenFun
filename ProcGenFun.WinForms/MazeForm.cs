@@ -9,7 +9,7 @@ using Svg;
 
 public partial class MazeForm : Form
 {
-    private static readonly Grid Grid = new(width: 16, height: 10);
+    private static readonly RectGrid Grid = new(width: 16, height: 10);
 
     private readonly IRng rng;
 
@@ -28,15 +28,15 @@ public partial class MazeForm : Form
         {
             0 =>
                 from maze in BinaryTree.MazeDist(Grid)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
             1 =>
                 from maze in Sidewinder.MazeDist(Grid)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
             2 =>
                 from maze in RecursiveBacktracker.MazeDist(Grid.Cells, Grid.GetNeighbours)
-                let svg = MazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
             _ => throw new NotImplementedException(),
         };
@@ -117,22 +117,22 @@ public partial class MazeForm : Form
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            MazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), Grid).GetXML());
+            RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), Grid).GetXML());
     }
 
-    private static void SaveMazeImage(string folderPath, Maze<Cell> maze)
+    private static void SaveMazeImage(string folderPath, Maze<RectCell> maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
-            MazeImage.CreateSvg(maze, CellColours.Base(), Grid).GetXML());
+            RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid).GetXML());
     }
 
     private static void SaveMazeAnimationAndFrames(
         string folderPath,
-        Maze<Cell> initial,
+        Maze<RectCell> initial,
         IEnumerable<ColouredMaze> steps,
-        Maze<Cell> final,
-        Func<Cell, Color> initialCellColours)
+        Maze<RectCell> final,
+        Func<RectCell, Color> initialCellColours)
     {
         var framesPath = Path.Combine(folderPath, "frames");
         Directory.CreateDirectory(framesPath);
@@ -141,9 +141,9 @@ public partial class MazeForm : Form
 
         var index = 0;
 
-        void AddFrame(Maze<Cell> maze, Func<Cell, Color> getCellColor, int delay = -1)
+        void AddFrame(Maze<RectCell> maze, Func<RectCell, Color> getCellColor, int delay = -1)
         {
-            var svgDocument = MazeImage.CreateSvg(maze, getCellColor, Grid);
+            var svgDocument = RectMazeImage.CreateSvg(maze, getCellColor, Grid);
 
             File.WriteAllText(
                 Path.Combine(framesPath, $"frame_{index++:0000}.svg"),

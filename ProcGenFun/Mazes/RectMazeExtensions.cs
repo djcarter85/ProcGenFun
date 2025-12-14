@@ -1,20 +1,20 @@
 ﻿namespace ProcGenFun.Mazes;
 
-public static class MazeExtensions
+public static class RectMazeExtensions
 {
-    public static Maze<Cell> RemoveWall(this Maze<Cell> maze, Grid grid, Cell cell, Direction direction)
+    public static Maze<RectCell> RemoveWall(this Maze<RectCell> maze, RectGrid grid, RectCell cell, RectDirection direction)
     {
         var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 
         if (adjacentCell == null)
         {
-            throw new InvalidOperationException($"Cell does not have an adjacent cell to the {direction}");
+            throw new InvalidOperationException($"RectCell does not have an adjacent cell to the {direction}");
         }
 
         return maze.AddEdge(cell, adjacentCell);
     }
 
-    public static bool WallExists(this Maze<Cell> maze, Grid grid, Cell cell, Direction direction)
+    public static bool WallExists(this Maze<RectCell> maze, RectGrid grid, RectCell cell, RectDirection direction)
     {
         var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 

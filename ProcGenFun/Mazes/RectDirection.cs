@@ -1,6 +1,6 @@
 ﻿namespace ProcGenFun.Mazes;
 
-public enum Direction
+public enum RectDirection
 {
     North,
     East,

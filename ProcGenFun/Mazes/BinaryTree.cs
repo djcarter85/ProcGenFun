@@ -8,18 +8,18 @@ using RandN.Extensions;
 
 public static class BinaryTree
 {
-    public static IDistribution<Maze<Cell>> MazeDist(Grid grid) =>
+    public static IDistribution<Maze<RectCell>> MazeDist(RectGrid grid) =>
         from state in StateDist(grid)
         select state.Current;
 
-    public static IDistribution<BinaryTreeHistory> HistoryDist(Grid grid) =>
+    public static IDistribution<BinaryTreeHistory> HistoryDist(RectGrid grid) =>
         from state in StateDist(grid)
         select new BinaryTreeHistory(
             Initial: state.Initial,
             Steps: state.Steps,
             Final: state.Current);
 
-    private static IDistribution<BinaryTreeState> StateDist(Grid grid)
+    private static IDistribution<BinaryTreeState> StateDist(RectGrid grid)
     {
         var stateDist =
             from maze in InitialMazeDist(grid)
@@ -39,14 +39,14 @@ public static class BinaryTree
         return stateDist;
     }
 
-    private static IDistribution<Maze<Cell>> InitialMazeDist(Grid grid)
+    private static IDistribution<Maze<RectCell>> InitialMazeDist(RectGrid grid)
     {
         var initialState = Maze.WithNoEdges(grid.Cells);
 
         return Singleton.New(initialState);
     }
 
-    private static IDistribution<Maze<Cell>> NextStepDist(Maze<Cell> maze, Grid grid, Cell cell)
+    private static IDistribution<Maze<RectCell>> NextStepDist(Maze<RectCell> maze, RectGrid grid, RectCell cell)
     {
         var validDirections = GetValidDirections(cell, grid);
 
@@ -60,8 +60,8 @@ public static class BinaryTree
         }
     }
 
-    private static IEnumerable<Direction> GetValidDirections(Cell cell, Grid grid) =>
-        new[] { Direction.South, Direction.East }.Where(dir => grid.CanRemoveWall(cell, dir));
+    private static IEnumerable<RectDirection> GetValidDirections(RectCell cell, RectGrid grid) =>
+        new[] { RectDirection.South, RectDirection.East }.Where(dir => grid.CanRemoveWall(cell, dir));
 
-    private record BinaryTreeState(Maze<Cell> Initial, ImmutableList<BinaryTreeStep> Steps, Maze<Cell> Current);
+    private record BinaryTreeState(Maze<RectCell> Initial, ImmutableList<BinaryTreeStep> Steps, Maze<RectCell> Current);
 }

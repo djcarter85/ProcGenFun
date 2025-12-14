@@ -4,7 +4,7 @@ using System.Drawing;
 using Svg;
 using Svg.Pathing;
 
-public static class MazeImage
+public static class RectMazeImage
 {
     private const int marginX = 25;
     private const int marginY = 25;
@@ -14,7 +14,7 @@ public static class MazeImage
 
     private static readonly Color wallColor = Theme.Blue900;
 
-    public static SvgDocument CreateSvg(Maze<Cell> maze, Func<Cell, Color> getCellColor, Grid grid)
+    public static SvgDocument CreateSvg(Maze<RectCell> maze, Func<RectCell, Color> getCellColor, RectGrid grid)
     {
         var imageWidth = ImageWidth(grid);
         var imageHeight = ImageHeight(grid);
@@ -36,7 +36,7 @@ public static class MazeImage
         return svgDocument;
     }
 
-    private static SvgRectangle DrawCell(Cell cell, Color color) =>
+    private static SvgRectangle DrawCell(RectCell cell, Color color) =>
         new SvgRectangle
         {
             Fill = new SvgColourServer(color),
@@ -46,7 +46,7 @@ public static class MazeImage
             Height = cellHeight
         };
 
-    private static SvgPath DrawWalls(Maze<Cell> maze, Grid grid)
+    private static SvgPath DrawWalls(Maze<RectCell> maze, RectGrid grid)
     {
         var pathData = new SvgPathSegmentList();
         foreach (var segment in HorizontalWalls(maze, grid).Concat(VerticalWalls(maze, grid)))
@@ -62,42 +62,42 @@ public static class MazeImage
         };
     }
 
-    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze<Cell> maze, Grid grid)
+    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze<RectCell> maze, RectGrid grid)
     {
-        yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
+        yield return new SvgMoveToSegment(false, TopLeft(new RectCell(0, 0)));
 
         foreach (var cell in grid.Cells.Where(c => c.Y == 0))
         {
-            yield return WallOrBlank(maze.WallExists(grid, cell, Direction.North), TopRight(cell));
+            yield return WallOrBlank(maze.WallExists(grid, cell, RectDirection.North), TopRight(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.Y))
         {
-            yield return new SvgMoveToSegment(false, BottomLeft(new Cell(0, grouping.Key)));
+            yield return new SvgMoveToSegment(false, BottomLeft(new RectCell(0, grouping.Key)));
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(grid, cell, Direction.South), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(grid, cell, RectDirection.South), BottomRight(cell));
             }
         }
     }
 
-    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze<Cell> maze, Grid grid)
+    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze<RectCell> maze, RectGrid grid)
     {
-        yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
+        yield return new SvgMoveToSegment(false, TopLeft(new RectCell(0, 0)));
 
         foreach (var cell in grid.Cells.Where(c => c.X == 0))
         {
-            yield return WallOrBlank(maze.WallExists(grid, cell, Direction.West), BottomLeft(cell));
+            yield return WallOrBlank(maze.WallExists(grid, cell, RectDirection.West), BottomLeft(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.X))
         {
-            yield return new SvgMoveToSegment(false, TopRight(new Cell(grouping.Key, 0)));
+            yield return new SvgMoveToSegment(false, TopRight(new RectCell(grouping.Key, 0)));
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(grid, cell, Direction.East), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(grid, cell, RectDirection.East), BottomRight(cell));
             }
         }
     }
@@ -105,23 +105,23 @@ public static class MazeImage
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
         wallExists ? new SvgLineSegment(false, endpoint) : new SvgMoveToSegment(false, endpoint);
 
-    private static int ImageHeight(Grid grid) => grid.Height * cellHeight + 2 * marginY;
+    private static int ImageHeight(RectGrid grid) => grid.Height * cellHeight + 2 * marginY;
 
-    private static int ImageWidth(Grid grid) => grid.Width * cellWidth + 2 * marginX;
+    private static int ImageWidth(RectGrid grid) => grid.Width * cellWidth + 2 * marginX;
 
-    private static int Left(Cell cell) => marginX + cell.X * cellWidth;
+    private static int Left(RectCell cell) => marginX + cell.X * cellWidth;
 
-    private static int Right(Cell cell) => Left(cell) + cellWidth;
+    private static int Right(RectCell cell) => Left(cell) + cellWidth;
 
-    private static int Top(Cell cell) => marginY + cell.Y * cellWidth;
+    private static int Top(RectCell cell) => marginY + cell.Y * cellWidth;
 
-    private static int Bottom(Cell cell) => Top(cell) + cellWidth;
+    private static int Bottom(RectCell cell) => Top(cell) + cellWidth;
 
-    private static Point TopLeft(Cell cell) => new Point(Left(cell), Top(cell));
+    private static Point TopLeft(RectCell cell) => new Point(Left(cell), Top(cell));
 
-    private static Point TopRight(Cell cell) => new Point(Right(cell), Top(cell));
+    private static Point TopRight(RectCell cell) => new Point(Right(cell), Top(cell));
 
-    private static Point BottomLeft(Cell cell) => new Point(Left(cell), Bottom(cell));
+    private static Point BottomLeft(RectCell cell) => new Point(Left(cell), Bottom(cell));
 
-    private static Point BottomRight(Cell cell) => new Point(Right(cell), Bottom(cell));
+    private static Point BottomRight(RectCell cell) => new Point(Right(cell), Bottom(cell));
 }
