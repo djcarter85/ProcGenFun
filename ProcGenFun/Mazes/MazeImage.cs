@@ -26,7 +26,7 @@ public static class MazeImage
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
         };
 
-        foreach (var cell in maze.Cells)
+        foreach (var cell in grid.Cells)
         {
             svgDocument.Children.Add(DrawCell(cell, color: getCellColor(cell)));
         }
@@ -66,12 +66,12 @@ public static class MazeImage
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 
-        foreach (var cell in maze.Cells.Where(c => c.Y == 0))
+        foreach (var cell in grid.Cells.Where(c => c.Y == 0))
         {
             yield return WallOrBlank(WallExists(maze, cell, Direction.North, grid), TopRight(cell));
         }
 
-        foreach (var grouping in maze.Cells.GroupBy(c => c.Y))
+        foreach (var grouping in grid.Cells.GroupBy(c => c.Y))
         {
             yield return new SvgMoveToSegment(false, BottomLeft(new Cell(0, grouping.Key)));
 
@@ -86,12 +86,12 @@ public static class MazeImage
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 
-        foreach (var cell in maze.Cells.Where(c => c.X == 0))
+        foreach (var cell in grid.Cells.Where(c => c.X == 0))
         {
             yield return WallOrBlank(WallExists(maze, cell, Direction.West, grid), BottomLeft(cell));
         }
 
-        foreach (var grouping in maze.Cells.GroupBy(c => c.X))
+        foreach (var grouping in grid.Cells.GroupBy(c => c.X))
         {
             yield return new SvgMoveToSegment(false, TopRight(new Cell(grouping.Key, 0)));
 
