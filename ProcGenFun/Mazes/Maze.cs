@@ -12,8 +12,6 @@ public class Maze
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
-    public IEnumerable<Cell> Cells => this.adjacencyMatrix.Keys;
-
     public static Maze WithNoEdges(Grid grid) =>
         new(
             grid.Cells.Aggregate(
