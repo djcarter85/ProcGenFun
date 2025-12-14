@@ -26,3 +26,10 @@ public class Maze<TVertex> where TVertex : notnull
                 .SetItem(vertex1, this.adjacencyMatrix[vertex1].Add(vertex2))
                 .SetItem(vertex2, this.adjacencyMatrix[vertex2].Add(vertex1)));
 }
+
+public static class Maze
+{
+    public static Maze<TVertex> WithNoEdges<TVertex>(IEnumerable<TVertex> vertices)
+        where TVertex : notnull =>
+        Maze<TVertex>.WithNoEdges(vertices);
+}

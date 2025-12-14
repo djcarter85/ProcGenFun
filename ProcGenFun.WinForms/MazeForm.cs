@@ -113,7 +113,7 @@ public partial class MazeForm : Form
 
     private static void SaveMazeWithAllWallsImage(string folderPath)
     {
-        var mazeWithAllWalls = Maze<Cell>.WithNoEdges(Grid.Cells);
+        var mazeWithAllWalls = Maze.WithNoEdges(Grid.Cells);
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
