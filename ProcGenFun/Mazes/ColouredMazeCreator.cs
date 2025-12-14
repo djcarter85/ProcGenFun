@@ -20,5 +20,5 @@ public static class ColouredMazeCreator
         IReadOnlyList<RecursiveBacktrackerState<RectCell>> history) =>
         history.Select(step => new ColouredMaze(
             Maze: step.Maze,
-            CellColours.RB(currentCell: step.CurrentCell, visitedCells: step.Visited, path: step.Path)));
+            CellColours.RB(currentCell: step.CurrentVertex, visitedCells: step.Visited, path: step.Path)));
 }
