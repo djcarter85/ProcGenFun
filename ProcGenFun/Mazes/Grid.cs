@@ -20,7 +20,7 @@ public class Grid
 
     public int Height { get; }
 
-    public IEnumerable<Cell> Cells { get; }
+    public IReadOnlyList<Cell> Cells { get; }
 
     public int CellCount => this.Width * this.Height;
 
