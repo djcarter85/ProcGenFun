@@ -26,7 +26,7 @@ public static class RecursiveBacktracker
     private static IDistribution<RecursiveBacktrackerState> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)
         select new RecursiveBacktrackerState(
-            Maze: Maze.WithNoEdges(grid),
+            Maze: Maze.WithNoEdges(grid, grid.Cells),
             CurrentCell: cell,
             Path: [],
             Visited: [cell]);

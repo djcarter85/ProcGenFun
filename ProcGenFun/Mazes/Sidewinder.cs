@@ -13,7 +13,7 @@ public static class Sidewinder
 
     public static IDistribution<SidewinderHistory> HistoryDist(Grid grid)
     {
-        var initialMaze = Maze.WithNoEdges(grid);
+        var initialMaze = Maze.WithNoEdges(grid, grid.Cells);
 
         IDistribution<SidewinderHistory> historyDist =
             Singleton.New(new SidewinderHistory(Initial: initialMaze, Steps: [], Current: initialMaze));

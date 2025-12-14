@@ -12,9 +12,9 @@ public class Maze
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
-    public static Maze WithNoEdges(Grid grid) =>
+    public static Maze WithNoEdges(Grid grid, IEnumerable<Cell> cells) =>
         new(
-            grid.Cells.Aggregate(
+            cells.Aggregate(
                 ImmutableDictionary<Cell, ImmutableList<Cell>>.Empty,
                 (current, cell) => current.Add(cell, [])));
 
