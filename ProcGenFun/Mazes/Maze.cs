@@ -5,9 +5,9 @@ using ProcGenFun.Mazes;
 
 public class Maze
 {
-    private readonly ImmutableSortedDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix;
+    private readonly ImmutableDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix;
 
-    private Maze(ImmutableSortedDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix)
+    private Maze(ImmutableDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix)
     {
         this.adjacencyMatrix = adjacencyMatrix;
     }
@@ -15,7 +15,7 @@ public class Maze
     public static Maze WithNoEdges(Grid grid) =>
         new(
             grid.Cells.Aggregate(
-                ImmutableSortedDictionary<Cell, ImmutableList<Cell>>.Empty.WithComparers(Cell.Comparer),
+                ImmutableDictionary<Cell, ImmutableList<Cell>>.Empty,
                 (current, cell) => current.Add(cell, [])));
 
     public bool EdgeExistsBetween(Cell cell1, Cell cell2) => this.adjacencyMatrix[cell1].Contains(cell2);
