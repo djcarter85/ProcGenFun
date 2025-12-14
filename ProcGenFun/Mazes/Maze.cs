@@ -11,17 +11,18 @@ public class Maze<TVertex> where TVertex : notnull
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
-    public static Maze<TVertex> WithNoEdges(IEnumerable<TVertex> cells) =>
+    public static Maze<TVertex> WithNoEdges(IEnumerable<TVertex> vertices) =>
         new(
-            cells.Aggregate(
+            vertices.Aggregate(
                 ImmutableDictionary<TVertex, ImmutableList<TVertex>>.Empty,
-                (current, cell) => current.Add(cell, [])));
+                (current, vertex) => current.Add(vertex, [])));
 
-    public bool EdgeExistsBetween(TVertex cell1, TVertex cell2) => this.adjacencyMatrix[cell1].Contains(cell2);
+    public bool EdgeExistsBetween(TVertex vertex1, TVertex vertex2) =>
+        this.adjacencyMatrix[vertex1].Contains(vertex2);
 
-    public Maze<TVertex> AddEdge(TVertex cell1, TVertex cell2) =>
+    public Maze<TVertex> AddEdge(TVertex vertex1, TVertex vertex2) =>
         new(
             this.adjacencyMatrix
-                .SetItem(cell1, this.adjacencyMatrix[cell1].Add(cell2))
-                .SetItem(cell2, this.adjacencyMatrix[cell2].Add(cell1)));
+                .SetItem(vertex1, this.adjacencyMatrix[vertex1].Add(vertex2))
+                .SetItem(vertex2, this.adjacencyMatrix[vertex2].Add(vertex1)));
 }
