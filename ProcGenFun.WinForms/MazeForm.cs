@@ -35,7 +35,7 @@ public partial class MazeForm : Form
                 let svg = MazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
             2 =>
-                from maze in RecursiveBacktracker.MazeDist(Grid)
+                from maze in RecursiveBacktracker.MazeDist(Grid.Cells, Grid.GetNeighbours)
                 let svg = MazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
             _ => throw new NotImplementedException(),
@@ -93,7 +93,7 @@ public partial class MazeForm : Form
             }
             else
             {
-                var historyDist = RecursiveBacktracker.HistoryDist(Grid);
+                var historyDist = RecursiveBacktracker.HistoryDist(Grid.Cells, Grid.GetNeighbours);
 
                 var history = historyDist.Sample(this.rng);
 

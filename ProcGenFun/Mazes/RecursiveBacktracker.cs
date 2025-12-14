@@ -8,32 +8,35 @@ using RandN.Extensions;
 
 public static class RecursiveBacktracker
 {
-    public static IDistribution<Maze<Cell>> MazeDist(Grid grid) =>
-        from history in HistoryDist(grid)
+    public static IDistribution<Maze<Cell>> MazeDist(
+        IReadOnlyList<Cell> cells, Func<Cell, IEnumerable<Cell>> getNeighbours) =>
+        from history in HistoryDist(cells, getNeighbours)
         select history.Last().Maze;
 
-    public static IDistribution<IReadOnlyList<RecursiveBacktrackerState>> HistoryDist(Grid grid) =>
-        from initial in InitialStateDist(grid)
-        from randomWalk in RandomWalk.New(initial, s => NextStateDist(grid, s))
-        select randomWalk.TakeWhile(s => !StopIteration(s, grid)).ToReadOnly();
+    public static IDistribution<IReadOnlyList<RecursiveBacktrackerState>> HistoryDist(
+        IReadOnlyList<Cell> cells, Func<Cell, IEnumerable<Cell>> getNeighbours) =>
+        from initial in InitialStateDist(cells)
+        from randomWalk in RandomWalk.New(initial, s => NextStateDist(s, getNeighbours))
+        select randomWalk.TakeWhile(s => !StopIteration(s, cells)).ToReadOnly();
 
-    private static bool StopIteration(RecursiveBacktrackerState state, Grid grid) => 
-        AllCellsVisited(state, grid) && state.Path.IsEmpty;
+    private static bool StopIteration(RecursiveBacktrackerState state, IReadOnlyList<Cell> cells) => 
+        AllCellsVisited(state, cells) && state.Path.IsEmpty;
 
-    private static bool AllCellsVisited(RecursiveBacktrackerState state, Grid grid) =>
-        state.Visited.Count == grid.Cells.Count;
+    private static bool AllCellsVisited(RecursiveBacktrackerState state, IReadOnlyList<Cell> cells) =>
+        state.Visited.Count == cells.Count;
 
-    private static IDistribution<RecursiveBacktrackerState> InitialStateDist(Grid grid) =>
-        from cell in UniformDistribution.Create(grid.Cells)
+    private static IDistribution<RecursiveBacktrackerState> InitialStateDist(IReadOnlyList<Cell> cells) =>
+        from cell in UniformDistribution.Create(cells)
         select new RecursiveBacktrackerState(
-            Maze: Maze.WithNoEdges(grid.Cells),
+            Maze: Maze.WithNoEdges(cells),
             CurrentCell: cell,
             Path: [],
             Visited: [cell]);
 
-    private static IDistribution<RecursiveBacktrackerState> NextStateDist(Grid grid, RecursiveBacktrackerState state)
+    private static IDistribution<RecursiveBacktrackerState> NextStateDist(
+        RecursiveBacktrackerState state, Func<Cell, IEnumerable<Cell>> getNeighbours)
     {
-        var unvisitedNeighbours = grid.GetNeighbours(state.CurrentCell)
+        var unvisitedNeighbours = getNeighbours(state.CurrentCell)
             .Where(n => !state.Visited.Contains(n));
         return UniformDistribution.TryCreate(unvisitedNeighbours, out var unvisitedNeighbourDist) ?
             ProceedDist(state, unvisitedNeighbourDist) :

@@ -72,7 +72,7 @@
                     history.Current,
                     grid),
             MazeAlgorithm.RecursiveBacktracker =>
-                from history in RecursiveBacktracker.HistoryDist(grid)
+                from history in RecursiveBacktracker.HistoryDist(grid.Cells, grid.GetNeighbours)
                 select GetImages(
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
