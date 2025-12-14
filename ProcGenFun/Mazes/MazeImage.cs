@@ -68,7 +68,7 @@ public static class MazeImage
 
         foreach (var cell in grid.Cells.Where(c => c.Y == 0))
         {
-            yield return WallOrBlank(WallExists(maze, cell, Direction.North, grid), TopRight(cell));
+            yield return WallOrBlank(maze.WallExists(cell, Direction.North, grid), TopRight(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.Y))
@@ -77,7 +77,7 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(WallExists(maze, cell, Direction.South, grid), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(cell, Direction.South, grid), BottomRight(cell));
             }
         }
     }
@@ -88,7 +88,7 @@ public static class MazeImage
 
         foreach (var cell in grid.Cells.Where(c => c.X == 0))
         {
-            yield return WallOrBlank(WallExists(maze, cell, Direction.West, grid), BottomLeft(cell));
+            yield return WallOrBlank(maze.WallExists(cell, Direction.West, grid), BottomLeft(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.X))
@@ -97,23 +97,9 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(WallExists(maze, cell, Direction.East, grid), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(cell, Direction.East, grid), BottomRight(cell));
             }
         }
-    }
-
-    private static bool WallExists(Maze maze, Cell cell, Direction direction, Grid grid)
-    {
-        var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
-
-        if (adjacentCell == null)
-        {
-            // If there isn't an adjacent cell, then it must mean we're at the edge of the maze, and walls exist around
-            // the entire boundary.
-            return true;
-        }
-
-        return !maze.EdgeExistsBetween(cell, adjacentCell);
     }
 
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>

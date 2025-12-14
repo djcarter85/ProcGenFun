@@ -13,4 +13,18 @@ public static class MazeExtensions
 
         return maze.AddEdge(cell, adjacentCell);
     }
+
+    public static bool WallExists(this Maze maze, Cell cell, Direction direction, Grid grid)
+    {
+        var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
+
+        if (adjacentCell == null)
+        {
+            // If there isn't an adjacent cell, then it must mean we're at the edge of the maze, and walls exist around
+            // the entire boundary.
+            return true;
+        }
+
+        return !maze.EdgeExistsBetween(cell, adjacentCell);
+    }
 }
