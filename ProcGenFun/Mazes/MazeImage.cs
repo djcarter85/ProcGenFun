@@ -68,7 +68,7 @@ public static class MazeImage
 
         foreach (var cell in grid.Cells.Where(c => c.Y == 0))
         {
-            yield return WallOrBlank(maze.WallExists(cell, Direction.North, grid), TopRight(cell));
+            yield return WallOrBlank(maze.WallExists(grid, cell, Direction.North), TopRight(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.Y))
@@ -77,7 +77,7 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(cell, Direction.South, grid), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(grid, cell, Direction.South), BottomRight(cell));
             }
         }
     }
@@ -88,7 +88,7 @@ public static class MazeImage
 
         foreach (var cell in grid.Cells.Where(c => c.X == 0))
         {
-            yield return WallOrBlank(maze.WallExists(cell, Direction.West, grid), BottomLeft(cell));
+            yield return WallOrBlank(maze.WallExists(grid, cell, Direction.West), BottomLeft(cell));
         }
 
         foreach (var grouping in grid.Cells.GroupBy(c => c.X))
@@ -97,7 +97,7 @@ public static class MazeImage
 
             foreach (var cell in grouping)
             {
-                yield return WallOrBlank(maze.WallExists(cell, Direction.East, grid), BottomRight(cell));
+                yield return WallOrBlank(maze.WallExists(grid, cell, Direction.East), BottomRight(cell));
             }
         }
     }

@@ -14,7 +14,7 @@ public static class MazeExtensions
         return maze.AddEdge(cell, adjacentCell);
     }
 
-    public static bool WallExists(this Maze maze, Cell cell, Direction direction, Grid grid)
+    public static bool WallExists(this Maze maze, Grid grid, Cell cell, Direction direction)
     {
         var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 
