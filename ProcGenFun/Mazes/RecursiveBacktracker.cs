@@ -34,20 +34,20 @@ public static class RecursiveBacktracker
     private static IDistribution<RecursiveBacktrackerState> NextStateDist(Grid grid, RecursiveBacktrackerState state)
     {
         var unvisitedNeighbours = grid.GetNeighbours(state.CurrentCell)
-            .Where(n => !state.Visited.Contains(n.Cell));
+            .Where(n => !state.Visited.Contains(n));
         return UniformDistribution.TryCreate(unvisitedNeighbours, out var unvisitedNeighbourDist) ?
             ProceedDist(state, unvisitedNeighbourDist) :
             Singleton.New(Backtrack(state));
     }
 
     private static IDistribution<RecursiveBacktrackerState> ProceedDist(
-        RecursiveBacktrackerState state, IDistribution<Neighbour> unvisitedNeighbourDist) =>
+        RecursiveBacktrackerState state, IDistribution<Cell> unvisitedNeighbourDist) =>
         from neighbour in unvisitedNeighbourDist
         select new RecursiveBacktrackerState(
-            Maze: state.Maze.AddEdge(state.CurrentCell, neighbour.Cell),
-            CurrentCell: neighbour.Cell,
+            Maze: state.Maze.AddEdge(state.CurrentCell, neighbour),
+            CurrentCell: neighbour,
             Path: state.Path.Push(state.CurrentCell),
-            Visited: state.Visited.Add(neighbour.Cell));
+            Visited: state.Visited.Add(neighbour));
 
     private static RecursiveBacktrackerState Backtrack(RecursiveBacktrackerState state) =>
         state with { Path = state.Path.Pop(out var cell), CurrentCell = cell };

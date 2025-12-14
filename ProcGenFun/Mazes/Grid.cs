@@ -40,11 +40,11 @@ public class Grid
         return IsValid(potentialAdjacentCell) ? potentialAdjacentCell : null;
     }
 
-    public IEnumerable<Neighbour> GetNeighbours(Cell cell) =>
+    public IEnumerable<Cell> GetNeighbours(Cell cell) =>
         from direction in AllDirections
         let adjacentCellOrNull = AdjacentCellOrNull(cell, direction)
         where adjacentCellOrNull != null
-        select new Neighbour(Cell: adjacentCellOrNull, Direction: direction);
+        select adjacentCellOrNull;
 
     private static Cell AdjacentCell(Cell cell, Direction direction) =>
         direction switch
