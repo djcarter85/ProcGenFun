@@ -2,5 +2,5 @@
 
 using System.Collections.Immutable;
 
-public record RecursiveBacktrackerState(
-    Maze<Cell> Maze, Cell CurrentCell, ImmutableStack<Cell> Path, ImmutableList<Cell> Visited);
+public record RecursiveBacktrackerState<T>(
+    Maze<T> Maze, T CurrentCell, ImmutableStack<T> Path, ImmutableList<T> Visited);
