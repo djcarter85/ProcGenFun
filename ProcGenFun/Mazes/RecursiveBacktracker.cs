@@ -21,7 +21,7 @@ public static class RecursiveBacktracker
         AllCellsVisited(state, grid) && state.Path.IsEmpty;
 
     private static bool AllCellsVisited(RecursiveBacktrackerState state, Grid grid) =>
-        state.Visited.Count == grid.CellCount;
+        state.Visited.Count == grid.Cells.Count;
 
     private static IDistribution<RecursiveBacktrackerState> InitialStateDist(Grid grid) =>
         from cell in UniformDistribution.Create(grid.Cells)

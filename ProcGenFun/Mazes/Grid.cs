@@ -22,8 +22,6 @@ public class Grid
 
     public IReadOnlyList<Cell> Cells { get; }
 
-    public int CellCount => this.Width * this.Height;
-
     public IEnumerable<int> ColumnIndices => Enumerable.Range(0, this.Width);
 
     public IEnumerable<int> RowIndices => Enumerable.Range(0, this.Height);
