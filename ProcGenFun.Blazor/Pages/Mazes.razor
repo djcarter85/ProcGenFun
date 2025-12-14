@@ -111,7 +111,7 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(Maze initial, IEnumerable<ColouredMaze> steps, Maze final, Grid grid)
+    private IReadOnlyList<SvgDocument> GetImages(Maze<Cell> initial, IEnumerable<ColouredMaze> steps, Maze<Cell> final, Grid grid)
     {
         var images = new List<SvgDocument>();
 

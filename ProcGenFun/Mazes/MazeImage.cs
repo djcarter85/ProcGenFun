@@ -14,7 +14,7 @@ public static class MazeImage
 
     private static readonly Color wallColor = Theme.Blue900;
 
-    public static SvgDocument CreateSvg(Maze maze, Func<Cell, Color> getCellColor, Grid grid)
+    public static SvgDocument CreateSvg(Maze<Cell> maze, Func<Cell, Color> getCellColor, Grid grid)
     {
         var imageWidth = ImageWidth(grid);
         var imageHeight = ImageHeight(grid);
@@ -46,7 +46,7 @@ public static class MazeImage
             Height = cellHeight
         };
 
-    private static SvgPath DrawWalls(Maze maze, Grid grid)
+    private static SvgPath DrawWalls(Maze<Cell> maze, Grid grid)
     {
         var pathData = new SvgPathSegmentList();
         foreach (var segment in HorizontalWalls(maze, grid).Concat(VerticalWalls(maze, grid)))
@@ -62,7 +62,7 @@ public static class MazeImage
         };
     }
 
-    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze maze, Grid grid)
+    private static IEnumerable<SvgPathSegment> HorizontalWalls(Maze<Cell> maze, Grid grid)
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 
@@ -82,7 +82,7 @@ public static class MazeImage
         }
     }
 
-    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze maze, Grid grid)
+    private static IEnumerable<SvgPathSegment> VerticalWalls(Maze<Cell> maze, Grid grid)
     {
         yield return new SvgMoveToSegment(false, TopLeft(new Cell(0, 0)));
 

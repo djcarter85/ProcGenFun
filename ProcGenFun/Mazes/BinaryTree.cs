@@ -8,7 +8,7 @@ using RandN.Extensions;
 
 public static class BinaryTree
 {
-    public static IDistribution<Maze> MazeDist(Grid grid) =>
+    public static IDistribution<Maze<Cell>> MazeDist(Grid grid) =>
         from state in StateDist(grid)
         select state.Current;
 
@@ -39,14 +39,14 @@ public static class BinaryTree
         return stateDist;
     }
 
-    private static IDistribution<Maze> InitialMazeDist(Grid grid)
+    private static IDistribution<Maze<Cell>> InitialMazeDist(Grid grid)
     {
-        var initialState = Maze.WithNoEdges(grid.Cells);
+        var initialState = Maze<Cell>.WithNoEdges(grid.Cells);
 
         return Singleton.New(initialState);
     }
 
-    private static IDistribution<Maze> NextStepDist(Maze maze, Grid grid, Cell cell)
+    private static IDistribution<Maze<Cell>> NextStepDist(Maze<Cell> maze, Grid grid, Cell cell)
     {
         var validDirections = GetValidDirections(cell, grid);
 
@@ -63,5 +63,5 @@ public static class BinaryTree
     private static IEnumerable<Direction> GetValidDirections(Cell cell, Grid grid) =>
         new[] { Direction.South, Direction.East }.Where(dir => grid.CanRemoveWall(cell, dir));
 
-    private record BinaryTreeState(Maze Initial, ImmutableList<BinaryTreeStep> Steps, Maze Current);
+    private record BinaryTreeState(Maze<Cell> Initial, ImmutableList<BinaryTreeStep> Steps, Maze<Cell> Current);
 }

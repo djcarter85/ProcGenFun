@@ -2,4 +2,4 @@
 
 using System.Collections.Immutable;
 
-public record SidewinderHistory(Maze Initial, ImmutableList<SidewinderStep> Steps, Maze Current);
+public record SidewinderHistory(Maze<Cell> Initial, ImmutableList<SidewinderStep> Steps, Maze<Cell> Current);

@@ -2,7 +2,7 @@
 
 public static class MazeExtensions
 {
-    public static Maze RemoveWall(this Maze maze, Grid grid, Cell cell, Direction direction)
+    public static Maze<Cell> RemoveWall(this Maze<Cell> maze, Grid grid, Cell cell, Direction direction)
     {
         var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 
@@ -14,7 +14,7 @@ public static class MazeExtensions
         return maze.AddEdge(cell, adjacentCell);
     }
 
-    public static bool WallExists(this Maze maze, Grid grid, Cell cell, Direction direction)
+    public static bool WallExists(this Maze<Cell> maze, Grid grid, Cell cell, Direction direction)
     {
         var adjacentCell = grid.AdjacentCellOrNull(cell, direction);
 

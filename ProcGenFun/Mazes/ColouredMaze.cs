@@ -2,4 +2,4 @@
 
 using System.Drawing;
 
-public record ColouredMaze(Maze Maze, Func<Cell, Color> GetCellColour);
+public record ColouredMaze(Maze<Cell> Maze, Func<Cell, Color> GetCellColour);

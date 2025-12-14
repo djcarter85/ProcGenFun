@@ -113,14 +113,14 @@ public partial class MazeForm : Form
 
     private static void SaveMazeWithAllWallsImage(string folderPath)
     {
-        var mazeWithAllWalls = Maze.WithNoEdges(Grid.Cells);
+        var mazeWithAllWalls = Maze<Cell>.WithNoEdges(Grid.Cells);
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
             MazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), Grid).GetXML());
     }
 
-    private static void SaveMazeImage(string folderPath, Maze maze)
+    private static void SaveMazeImage(string folderPath, Maze<Cell> maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
@@ -129,9 +129,9 @@ public partial class MazeForm : Form
 
     private static void SaveMazeAnimationAndFrames(
         string folderPath,
-        Maze initial,
+        Maze<Cell> initial,
         IEnumerable<ColouredMaze> steps,
-        Maze final,
+        Maze<Cell> final,
         Func<Cell, Color> initialCellColours)
     {
         var framesPath = Path.Combine(folderPath, "frames");
@@ -141,7 +141,7 @@ public partial class MazeForm : Form
 
         var index = 0;
 
-        void AddFrame(Maze maze, Func<Cell, Color> getCellColor, int delay = -1)
+        void AddFrame(Maze<Cell> maze, Func<Cell, Color> getCellColor, int delay = -1)
         {
             var svgDocument = MazeImage.CreateSvg(maze, getCellColor, Grid);
 

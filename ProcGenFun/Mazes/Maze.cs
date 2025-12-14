@@ -1,26 +1,25 @@
 namespace ProcGenFun;
 
 using System.Collections.Immutable;
-using ProcGenFun.Mazes;
 
-public class Maze
+public class Maze<TVertex> where TVertex : notnull
 {
-    private readonly ImmutableDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix;
+    private readonly ImmutableDictionary<TVertex, ImmutableList<TVertex>> adjacencyMatrix;
 
-    private Maze(ImmutableDictionary<Cell, ImmutableList<Cell>> adjacencyMatrix)
+    private Maze(ImmutableDictionary<TVertex, ImmutableList<TVertex>> adjacencyMatrix)
     {
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
-    public static Maze WithNoEdges(IEnumerable<Cell> cells) =>
+    public static Maze<TVertex> WithNoEdges(IEnumerable<TVertex> cells) =>
         new(
             cells.Aggregate(
-                ImmutableDictionary<Cell, ImmutableList<Cell>>.Empty,
+                ImmutableDictionary<TVertex, ImmutableList<TVertex>>.Empty,
                 (current, cell) => current.Add(cell, [])));
 
-    public bool EdgeExistsBetween(Cell cell1, Cell cell2) => this.adjacencyMatrix[cell1].Contains(cell2);
+    public bool EdgeExistsBetween(TVertex cell1, TVertex cell2) => this.adjacencyMatrix[cell1].Contains(cell2);
 
-    public Maze AddEdge(Cell cell1, Cell cell2) =>
+    public Maze<TVertex> AddEdge(TVertex cell1, TVertex cell2) =>
         new(
             this.adjacencyMatrix
                 .SetItem(cell1, this.adjacencyMatrix[cell1].Add(cell2))

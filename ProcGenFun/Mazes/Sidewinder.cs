@@ -8,12 +8,12 @@ using RandN.Extensions;
 
 public static class Sidewinder
 {
-    public static IDistribution<Maze> MazeDist(Grid grid) =>
+    public static IDistribution<Maze<Cell>> MazeDist(Grid grid) =>
         HistoryDist(grid).Select(h => h.Current);
 
     public static IDistribution<SidewinderHistory> HistoryDist(Grid grid)
     {
-        var initialMaze = Maze.WithNoEdges(grid.Cells);
+        var initialMaze = Maze<Cell>.WithNoEdges(grid.Cells);
 
         IDistribution<SidewinderHistory> historyDist =
             Singleton.New(new SidewinderHistory(Initial: initialMaze, Steps: [], Current: initialMaze));
@@ -57,7 +57,7 @@ public static class Sidewinder
         var validActions = GetValidActions(grid, cell);
         if (UniformDistribution.TryCreate(validActions, out var actionDist))
         {
-            Maze maze = rowState.Maze;
+            Maze<Cell> maze = rowState.Maze;
             return
                 from action in actionDist
                 from newRowState in ApplyAction(maze, runBeforeWallRemoved, cell, action, grid)
@@ -70,7 +70,7 @@ public static class Sidewinder
     }
 
     private static IDistribution<RowState> ApplyAction(
-        Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Action action, Grid grid) =>
+        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Action action, Grid grid) =>
         action switch
         {
             Action.RemoveEastWall => Singleton.New(RemoveEastWall(maze, runBeforeWallRemoved, cell, grid)),
@@ -79,14 +79,14 @@ public static class Sidewinder
         };
 
     private static RowState RemoveEastWall(
-        Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Grid grid) =>
+        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Cell cell, Grid grid) =>
         new RowState(
             Maze: maze.RemoveWall(grid, cell, Direction.East),
             RunBeforeWallRemoved: runBeforeWallRemoved,
             Run: runBeforeWallRemoved);
 
     private static IDistribution<RowState> CloseRunDist(
-        Maze maze, ImmutableList<Cell> runBeforeWallRemoved, Grid grid) =>
+        Maze<Cell> maze, ImmutableList<Cell> runBeforeWallRemoved, Grid grid) =>
         from cellToRemoveSouthWallFrom in UniformDistribution.Create(runBeforeWallRemoved)
         select new RowState(
             Maze: maze.RemoveWall(grid, cellToRemoveSouthWallFrom, Direction.South),
@@ -106,7 +106,7 @@ public static class Sidewinder
         }
     }
 
-    private record RowState(Maze Maze, ImmutableList<Cell> RunBeforeWallRemoved, ImmutableList<Cell> Run);
+    private record RowState(Maze<Cell> Maze, ImmutableList<Cell> RunBeforeWallRemoved, ImmutableList<Cell> Run);
 
     private record RollingRowState(ImmutableList<RowState> Previous, RowState Current);
 
