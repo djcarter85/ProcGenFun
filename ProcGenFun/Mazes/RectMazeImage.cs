@@ -6,13 +6,8 @@ using Svg.Pathing;
 
 public static class RectMazeImage
 {
-    private const int marginX = 25;
-    private const int marginY = 25;
-
     private const int cellWidth = 25;
     private const int cellHeight = 25;
-
-    private static readonly Color wallColor = Theme.Blue900;
 
     public static SvgDocument CreateSvg(Maze<RectCell> maze, Func<RectCell, Color> getCellColor, RectGrid grid)
     {
@@ -56,7 +51,7 @@ public static class RectMazeImage
 
         return new SvgPath
         {
-            Stroke = new SvgColourServer(wallColor),
+            Stroke = new SvgColourServer(MazeImage.wallColor),
             StrokeWidth = 1,
             PathData = pathData
         };
@@ -105,15 +100,15 @@ public static class RectMazeImage
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
         wallExists ? new SvgLineSegment(false, endpoint) : new SvgMoveToSegment(false, endpoint);
 
-    private static int ImageHeight(RectGrid grid) => grid.Height * cellHeight + 2 * marginY;
+    private static int ImageHeight(RectGrid grid) => grid.Height * cellHeight + 2 * MazeImage.marginY;
 
-    private static int ImageWidth(RectGrid grid) => grid.Width * cellWidth + 2 * marginX;
+    private static int ImageWidth(RectGrid grid) => grid.Width * cellWidth + 2 * MazeImage.marginX;
 
-    private static int Left(RectCell cell) => marginX + cell.X * cellWidth;
+    private static int Left(RectCell cell) => MazeImage.marginX + cell.X * cellWidth;
 
     private static int Right(RectCell cell) => Left(cell) + cellWidth;
 
-    private static int Top(RectCell cell) => marginY + cell.Y * cellWidth;
+    private static int Top(RectCell cell) => MazeImage.marginY + cell.Y * cellWidth;
 
     private static int Bottom(RectCell cell) => Top(cell) + cellWidth;
 
