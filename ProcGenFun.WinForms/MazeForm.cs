@@ -4,12 +4,14 @@ using AnimatedGif;
 using ProcGenFun.Distributions;
 using ProcGenFun.Mazes;
 using RandN;
+using RandN.Distributions;
 using RandN.Extensions;
 using Svg;
 
 public partial class MazeForm : Form
 {
     private static readonly RectGrid Grid = new(width: 16, height: 10);
+    private static readonly HexGrid HexGrid = new(maxDistanceFromOrigin: 6);
 
     private readonly IRng rng;
 
@@ -38,6 +40,8 @@ public partial class MazeForm : Form
                 from maze in RecursiveBacktracker.MazeDist(Grid.Cells, Grid.GetNeighbours)
                 let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
                 select svg.Draw(),
+            3 =>
+                Singleton.New(HexMazeImage.CreateSvg(HexGrid).Draw()),
             _ => throw new NotImplementedException(),
         };
 
@@ -91,7 +95,7 @@ public partial class MazeForm : Form
                     history.Current,
                     CellColours.Base());
             }
-            else
+            else if (algorithmCombo.SelectedIndex == 2)
             {
                 var historyDist = RecursiveBacktracker.HistoryDist(Grid.Cells, Grid.GetNeighbours);
 
@@ -108,7 +112,18 @@ public partial class MazeForm : Form
                     history.Last().Maze,
                     CellColours.RBUnvisited());
             }
+            else
+            {
+                SaveHexMazeWithAllWallsImage(folderPath);
+            }
         }
+    }
+
+    private static void SaveHexMazeWithAllWallsImage(string folderPath)
+    {
+        File.WriteAllText(
+            path: Path.Combine(folderPath, "maze-all-walls.svg"),
+            HexMazeImage.CreateSvg(HexGrid).GetXML());
     }
 
     private static void SaveRectMazeWithAllWallsImage(string folderPath)
