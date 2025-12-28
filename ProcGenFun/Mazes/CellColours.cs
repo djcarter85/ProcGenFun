@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun.Mazes;
+namespace ProcGenFun.Mazes;
 
 using System.Drawing;
 using System.Linq;

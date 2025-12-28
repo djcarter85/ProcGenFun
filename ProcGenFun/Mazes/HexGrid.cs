@@ -20,6 +20,12 @@ public class HexGrid
 
     public IReadOnlyList<HexCell> Cells { get; }
 
+    public IEnumerable<HexCell> GetNeighbours(HexCell cell) =>
+        from direction in HexDirection.GetAll()
+        let neighbour = cell.GetNeighbourInDirection(direction)
+        where this.IsWithinBounds(neighbour)
+        select neighbour;
+
     private static IEnumerable<int> RangeBetweenInclusive(int lowerBound, int upperBound) =>
         Enumerable.Range(lowerBound, upperBound - lowerBound + 1);
 

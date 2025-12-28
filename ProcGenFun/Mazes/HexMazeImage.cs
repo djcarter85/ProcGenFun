@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun.Mazes;
+namespace ProcGenFun.Mazes;
 
 using System.Drawing;
 using Svg;
@@ -9,7 +9,7 @@ public static class HexMazeImage
     private const float outerRadiusInPixels = 16;
     private static readonly float innerRadiusInPixels = 0.5f * SqrtF(3) * outerRadiusInPixels;
 
-    public static SvgDocument CreateSvg(HexGrid grid)
+    public static SvgDocument CreateSvg(Maze<HexCell> maze, Func<HexCell, Color> getCellColor, HexGrid grid)
     {
         var imageWidthInPixels = ImageWidthInPixels(grid);
         var imageHeightInPixels = ImageHeightInPixels(grid);
@@ -28,10 +28,10 @@ public static class HexMazeImage
 
         foreach (var cell in grid.Cells)
         {
-            svgDocument.Children.Add(DrawCell(cell, color: Theme.White));
+            svgDocument.Children.Add(DrawCell(cell, color: getCellColor(cell)));
         }
 
-        svgDocument.Children.Add(DrawWalls(grid));
+        svgDocument.Children.Add(DrawWalls(maze, grid));
 
         return svgDocument;
     }
@@ -82,10 +82,10 @@ public static class HexMazeImage
         return originCellHeightInPixels + nonOriginCellHeightInPixels * numberOfNonOriginCells + totalMarginInPixels;
     }
 
-    private static SvgPath DrawWalls(HexGrid grid)
+    private static SvgPath DrawWalls(Maze<HexCell> maze, HexGrid grid)
     {
         var pathData = new SvgPathSegmentList();
-        foreach (var segment in CellWallPathSegments(grid))
+        foreach (var segment in CellWallPathSegments(maze, grid))
         {
             pathData.Add(segment);
         }
@@ -99,7 +99,7 @@ public static class HexMazeImage
         };
     }
 
-    private static IEnumerable<SvgPathSegment> CellWallPathSegments(HexGrid grid)
+    private static IEnumerable<SvgPathSegment> CellWallPathSegments(Maze<HexCell> maze, HexGrid grid)
     {
         foreach (var cell in grid.Cells)
         {
@@ -117,7 +117,7 @@ public static class HexMazeImage
 
             foreach (var cellWall in hexCellWalls)
             {
-                if (cellWall.ShouldDraw(grid, cell))
+                if (cellWall.ShouldDraw(maze, grid, cell))
                 {
                     yield return new SvgLineSegment(false, cellWall.ToCorner);
                 }
@@ -166,7 +166,20 @@ public static class HexMazeImage
 
         private bool DirectionIsPrimary => PrimaryDirections.Contains(this.Direction);
 
-        public bool ShouldDraw(HexGrid grid, HexCell cell) =>
-            this.DirectionIsPrimary || !grid.IsWithinBounds(cell.GetNeighbourInDirection(this.Direction));
+        public bool ShouldDraw(Maze<HexCell> maze, HexGrid grid, HexCell cell)
+        {
+            var neighbour = cell.GetNeighbourInDirection(this.Direction);
+            if (!grid.IsWithinBounds(neighbour))
+            {
+                return true;
+            }
+
+            if (maze.EdgeExistsBetween(cell, neighbour))
+            {
+                return false;
+            }
+
+            return this.DirectionIsPrimary;
+        }
     }
 }

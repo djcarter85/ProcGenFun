@@ -41,7 +41,9 @@ public partial class MazeForm : Form
                 let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), RectGrid)
                 select svg.Draw(),
             3 =>
-                Singleton.New(HexMazeImage.CreateSvg(HexGrid).Draw()),
+                from maze in RecursiveBacktracker.MazeDist(HexGrid.Cells, HexGrid.GetNeighbours)
+                let svg = HexMazeImage.CreateSvg(maze, CellColours.Base<HexCell>(), HexGrid)
+                select svg.Draw(),
             _ => throw new NotImplementedException(),
         };
 
@@ -117,16 +119,32 @@ public partial class MazeForm : Form
             }
             else
             {
+                var historyDist = RecursiveBacktracker.HistoryDist(HexGrid.Cells, HexGrid.GetNeighbours);
+
+                var history = historyDist.Sample(this.rng);
+
                 SaveHexMazeWithAllWallsImage(folderPath);
+
+                SaveHexMazeImage(folderPath, history.Last().Maze);
+
+                SaveMazeAnimationAndFrames(
+                    folderPath,
+                    history.First().Maze,
+                    ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
+                    history.Last().Maze,
+                    CellColours.RBUnvisited<HexCell>(),
+                    (m, gcc) => HexMazeImage.CreateSvg(m, gcc, HexGrid));
             }
         }
     }
 
     private static void SaveHexMazeWithAllWallsImage(string folderPath)
     {
+        var mazeWithAllWalls = Maze.WithNoEdges(HexGrid.Cells);
+
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            HexMazeImage.CreateSvg(HexGrid).GetXML());
+            HexMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base<HexCell>(), HexGrid).GetXML());
     }
 
     private static void SaveRectMazeWithAllWallsImage(string folderPath)
@@ -136,6 +154,13 @@ public partial class MazeForm : Form
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
             RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base<RectCell>(), RectGrid).GetXML());
+    }
+
+    private static void SaveHexMazeImage(string folderPath, Maze<HexCell> maze)
+    {
+        File.WriteAllText(
+            path: Path.Combine(folderPath, "maze.svg"),
+            HexMazeImage.CreateSvg(maze, CellColours.Base<HexCell>(), HexGrid).GetXML());
     }
 
     private static void SaveRectMazeImage(string folderPath, Maze<RectCell> maze)

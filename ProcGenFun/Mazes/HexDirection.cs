@@ -21,6 +21,16 @@ public record HexDirection
 
     public static HexDirection NorthWest { get; } = new(0, -1, 1);
 
+    public static IEnumerable<HexDirection> GetAll() =>
+    [
+        NorthEast,
+        East,
+        SouthEast,
+        SouthWest,
+        West,
+        NorthWest,
+    ];
+
     public int Q { get; }
     
     public int R { get; }
