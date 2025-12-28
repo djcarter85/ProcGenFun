@@ -4,8 +4,8 @@ using System.Drawing;
 
 public static class MazeImage
 {
-    public const int marginX = 25;
-    public const int marginY = 25;
+    public const int MarginXInPixels = 25;
+    public const int MarginYInPixels = 25;
 
-    public static readonly Color wallColor = Theme.Blue900;
+    public static readonly Color WallColor = Theme.Blue900;
 }

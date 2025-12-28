@@ -51,7 +51,7 @@ public static class RectMazeImage
 
         return new SvgPath
         {
-            Stroke = new SvgColourServer(MazeImage.wallColor),
+            Stroke = new SvgColourServer(MazeImage.WallColor),
             StrokeWidth = 1,
             PathData = pathData
         };
@@ -100,15 +100,15 @@ public static class RectMazeImage
     private static SvgPathSegment WallOrBlank(bool wallExists, Point endpoint) =>
         wallExists ? new SvgLineSegment(false, endpoint) : new SvgMoveToSegment(false, endpoint);
 
-    private static int ImageHeight(RectGrid grid) => grid.Height * cellHeight + 2 * MazeImage.marginY;
+    private static int ImageHeight(RectGrid grid) => grid.Height * cellHeight + 2 * MazeImage.MarginYInPixels;
 
-    private static int ImageWidth(RectGrid grid) => grid.Width * cellWidth + 2 * MazeImage.marginX;
+    private static int ImageWidth(RectGrid grid) => grid.Width * cellWidth + 2 * MazeImage.MarginXInPixels;
 
-    private static int Left(RectCell cell) => MazeImage.marginX + cell.X * cellWidth;
+    private static int Left(RectCell cell) => MazeImage.MarginXInPixels + cell.X * cellWidth;
 
     private static int Right(RectCell cell) => Left(cell) + cellWidth;
 
-    private static int Top(RectCell cell) => MazeImage.marginY + cell.Y * cellWidth;
+    private static int Top(RectCell cell) => MazeImage.MarginYInPixels + cell.Y * cellWidth;
 
     private static int Bottom(RectCell cell) => Top(cell) + cellWidth;
 
