@@ -10,7 +10,7 @@ using Svg;
 
 public partial class MazeForm : Form
 {
-    private static readonly RectGrid Grid = new(width: 16, height: 10);
+    private static readonly RectGrid RectGrid = new(width: 16, height: 10);
     private static readonly HexGrid HexGrid = new(maxDistanceFromOrigin: 6);
 
     private readonly IRng rng;
@@ -29,16 +29,16 @@ public partial class MazeForm : Form
         var imageDist = algorithmCombo.SelectedIndex switch
         {
             0 =>
-                from maze in BinaryTree.MazeDist(Grid)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
+                from maze in BinaryTree.MazeDist(RectGrid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), RectGrid)
                 select svg.Draw(),
             1 =>
-                from maze in Sidewinder.MazeDist(Grid)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
+                from maze in Sidewinder.MazeDist(RectGrid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), RectGrid)
                 select svg.Draw(),
             2 =>
-                from maze in RecursiveBacktracker.MazeDist(Grid.Cells, Grid.GetNeighbours)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
+                from maze in RecursiveBacktracker.MazeDist(RectGrid.Cells, RectGrid.GetNeighbours)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), RectGrid)
                 select svg.Draw(),
             3 =>
                 Singleton.New(HexMazeImage.CreateSvg(HexGrid).Draw()),
@@ -63,7 +63,7 @@ public partial class MazeForm : Form
 
             if (algorithmCombo.SelectedIndex == 0)
             {
-                var historyDist = BinaryTree.HistoryDist(Grid);
+                var historyDist = BinaryTree.HistoryDist(RectGrid);
 
                 var history = historyDist.Sample(this.rng);
 
@@ -77,11 +77,11 @@ public partial class MazeForm : Form
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final,
                     CellColours.Base<RectCell>(),
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, RectGrid));
             }
             else if (algorithmCombo.SelectedIndex == 1)
             {
-                var historyDist = Sidewinder.HistoryDist(Grid);
+                var historyDist = Sidewinder.HistoryDist(RectGrid);
 
                 var history = historyDist.Sample(this.rng);
 
@@ -95,11 +95,11 @@ public partial class MazeForm : Form
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
                     CellColours.Base<RectCell>(),
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, RectGrid));
             }
             else if (algorithmCombo.SelectedIndex == 2)
             {
-                var historyDist = RecursiveBacktracker.HistoryDist(Grid.Cells, Grid.GetNeighbours);
+                var historyDist = RecursiveBacktracker.HistoryDist(RectGrid.Cells, RectGrid.GetNeighbours);
 
                 var history = historyDist.Sample(this.rng);
 
@@ -113,7 +113,7 @@ public partial class MazeForm : Form
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
                     CellColours.RBUnvisited<RectCell>(),
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, RectGrid));
             }
             else
             {
@@ -131,18 +131,18 @@ public partial class MazeForm : Form
 
     private static void SaveRectMazeWithAllWallsImage(string folderPath)
     {
-        var mazeWithAllWalls = Maze.WithNoEdges(Grid.Cells);
+        var mazeWithAllWalls = Maze.WithNoEdges(RectGrid.Cells);
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base<RectCell>(), Grid).GetXML());
+            RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base<RectCell>(), RectGrid).GetXML());
     }
 
     private static void SaveRectMazeImage(string folderPath, Maze<RectCell> maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
-            RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid).GetXML());
+            RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), RectGrid).GetXML());
     }
 
     private static void SaveMazeAnimationAndFrames<TCell>(
