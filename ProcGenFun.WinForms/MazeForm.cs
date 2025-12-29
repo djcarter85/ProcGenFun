@@ -63,9 +63,9 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveRectMazeWithAllWallsImage(folderPath);
 
-                SaveMazeImage(folderPath, history.Final);
+                SaveRectMazeImage(folderPath, history.Final);
 
                 SaveMazeAnimationAndFrames(
                     folderPath,
@@ -80,9 +80,9 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveRectMazeWithAllWallsImage(folderPath);
 
-                SaveMazeImage(folderPath, history.Current);
+                SaveRectMazeImage(folderPath, history.Current);
 
                 SaveMazeAnimationAndFrames(
                     folderPath,
@@ -97,9 +97,9 @@ public partial class MazeForm : Form
 
                 var history = historyDist.Sample(this.rng);
 
-                SaveMazeWithAllWallsImage(folderPath);
+                SaveRectMazeWithAllWallsImage(folderPath);
 
-                SaveMazeImage(folderPath, history.Last().Maze);
+                SaveRectMazeImage(folderPath, history.Last().Maze);
 
                 SaveMazeAnimationAndFrames(
                     folderPath,
@@ -111,7 +111,7 @@ public partial class MazeForm : Form
         }
     }
 
-    private static void SaveMazeWithAllWallsImage(string folderPath)
+    private static void SaveRectMazeWithAllWallsImage(string folderPath)
     {
         var mazeWithAllWalls = Maze.WithNoEdges(Grid.Cells);
 
@@ -120,7 +120,7 @@ public partial class MazeForm : Form
             RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), Grid).GetXML());
     }
 
-    private static void SaveMazeImage(string folderPath, Maze<RectCell> maze)
+    private static void SaveRectMazeImage(string folderPath, Maze<RectCell> maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
