@@ -2,4 +2,5 @@
 
 using System.Drawing;
 
-public record ColouredMaze(Maze<RectCell> Maze, Func<RectCell, Color> GetCellColour);
+public record ColouredMaze<TCell>(Maze<TCell> Maze, Func<TCell, Color> GetCellColour)
+    where TCell : notnull;

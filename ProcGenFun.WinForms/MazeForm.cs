@@ -30,15 +30,15 @@ public partial class MazeForm : Form
         {
             0 =>
                 from maze in BinaryTree.MazeDist(Grid)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
                 select svg.Draw(),
             1 =>
                 from maze in Sidewinder.MazeDist(Grid)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
                 select svg.Draw(),
             2 =>
                 from maze in RecursiveBacktracker.MazeDist(Grid.Cells, Grid.GetNeighbours)
-                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid)
+                let svg = RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid)
                 select svg.Draw(),
             3 =>
                 Singleton.New(HexMazeImage.CreateSvg(HexGrid).Draw()),
@@ -76,7 +76,7 @@ public partial class MazeForm : Form
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final,
-                    CellColours.Base(),
+                    CellColours.Base<RectCell>(),
                     (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else if (algorithmCombo.SelectedIndex == 1)
@@ -94,7 +94,7 @@ public partial class MazeForm : Form
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
-                    CellColours.Base(),
+                    CellColours.Base<RectCell>(),
                     (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else if (algorithmCombo.SelectedIndex == 2)
@@ -112,7 +112,7 @@ public partial class MazeForm : Form
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
-                    CellColours.RBUnvisited(),
+                    CellColours.RBUnvisited<RectCell>(),
                     (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else
@@ -135,23 +135,23 @@ public partial class MazeForm : Form
 
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze-all-walls.svg"),
-            RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base(), Grid).GetXML());
+            RectMazeImage.CreateSvg(mazeWithAllWalls, CellColours.Base<RectCell>(), Grid).GetXML());
     }
 
     private static void SaveRectMazeImage(string folderPath, Maze<RectCell> maze)
     {
         File.WriteAllText(
             path: Path.Combine(folderPath, "maze.svg"),
-            RectMazeImage.CreateSvg(maze, CellColours.Base(), Grid).GetXML());
+            RectMazeImage.CreateSvg(maze, CellColours.Base<RectCell>(), Grid).GetXML());
     }
 
-    private static void SaveMazeAnimationAndFrames(
+    private static void SaveMazeAnimationAndFrames<TCell>(
         string folderPath,
-        Maze<RectCell> initial,
-        IEnumerable<ColouredMaze> steps,
-        Maze<RectCell> final,
-        Func<RectCell, Color> initialCellColours,
-        Func<Maze<RectCell>, Func<RectCell, Color>, SvgDocument> createSvg)
+        Maze<TCell> initial,
+        IEnumerable<ColouredMaze<TCell>> steps,
+        Maze<TCell> final,
+        Func<TCell, Color> initialCellColours,
+        Func<Maze<TCell>, Func<TCell, Color>, SvgDocument> createSvg) where TCell : notnull
     {
         var framesPath = Path.Combine(folderPath, "frames");
         Directory.CreateDirectory(framesPath);
@@ -160,7 +160,7 @@ public partial class MazeForm : Form
 
         var index = 0;
 
-        void AddFrame(Maze<RectCell> maze, Func<RectCell, Color> getCellColor, int delay = -1)
+        void AddFrame(Maze<TCell> maze, Func<TCell, Color> getCellColor, int delay = -1)
         {
             var svgDocument = createSvg(maze, getCellColor);
 
@@ -180,6 +180,6 @@ public partial class MazeForm : Form
             AddFrame(step.Maze, step.GetCellColour);
         }
 
-        AddFrame(final, CellColours.Base(), delay: 1000);
+        AddFrame(final, CellColours.Base<TCell>(), delay: 1000);
     }
 }

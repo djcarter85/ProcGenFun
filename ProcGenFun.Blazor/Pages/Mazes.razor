@@ -112,22 +112,23 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(
-        Maze<RectCell> initial,
-        IEnumerable<ColouredMaze> steps,
-        Maze<RectCell> final,
-        Func<Maze<RectCell>, Func<RectCell, Color>, SvgDocument> createSvg)
+    private IReadOnlyList<SvgDocument> GetImages<TCell>(
+        Maze<TCell> initial,
+        IEnumerable<ColouredMaze<TCell>> steps,
+        Maze<TCell> final,
+        Func<Maze<TCell>, Func<TCell, Color>, SvgDocument> createSvg)
+        where TCell : notnull
     {
         var images = new List<SvgDocument>();
 
-        images.Add(createSvg(initial, CellColours.Base()));
+        images.Add(createSvg(initial, CellColours.Base<TCell>()));
 
         foreach (var step in steps)
         {
             images.Add(createSvg(step.Maze, step.GetCellColour));
         }
 
-        images.Add(createSvg(final, CellColours.Base()));
+        images.Add(createSvg(final, CellColours.Base<TCell>()));
 
         return images;
     }
