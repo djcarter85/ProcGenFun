@@ -22,7 +22,7 @@
         <select @bind="mazeAlgorithm">
             <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
             <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
-            <option value="@MazeAlgorithm.RecursiveBacktracker">Recursive Backtracker</option>
+            <option value="@MazeAlgorithm.RecursiveBacktrackerRect">Recursive Backtracker</option>
         </select>
     </div>
 
@@ -72,7 +72,7 @@
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
                     (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
-            MazeAlgorithm.RecursiveBacktracker =>
+            MazeAlgorithm.RecursiveBacktrackerRect =>
                 from history in RecursiveBacktracker.HistoryDist(grid.Cells, grid.GetNeighbours)
                 select GetImages(
                     history.First().Maze,
@@ -137,6 +137,6 @@
     {
         BinaryTree,
         Sidewinder,
-        RecursiveBacktracker
+        RecursiveBacktrackerRect
     }
 }
