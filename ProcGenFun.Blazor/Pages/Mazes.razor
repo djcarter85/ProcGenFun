@@ -54,31 +54,31 @@
 
     public void GenerateMaze()
     {
-        var grid = new RectGrid(16, 10);
+        var rectGrid = new RectGrid(16, 10);
 
         var imagesDist = this.mazeAlgorithm switch
         {
             MazeAlgorithm.BinaryTree =>
-                from history in BinaryTree.HistoryDist(grid)
+                from history in BinaryTree.HistoryDist(rectGrid)
                 select GetImages(
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final,
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, rectGrid)),
             MazeAlgorithm.Sidewinder =>
-                from history in Sidewinder.HistoryDist(grid)
+                from history in Sidewinder.HistoryDist(rectGrid)
                 select GetImages(
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, rectGrid)),
             MazeAlgorithm.RecursiveBacktrackerRect =>
-                from history in RecursiveBacktracker.HistoryDist(grid.Cells, grid.GetNeighbours)
+                from history in RecursiveBacktracker.HistoryDist(rectGrid.Cells, rectGrid.GetNeighbours)
                 select GetImages(
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
-                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, rectGrid)),
             _ => throw new ArgumentOutOfRangeException()
         };
 
