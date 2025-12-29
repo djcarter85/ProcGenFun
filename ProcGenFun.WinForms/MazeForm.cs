@@ -76,7 +76,8 @@ public partial class MazeForm : Form
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final,
-                    CellColours.Base());
+                    CellColours.Base(),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else if (algorithmCombo.SelectedIndex == 1)
             {
@@ -93,7 +94,8 @@ public partial class MazeForm : Form
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
-                    CellColours.Base());
+                    CellColours.Base(),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else if (algorithmCombo.SelectedIndex == 2)
             {
@@ -110,7 +112,8 @@ public partial class MazeForm : Form
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
-                    CellColours.RBUnvisited());
+                    CellColours.RBUnvisited(),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, Grid));
             }
             else
             {
@@ -147,7 +150,8 @@ public partial class MazeForm : Form
         Maze<RectCell> initial,
         IEnumerable<ColouredMaze> steps,
         Maze<RectCell> final,
-        Func<RectCell, Color> initialCellColours)
+        Func<RectCell, Color> initialCellColours,
+        Func<Maze<RectCell>, Func<RectCell, Color>, SvgDocument> createSvg)
     {
         var framesPath = Path.Combine(folderPath, "frames");
         Directory.CreateDirectory(framesPath);
@@ -158,7 +162,7 @@ public partial class MazeForm : Form
 
         void AddFrame(Maze<RectCell> maze, Func<RectCell, Color> getCellColor, int delay = -1)
         {
-            var svgDocument = RectMazeImage.CreateSvg(maze, getCellColor, Grid);
+            var svgDocument = createSvg(maze, getCellColor);
 
             File.WriteAllText(
                 Path.Combine(framesPath, $"frame_{index++:0000}.svg"),

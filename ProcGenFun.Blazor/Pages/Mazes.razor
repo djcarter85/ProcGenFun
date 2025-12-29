@@ -1,3 +1,4 @@
+@using System.Drawing
 @using Microsoft.AspNetCore.Components.Forms
 @using ProcGenFun
 @using ProcGenFun.Blazor.Components
@@ -63,21 +64,21 @@
                     history.Initial,
                     ColouredMazeCreator.FromBinaryTreeHistory(history),
                     history.Final,
-                    grid),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
             MazeAlgorithm.Sidewinder =>
                 from history in Sidewinder.HistoryDist(grid)
                 select GetImages(
                     history.Initial,
                     ColouredMazeCreator.FromSidewinderHistory(history),
                     history.Current,
-                    grid),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
             MazeAlgorithm.RecursiveBacktracker =>
                 from history in RecursiveBacktracker.HistoryDist(grid.Cells, grid.GetNeighbours)
                 select GetImages(
                     history.First().Maze,
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
-                    grid),
+                    (m, gcc) => RectMazeImage.CreateSvg(m, gcc, grid)),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -111,18 +112,22 @@
         this.selectedImageIndex = this.images!.Count - 1;
     }
 
-    private IReadOnlyList<SvgDocument> GetImages(Maze<RectCell> initial, IEnumerable<ColouredMaze> steps, Maze<RectCell> final, RectGrid grid)
+    private IReadOnlyList<SvgDocument> GetImages(
+        Maze<RectCell> initial,
+        IEnumerable<ColouredMaze> steps,
+        Maze<RectCell> final,
+        Func<Maze<RectCell>, Func<RectCell, Color>, SvgDocument> createSvg)
     {
         var images = new List<SvgDocument>();
 
-        images.Add(RectMazeImage.CreateSvg(initial, CellColours.Base(), grid));
+        images.Add(createSvg(initial, CellColours.Base()));
 
         foreach (var step in steps)
         {
-            images.Add(RectMazeImage.CreateSvg(step.Maze, step.GetCellColour, grid));
+            images.Add(createSvg(step.Maze, step.GetCellColour));
         }
 
-        images.Add(RectMazeImage.CreateSvg(final, CellColours.Base(), grid));
+        images.Add(createSvg(final, CellColours.Base()));
 
         return images;
     }
