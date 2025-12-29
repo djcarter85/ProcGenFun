@@ -22,7 +22,8 @@
         <select @bind="mazeAlgorithm">
             <option value="@MazeAlgorithm.BinaryTree">Binary Tree</option>
             <option value="@MazeAlgorithm.Sidewinder">Sidewinder</option>
-            <option value="@MazeAlgorithm.RecursiveBacktrackerRect">Recursive Backtracker</option>
+            <option value="@MazeAlgorithm.RecursiveBacktrackerRect">Recursive Backtracker (Rect)</option>
+            <option value="@MazeAlgorithm.RecursiveBacktrackerHex">Recursive Backtracker (Hex)</option>
         </select>
     </div>
 
@@ -55,6 +56,7 @@
     public void GenerateMaze()
     {
         var rectGrid = new RectGrid(16, 10);
+        var hexGrid = new HexGrid(maxDistanceFromOrigin: 5);
 
         var imagesDist = this.mazeAlgorithm switch
         {
@@ -79,6 +81,13 @@
                     ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
                     history.Last().Maze,
                     (m, gcc) => RectMazeImage.CreateSvg(m, gcc, rectGrid)),
+            MazeAlgorithm.RecursiveBacktrackerHex =>
+                from history in RecursiveBacktracker.HistoryDist(hexGrid.Cells, hexGrid.GetNeighbours)
+                select GetImages(
+                    history.First().Maze,
+                    ColouredMazeCreator.FromRecursiveBacktrackerHistory(history),
+                    history.Last().Maze,
+                    (m, gcc) => HexMazeImage.CreateSvg(m, gcc, hexGrid)),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -137,6 +146,7 @@
     {
         BinaryTree,
         Sidewinder,
-        RecursiveBacktrackerRect
+        RecursiveBacktrackerRect,
+        RecursiveBacktrackerHex
     }
 }
