@@ -37,4 +37,9 @@ public partial class MainForm : Form
     {
         new RandomWalkForm(this.rng).Show();
     }
+
+    private void ClockButton_Click(object sender, EventArgs e)
+    {
+        new ClockForm(this.rng).Show();
+    }
 }
