@@ -33,6 +33,7 @@
             birthdaysButton = new Button();
             diceButton = new Button();
             randomWalkButton = new Button();
+            flagsButton = new Button();
             SuspendLayout();
             // 
             // visualiseDistributionsButton
@@ -85,11 +86,22 @@
             randomWalkButton.UseVisualStyleBackColor = true;
             randomWalkButton.Click += RandomWalkButton_Click;
             // 
+            // flagsButton
+            // 
+            flagsButton.Location = new Point(575, 12);
+            flagsButton.Name = "flagsButton";
+            flagsButton.Size = new Size(107, 50);
+            flagsButton.TabIndex = 5;
+            flagsButton.Text = "Flags";
+            flagsButton.UseVisualStyleBackColor = true;
+            flagsButton.Click += FlagsButton_Click;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(582, 74);
+            this.ClientSize = new Size(694, 74);
+            this.Controls.Add(flagsButton);
             this.Controls.Add(randomWalkButton);
             this.Controls.Add(diceButton);
             this.Controls.Add(birthdaysButton);
@@ -107,5 +119,6 @@
         private Button birthdaysButton;
         private Button diceButton;
         private Button randomWalkButton;
+        private Button flagsButton;
     }
 }

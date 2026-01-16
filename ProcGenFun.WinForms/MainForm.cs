@@ -37,4 +37,9 @@ public partial class MainForm : Form
     {
         new RandomWalkForm(this.rng).Show();
     }
+
+    private void FlagsButton_Click(object sender, EventArgs e)
+    {
+        new FlagsForm(this.rng).Show();
+    }
 }
