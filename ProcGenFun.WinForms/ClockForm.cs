@@ -18,9 +18,9 @@ public partial class ClockForm : Form
 
     private void EstimateProbabilitiesButton_Click(object sender, EventArgs e)
     {
-        var lastNumberFoundDist = LastClockNumberReached();
-
-        var probabilityDensityDist = lastNumberFoundDist.EstimateProbabilityDensities(sampleCount: 10_000);
+        var probabilityDensityDist =
+            LastNumberReachedDist()
+                .EstimateProbabilityDensities(sampleCount: 100_000);
 
         var probabilityDensity = probabilityDensityDist.Sample(this.rng);
 
@@ -29,17 +29,16 @@ public partial class ClockForm : Form
             probabilityDensity.OrderBy(kvp => kvp.Key).Select(kvp => $"{kvp.Key}: {kvp.Value}%"));
     }
 
-    private static IDistribution<int> LastClockNumberReached()
+    private static IDistribution<int> LastNumberReachedDist()
     {
         var modulus = 12;
 
-        var relativeStepDist =
+        IDistribution<int> StepDist(int current) =>
             from x in Bernoulli.FromRatio(1, 2)
-            select x ? +1 : -1;
+            let relativeStep = x ? +1 : -1
+            select Modulo(current + relativeStep, modulus);
 
-        var randomWalkDist = RandomWalk.New(
-            initial: 0,
-            stepDist: curr => from rs in relativeStepDist select Modulo(curr + rs, modulus));
+        var randomWalkDist = RandomWalk.New(initial: 0, StepDist);
 
         return
             from rw in randomWalkDist
