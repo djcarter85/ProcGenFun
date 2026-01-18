@@ -1,3 +1,3 @@
 ﻿namespace ProcGenFun.Flags;
 
-public record Flag();
+public record Flag(FlagColour Colour);

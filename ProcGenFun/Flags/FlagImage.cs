@@ -17,11 +17,9 @@ public static class FlagImage
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
         };
 
-        var color = Color.FromArgb(22, 101, 52);
-
         svgDocument.Children.Add(new SvgRectangle
         {
-            Fill = new SvgColourServer(color),
+            Fill = new SvgColourServer(GetColor(flag.Colour)),
             X = 0,
             Y = 0,
             Width = 300,
@@ -30,4 +28,18 @@ public static class FlagImage
 
         return svgDocument;
     }
+
+    private static Color GetColor(FlagColour colour) =>
+        colour switch
+        {
+            FlagColour.Red => Color.FromArgb(185, 28, 28),
+            FlagColour.Orange => Color.FromArgb(249, 115, 22),
+            FlagColour.Yellow => Color.FromArgb(250, 204, 21),
+            FlagColour.Green => Color.FromArgb(22, 163, 74),
+            FlagColour.LightBlue => Color.FromArgb(6, 182, 212),
+            FlagColour.DarkBlue => Color.FromArgb(30, 64, 175),
+            FlagColour.White => Color.White,
+            FlagColour.Black => Color.Black,
+            _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
+        };
 }
