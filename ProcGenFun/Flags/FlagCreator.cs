@@ -32,6 +32,7 @@ public static class FlagCreator
         {
             Flag.Type.Solid => SolidFlagDist(),
             Flag.Type.VerticalDiband => VerticalDibandDist(),
+            Flag.Type.HorizontalDiband => HorizontalDibandDist(),
             Flag.Type.VerticalTriband => VerticalTribandDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
@@ -42,6 +43,10 @@ public static class FlagCreator
     private static IDistribution<Flag> VerticalDibandDist() =>
         from colours in Shuffle.New(allColours)
         select (Flag)new Flag.VerticalDiband(colours[0], colours[1]);
+
+    private static IDistribution<Flag> HorizontalDibandDist() =>
+        from colours in Shuffle.New(allColours)
+        select (Flag)new Flag.HorizontalDiband(colours[0], colours[1]);
 
     private static IDistribution<Flag> VerticalTribandDist() =>
         from colours in Shuffle.New(allColours)
