@@ -10,7 +10,19 @@ using System.ComponentModel;
 public static class FlagCreator
 {
     public static IDistribution<Flag> FlagDist() =>
-        from colour in ColourDist() select new Flag(colour);
+        from flagType in UniformDistribution.Create(Flag.Types)
+        from flag in FlagDist(flagType)
+        select flag;
+
+    private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
+        flagType switch
+        {
+            Flag.Type.Solid => SolidFlagDist(),
+            _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
+        };
+
+    private static IDistribution<Flag> SolidFlagDist() =>
+        from colour in ColourDist() select (Flag)new Flag.Solid(colour);
 
     public static IDistribution<FlagColour> ColourDist() =>
         UniformDistribution.Create(

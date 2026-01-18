@@ -17,16 +17,31 @@ public static class FlagImage
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
         };
 
-        svgDocument.Children.Add(new SvgRectangle
+        foreach (var child in GetFlagElements(flag))
         {
-            Fill = new SvgColourServer(GetColor(flag.Colour)),
+            svgDocument.Children.Add(child);
+        }
+
+        return svgDocument;
+    }
+
+    private static IEnumerable<SvgRectangle> GetFlagElements(Flag flag) =>
+        flag switch
+        {
+            Flag.Solid solid => GetSolidFlagElements(solid),
+            _ => throw new ArgumentOutOfRangeException(nameof(flag), flag, null),
+        };
+
+    private static IEnumerable<SvgRectangle> GetSolidFlagElements(Flag.Solid solid)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(solid.Colour)),
             X = 0,
             Y = 0,
             Width = 300,
             Height = 200
-        });
-
-        return svgDocument;
+        };
     }
 
     private static Color GetColor(FlagColour colour) =>
