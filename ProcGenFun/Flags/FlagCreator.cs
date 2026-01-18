@@ -35,14 +35,11 @@ public static class FlagCreator
         };
 
     private static IDistribution<Flag> SolidFlagDist() =>
-        from colour in ColourDist() select (Flag)new Flag.Solid(colour);
+        from colour in UniformDistribution.Create(allColours) select (Flag)new Flag.Solid(colour);
 
     private static IDistribution<Flag> VerticalTribandDist() =>
-        from left in ColourDist()
-        from middle in ColourDist()
-        from right in ColourDist()
+        from left in UniformDistribution.Create(allColours)
+        from middle in UniformDistribution.Create(allColours)
+        from right in UniformDistribution.Create(allColours)
         select (Flag)new Flag.VerticalTriband(left, middle, right);
-
-    public static IDistribution<FlagColour> ColourDist() =>
-        UniformDistribution.Create(allColours);
 }
