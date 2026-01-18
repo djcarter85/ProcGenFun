@@ -18,11 +18,18 @@ public static class FlagCreator
         flagType switch
         {
             Flag.Type.Solid => SolidFlagDist(),
+            Flag.Type.VerticalTriband => VerticalTribandDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 
     private static IDistribution<Flag> SolidFlagDist() =>
         from colour in ColourDist() select (Flag)new Flag.Solid(colour);
+
+    private static IDistribution<Flag> VerticalTribandDist() =>
+        from left in ColourDist()
+        from middle in ColourDist()
+        from right in ColourDist()
+        select (Flag)new Flag.VerticalTriband(left, middle, right);
 
     public static IDistribution<FlagColour> ColourDist() =>
         UniformDistribution.Create(

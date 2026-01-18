@@ -29,6 +29,7 @@ public static class FlagImage
         flag switch
         {
             Flag.Solid solid => GetSolidFlagElements(solid),
+            Flag.VerticalTriband verticalTriband => GetVerticalTribandFlagElements(verticalTriband),
             _ => throw new ArgumentOutOfRangeException(nameof(flag), flag, null),
         };
 
@@ -40,6 +41,34 @@ public static class FlagImage
             X = 0,
             Y = 0,
             Width = 300,
+            Height = 200
+        };
+    }
+
+    private static IEnumerable<SvgRectangle> GetVerticalTribandFlagElements(Flag.VerticalTriband verticalTriband)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(verticalTriband.Left)),
+            X = 0,
+            Y = 0,
+            Width = 100,
+            Height = 200
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(verticalTriband.Middle)),
+            X = 100,
+            Y = 0,
+            Width = 100,
+            Height = 200
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(verticalTriband.Right)),
+            X = 200,
+            Y = 0,
+            Width = 100,
             Height = 200
         };
     }

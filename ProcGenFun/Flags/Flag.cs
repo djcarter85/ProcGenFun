@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun.Flags;
+namespace ProcGenFun.Flags;
 
 public abstract record Flag
 {
@@ -6,7 +6,9 @@ public abstract record Flag
 
     public sealed record Solid(FlagColour Colour) : Flag;
 
-    public static IEnumerable<Type> Types { get; } = [Type.Solid];
+    public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right) : Flag;
 
-    public enum Type { Solid }
+    public static IEnumerable<Type> Types { get; } = [Type.Solid, Type.VerticalTriband];
+
+    public enum Type { Solid, VerticalTriband, }
 }
