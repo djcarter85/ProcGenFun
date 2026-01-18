@@ -29,6 +29,7 @@ public static class FlagImage
         flag switch
         {
             Flag.Solid solid => GetSolidFlagElements(solid),
+            Flag.VerticalDiband verticalDiband => GetVerticalDibandFlagElements(verticalDiband),
             Flag.VerticalTriband verticalTriband => GetVerticalTribandFlagElements(verticalTriband),
             _ => throw new ArgumentOutOfRangeException(nameof(flag), flag, null),
         };
@@ -41,6 +42,26 @@ public static class FlagImage
             X = 0,
             Y = 0,
             Width = 300,
+            Height = 200
+        };
+    }
+
+    private static IEnumerable<SvgRectangle> GetVerticalDibandFlagElements(Flag.VerticalDiband verticalDiband)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(verticalDiband.Left)),
+            X = 0,
+            Y = 0,
+            Width = 150,
+            Height = 200
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(verticalDiband.Right)),
+            X = 150,
+            Y = 0,
+            Width = 150,
             Height = 200
         };
     }

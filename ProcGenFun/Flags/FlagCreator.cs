@@ -31,12 +31,17 @@ public static class FlagCreator
         flagType switch
         {
             Flag.Type.Solid => SolidFlagDist(),
+            Flag.Type.VerticalDiband => VerticalDibandDist(),
             Flag.Type.VerticalTriband => VerticalTribandDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 
     private static IDistribution<Flag> SolidFlagDist() =>
         from colour in UniformDistribution.Create(allColours) select (Flag)new Flag.Solid(colour);
+
+    private static IDistribution<Flag> VerticalDibandDist() =>
+        from colours in Shuffle.New(allColours)
+        select (Flag)new Flag.VerticalDiband(colours[0], colours[1]);
 
     private static IDistribution<Flag> VerticalTribandDist() =>
         from colours in Shuffle.New(allColours)
