@@ -9,6 +9,18 @@ using System.ComponentModel;
 
 public static class FlagCreator
 {
+    private static readonly IEnumerable<FlagColour> allColours =
+    [
+        FlagColour.Red,
+        FlagColour.Orange,
+        FlagColour.Yellow,
+        FlagColour.Green,
+        FlagColour.LightBlue,
+        FlagColour.DarkBlue,
+        FlagColour.White,
+        FlagColour.Black
+    ];
+
     public static IDistribution<Flag> FlagDist() =>
         from flagType in UniformDistribution.Create(Flag.Types)
         from flag in FlagDist(flagType)
@@ -32,15 +44,5 @@ public static class FlagCreator
         select (Flag)new Flag.VerticalTriband(left, middle, right);
 
     public static IDistribution<FlagColour> ColourDist() =>
-        UniformDistribution.Create(
-            [
-                FlagColour.Red,
-                FlagColour.Orange,
-                FlagColour.Yellow,
-                FlagColour.Green,
-                FlagColour.LightBlue,
-                FlagColour.DarkBlue,
-                FlagColour.White,
-                FlagColour.Black
-            ]);
+        UniformDistribution.Create(allColours);
 }
