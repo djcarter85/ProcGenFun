@@ -11,8 +11,10 @@ public abstract record Flag
     public sealed record HorizontalDiband(FlagColour Top, FlagColour Bottom) : Flag;
 
     public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right) : Flag;
+    
+    public sealed record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom) : Flag;
 
-    public static IEnumerable<Type> Types { get; } = [Type.Solid, Type.VerticalDiband, Type.HorizontalDiband, Type.VerticalTriband];
+    public static IEnumerable<Type> Types { get; } = [Type.Solid, Type.VerticalDiband, Type.HorizontalDiband, Type.VerticalTriband, Type.HorizontalTriband];
 
-    public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband }
+    public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband, HorizontalTriband }
 }
