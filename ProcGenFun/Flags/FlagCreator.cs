@@ -1,15 +1,16 @@
-﻿namespace ProcGenFun.Flags;
+namespace ProcGenFun.Flags;
 
 using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 public static class FlagCreator
 {
-    private static readonly IEnumerable<FlagColour> allColours =
+    private static readonly IReadOnlyList<FlagColour> allColours =
     [
         FlagColour.Red,
         FlagColour.Orange,
@@ -38,8 +39,6 @@ public static class FlagCreator
         from colour in UniformDistribution.Create(allColours) select (Flag)new Flag.Solid(colour);
 
     private static IDistribution<Flag> VerticalTribandDist() =>
-        from left in UniformDistribution.Create(allColours)
-        from middle in UniformDistribution.Create(allColours)
-        from right in UniformDistribution.Create(allColours)
-        select (Flag)new Flag.VerticalTriband(left, middle, right);
+        from colours in Shuffle.New(allColours)
+        select (Flag)new Flag.VerticalTriband(colours[0], colours[1], colours[2]);
 }
