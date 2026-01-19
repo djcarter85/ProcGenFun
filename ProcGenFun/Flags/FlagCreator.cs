@@ -23,9 +23,12 @@ public static class FlagCreator
     ];
 
     public static IDistribution<Flag> FlagDist() =>
-        from flagType in UniformDistribution.Create(Flag.Types)
+        from flagType in FlagTypeDist()
         from flag in FlagDist(flagType)
         select flag;
+
+    private static IDistribution<Flag.Type> FlagTypeDist() => 
+        UniformDistribution.Create(Flag.Types);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
         flagType switch
