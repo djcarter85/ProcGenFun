@@ -28,7 +28,14 @@ public static class FlagCreator
         select flag;
 
     private static IDistribution<Flag.Type> FlagTypeDist() => 
-        UniformDistribution.Create(Flag.Types);
+        WeightedDiscreteDistribution.New(
+            [
+                new Weighting<Flag.Type>(Flag.Type.Solid, 1),
+                new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 1),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 1),
+                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 1),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 1),
+            ]);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
         flagType switch
