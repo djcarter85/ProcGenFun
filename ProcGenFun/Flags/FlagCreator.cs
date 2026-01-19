@@ -31,10 +31,10 @@ public static class FlagCreator
         WeightedDiscreteDistribution.New(
             [
                 new Weighting<Flag.Type>(Flag.Type.Solid, 1),
-                new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 1),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 1),
-                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 1),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 1),
+                new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 2),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 2),
+                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 3),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 2),
             ]);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
