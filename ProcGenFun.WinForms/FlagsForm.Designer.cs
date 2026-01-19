@@ -28,45 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            createFlagButton = new Button();
-            pictureBox = new PictureBox();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
-            SuspendLayout();
+            this.createFlagsButton = new Button();
+            this.SuspendLayout();
             // 
-            // createFlagButton
+            // createFlagsButton
             // 
-            createFlagButton.Location = new Point(12, 12);
-            createFlagButton.Name = "createFlagButton";
-            createFlagButton.Size = new Size(124, 54);
-            createFlagButton.TabIndex = 0;
-            createFlagButton.Text = "Create Flag";
-            createFlagButton.UseVisualStyleBackColor = true;
-            createFlagButton.Click += CreateFlagButton_Click;
-            // 
-            // pictureBox
-            // 
-            pictureBox.Location = new Point(12, 87);
-            pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(100, 50);
-            pictureBox.TabIndex = 1;
-            pictureBox.TabStop = false;
+            this.createFlagsButton.Location = new Point(12, 12);
+            this.createFlagsButton.Name = "createFlagsButton";
+            this.createFlagsButton.Size = new Size(124, 54);
+            this.createFlagsButton.TabIndex = 0;
+            this.createFlagsButton.Text = "Create Flags";
+            this.createFlagsButton.UseVisualStyleBackColor = true;
+            this.createFlagsButton.Click += this.CreateFlagsButton_Click;
             // 
             // FlagsForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(800, 450);
-            this.Controls.Add(pictureBox);
-            this.Controls.Add(createFlagButton);
+            this.ClientSize = new Size(800, 645);
+            this.Controls.Add(this.createFlagsButton);
             this.Name = "FlagsForm";
             this.Text = "Flags";
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
-            ResumeLayout(false);
+            this.ResumeLayout(false);
         }
 
         #endregion
 
-        private Button createFlagButton;
-        private PictureBox pictureBox;
+        private Button createFlagsButton;
     }
 }

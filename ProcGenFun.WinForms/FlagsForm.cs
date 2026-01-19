@@ -1,5 +1,6 @@
 ﻿namespace ProcGenFun.WinForms;
 
+using ProcGenFun.Distributions;
 using ProcGenFun.Flags;
 using RandN;
 using RandN.Extensions;
@@ -15,16 +16,44 @@ public partial class FlagsForm : Form
         this.InitializeComponent();
     }
 
-    private void CreateFlagButton_Click(object sender, EventArgs e)
+    private void CreateFlagsButton_Click(object sender, EventArgs e)
     {
         var imageDist =
             from flag in FlagCreator.FlagDist()
             let svg = FlagImage.CreateSvg(flag)
             select svg.Draw();
 
-        var image = imageDist.Sample(this.rng);
+        var imagesDist = imageDist.Repeat(9);
 
-        this.pictureBox.Image = image;
-        this.pictureBox.Size = image.Size;
+        var images = imagesDist.Sample(this.rng);
+
+        foreach (var pictureBox in this.Controls.OfType<PictureBox>().ToArray())
+        {
+            this.Controls.Remove(pictureBox);
+            pictureBox.Dispose();
+        }
+
+        var index = 0;
+        foreach (var image in images)
+        {
+            var row = index / 3;
+            var col = index % 3;
+
+            var gap = 50;
+
+            var pictureBox = new PictureBox
+            {
+                Location = new Point(
+                    12 + row * (image.Width + gap),
+                    87 + col * (image.Height + gap)),
+                Image = image,
+                Width = image.Width,
+                Height = image.Height
+            };
+
+            this.Controls.Add(pictureBox);
+
+            index++;
+        }
     }
 }
