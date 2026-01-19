@@ -35,6 +35,7 @@ public static class FlagCreator
                 new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 2),
                 new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 3),
                 new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 2),
+                new Weighting<Flag.Type>(Flag.Type.Cross, 2),
             ]);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
@@ -45,6 +46,7 @@ public static class FlagCreator
             Flag.Type.HorizontalDiband => HorizontalDibandDist(),
             Flag.Type.VerticalTriband => VerticalTribandDist(),
             Flag.Type.HorizontalTriband => HorizontalTribandDist(),
+            Flag.Type.Cross => CrossDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 
@@ -66,4 +68,8 @@ public static class FlagCreator
     private static IDistribution<Flag> HorizontalTribandDist() =>
         from colours in Shuffle.New(allColours)
         select (Flag)new Flag.HorizontalTriband(colours[0], colours[1], colours[2]);
+
+    private static IDistribution<Flag> CrossDist() =>
+        from colours in Shuffle.New(allColours)
+        select (Flag)new Flag.Cross(colours[0], colours[1]);
 }

@@ -13,6 +13,8 @@ public abstract record Flag
     public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right) : Flag;
     
     public sealed record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom) : Flag;
+    
+    public sealed record Cross(FlagColour Background, FlagColour Foreground) : Flag;
 
-    public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband, HorizontalTriband }
+    public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband, HorizontalTriband, Cross }
 }
