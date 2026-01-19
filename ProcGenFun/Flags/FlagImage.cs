@@ -5,10 +5,12 @@ using System.Drawing;
 
 public static class FlagImage
 {
+    private const int U = 10;
+
     public static SvgDocument CreateSvg(Flag flag)
     {
-        var imageWidth = 300;
-        var imageHeight = 200;
+        var imageWidth = 18 * U;
+        var imageHeight = 12 * U;
 
         var svgDocument = new SvgDocument
         {
@@ -43,8 +45,8 @@ public static class FlagImage
             Fill = new SvgColourServer(GetColor(solid.Colour)),
             X = 0,
             Y = 0,
-            Width = 300,
-            Height = 200
+            Width = 18 * U,
+            Height = 12 * U
         };
     }
 
@@ -55,16 +57,16 @@ public static class FlagImage
             Fill = new SvgColourServer(GetColor(verticalDiband.Left)),
             X = 0,
             Y = 0,
-            Width = 150,
-            Height = 200
+            Width = 9 * U,
+            Height = 12 * U
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(verticalDiband.Right)),
-            X = 150,
+            X = 9 * U,
             Y = 0,
-            Width = 150,
-            Height = 200
+            Width = 9 * U,
+            Height = 12 * U
         };
     }
 
@@ -75,16 +77,16 @@ public static class FlagImage
             Fill = new SvgColourServer(GetColor(horizontalDiband.Top)),
             X = 0,
             Y = 0,
-            Width = 300,
+            Width = 18 * U,
             Height = 100
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(horizontalDiband.Bottom)),
             X = 0,
-            Y = 100,
-            Width = 300,
-            Height = 100
+            Y = 6 * U,
+            Width = 18 * U,
+            Height = 6 * U
         };
     }
 
@@ -95,24 +97,24 @@ public static class FlagImage
             Fill = new SvgColourServer(GetColor(verticalTriband.Left)),
             X = 0,
             Y = 0,
-            Width = 100,
-            Height = 200
+            Width = 6 * U,
+            Height = 12 * U
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(verticalTriband.Middle)),
-            X = 100,
+            X = 6 * U,
             Y = 0,
-            Width = 100,
-            Height = 200
+            Width = 6 * U,
+            Height = 12 * U
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(verticalTriband.Right)),
-            X = 200,
+            X = 12 * U,
             Y = 0,
-            Width = 100,
-            Height = 200
+            Width = 6 * U,
+            Height = 12 * U
         };
     }
 
@@ -123,24 +125,24 @@ public static class FlagImage
             Fill = new SvgColourServer(GetColor(verticalTriband.Top)),
             X = 0,
             Y = 0,
-            Width = 300,
-            Height = 67
+            Width = 18 * U,
+            Height = 4 * U
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(verticalTriband.Middle)),
             X = 0,
-            Y = 67,
-            Width = 300,
-            Height = 66
+            Y = 4 * U,
+            Width = 18 * U,
+            Height = 4 * U
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(verticalTriband.Bottom)),
             X = 0,
-            Y = 133,
-            Width = 300,
-            Height = 67
+            Y = 8 * U,
+            Width = 18 * U,
+            Height = 4 * U
         };
     }
 
