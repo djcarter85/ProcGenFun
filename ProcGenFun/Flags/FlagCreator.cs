@@ -54,22 +54,34 @@ public static class FlagCreator
         from colour in UniformDistribution.Create(allColours) select (Flag)new Flag.Solid(colour);
 
     private static IDistribution<Flag> VerticalDibandDist() =>
-        from colours in Shuffle.New(allColours)
-        select (Flag)new Flag.VerticalDiband(colours[0], colours[1]);
+        from left in AllColoursDist()
+        from right in AllColoursExceptDist(left)
+        select (Flag)new Flag.VerticalDiband(left, right);
 
     private static IDistribution<Flag> HorizontalDibandDist() =>
-        from colours in Shuffle.New(allColours)
-        select (Flag)new Flag.HorizontalDiband(colours[0], colours[1]);
+        from top in AllColoursDist()
+        from bottom in AllColoursExceptDist(top)
+        select (Flag)new Flag.HorizontalDiband(top, bottom);
 
     private static IDistribution<Flag> VerticalTribandDist() =>
-        from colours in Shuffle.New(allColours)
-        select (Flag)new Flag.VerticalTriband(colours[0], colours[1], colours[2]);
+        from left in AllColoursDist()
+        from middle in AllColoursExceptDist(left)
+        from right in AllColoursExceptDist(middle)
+        select (Flag)new Flag.VerticalTriband(left, middle, right);
 
     private static IDistribution<Flag> HorizontalTribandDist() =>
-        from colours in Shuffle.New(allColours)
-        select (Flag)new Flag.HorizontalTriband(colours[0], colours[1], colours[2]);
+        from top in AllColoursDist()
+        from middle in AllColoursExceptDist(top)
+        from bottom in AllColoursExceptDist(middle)
+        select (Flag)new Flag.HorizontalTriband(top, middle, bottom);
 
     private static IDistribution<Flag> CrossDist() =>
         from colours in Shuffle.New(allColours)
         select (Flag)new Flag.Cross(colours[0], colours[1]);
+
+    private static IDistribution<FlagColour> AllColoursDist() =>
+        UniformDistribution.Create(allColours);
+
+    private static IDistribution<FlagColour> AllColoursExceptDist(FlagColour exceptColour) =>
+        UniformDistribution.Create(allColours.Except([exceptColour]));
 }
