@@ -10,16 +10,16 @@ using System.ComponentModel;
 
 public static class FlagCreator
 {
-    private static readonly IReadOnlyList<FlagColour> allColours =
+    private static readonly IEnumerable<Weighting<FlagColour>> allColourWeightings =
     [
-        FlagColour.Red,
-        FlagColour.Orange,
-        FlagColour.Yellow,
-        FlagColour.Green,
-        FlagColour.LightBlue,
-        FlagColour.DarkBlue,
-        FlagColour.White,
-        FlagColour.Black
+        new(FlagColour.Red, 3),
+        new(FlagColour.Orange,1),
+        new(FlagColour.Yellow, 2),
+        new(FlagColour.Green, 3),
+        new(FlagColour.LightBlue, 2),
+        new(FlagColour.DarkBlue, 3),
+        new(FlagColour.White, 2),
+        new(FlagColour.Black, 1)
     ];
 
     public static IDistribution<Flag> FlagDist() =>
@@ -82,8 +82,8 @@ public static class FlagCreator
         select (Flag)new Flag.Cross(background, foreground);
 
     private static IDistribution<FlagColour> AllColoursDist() =>
-        UniformDistribution.Create(allColours);
+        WeightedDiscreteDistribution.New(allColourWeightings);
 
     private static IDistribution<FlagColour> AllColoursExceptDist(FlagColour exceptColour) =>
-        UniformDistribution.Create(allColours.Except([exceptColour]));
+        WeightedDiscreteDistribution.New(allColourWeightings.Where(w => w.Value != exceptColour));
 }
