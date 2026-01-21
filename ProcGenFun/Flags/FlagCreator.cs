@@ -27,7 +27,7 @@ public static class FlagCreator
         from flag in FlagDist(flagType)
         select flag;
 
-    private static IDistribution<Flag.Type> FlagTypeDist() => 
+    private static IDistribution<Flag.Type> FlagTypeDist() =>
         WeightedDiscreteDistribution.New(
             [
                 new Weighting<Flag.Type>(Flag.Type.Solid, 1),
@@ -51,7 +51,8 @@ public static class FlagCreator
         };
 
     private static IDistribution<Flag> SolidFlagDist() =>
-        from colour in UniformDistribution.Create(allColours) select (Flag)new Flag.Solid(colour);
+        from colour in AllColoursDist()
+        select (Flag)new Flag.Solid(colour);
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in AllColoursDist()
@@ -76,8 +77,9 @@ public static class FlagCreator
         select (Flag)new Flag.HorizontalTriband(top, middle, bottom);
 
     private static IDistribution<Flag> CrossDist() =>
-        from colours in Shuffle.New(allColours)
-        select (Flag)new Flag.Cross(colours[0], colours[1]);
+        from background in AllColoursDist()
+        from foreground in AllColoursExceptDist(background)
+        select (Flag)new Flag.Cross(background, foreground);
 
     private static IDistribution<FlagColour> AllColoursDist() =>
         UniformDistribution.Create(allColours);
