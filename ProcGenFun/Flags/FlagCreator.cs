@@ -52,7 +52,35 @@ public static class FlagCreator
 
     private static IDistribution<Flag> SolidFlagDist() =>
         from colour in AllColoursDist()
-        select (Flag)new Flag.Solid(colour);
+        from charge in ChargeDist(disallowedColour: colour)
+        select (Flag)new Flag.Solid(colour, charge);
+
+    private static IDistribution<FlagCharge> ChargeDist(FlagColour disallowedColour) =>
+        from chargeType in ChargeTypeDist()
+        from charge in ChargeDist(chargeType, disallowedColour)
+        select charge;
+
+    private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour disallowedColour) =>
+        chargeType switch
+        {
+            FlagCharge.Type.None => NoChargeDist(),
+            FlagCharge.Type.Star => StarChargeDist(disallowedColour),
+            _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
+        };
+
+    private static IDistribution<FlagCharge> NoChargeDist() => 
+        Singleton.New<FlagCharge>(new FlagCharge.None());
+
+    private static IDistribution<FlagCharge> StarChargeDist(FlagColour disallowedColour) => 
+        from colour in AllColoursExceptDist(disallowedColour)
+        select (FlagCharge)new FlagCharge.Star(colour);
+
+    private static IDistribution<FlagCharge.Type> ChargeTypeDist() =>
+        WeightedDiscreteDistribution.New(
+        [
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 1),
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 2),
+        ]);
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in AllColoursDist()

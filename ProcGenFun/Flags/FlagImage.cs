@@ -2,6 +2,8 @@
 
 using Svg;
 using System.Drawing;
+using Svg.Pathing;
+using Svg.Transforms;
 
 public static class FlagImage
 {
@@ -27,7 +29,7 @@ public static class FlagImage
         return svgDocument;
     }
 
-    private static IEnumerable<SvgRectangle> GetFlagElements(Flag flag) =>
+    private static IEnumerable<SvgElement> GetFlagElements(Flag flag) =>
         flag switch
         {
             Flag.Solid solid => GetSolidFlagElements(solid),
@@ -39,7 +41,7 @@ public static class FlagImage
             _ => throw new ArgumentOutOfRangeException(nameof(flag), flag, null),
         };
 
-    private static IEnumerable<SvgRectangle> GetSolidFlagElements(Flag.Solid solid)
+    private static IEnumerable<SvgElement> GetSolidFlagElements(Flag.Solid solid)
     {
         yield return new SvgRectangle
         {
@@ -48,6 +50,40 @@ public static class FlagImage
             Y = 0,
             Width = 18 * U,
             Height = 12 * U
+        };
+
+        foreach (var chargeElement in GetChargeElements(solid.Charge))
+        {
+            yield return chargeElement;
+        }
+    }
+
+    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
+        charge switch
+        {
+            FlagCharge.None => [],
+            FlagCharge.Star star => GetStarElements(star),
+            _ => throw new ArgumentOutOfRangeException(nameof(charge))
+        };
+
+    private static IEnumerable<SvgElement> GetStarElements(FlagCharge.Star star)
+    {
+        yield return new SvgPath
+        {
+            PathData =
+            [
+                new SvgMoveToSegment(true, new PointF(0, -3 * U)),
+                new SvgLineSegment(true, new PointF(1.7634f * U, 5.427f * U)),
+                new SvgLineSegment(true, new PointF(-4.6166f * U, -3.354f * U)),
+                new SvgLineSegment(true, new PointF(5.7064f * U, 0)),
+                new SvgLineSegment(true, new PointF(-4.6166f * U, 3.354f * U)),
+                new SvgClosePathSegment(false)
+            ],
+            Fill = new SvgColourServer(GetColor(star.Colour)),
+            Transforms =
+            [
+                new SvgTranslate(9 * U, 6 * U)
+            ]
         };
     }
 
