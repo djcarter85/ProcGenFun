@@ -8,5 +8,7 @@ public abstract record FlagCharge
 
     public sealed record Star(FlagColour Colour) : FlagCharge;
 
-    public enum Type { None, Star }
+    public sealed record StarBand(FlagColour Colour) : FlagCharge;
+
+    public enum Type { None, Star, StarBand }
 }

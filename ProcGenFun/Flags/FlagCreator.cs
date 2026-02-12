@@ -72,6 +72,9 @@ public static class FlagCreator
             FlagCharge.Type.Star =>
                 from colour in AllColoursExceptDist(disallowedColour)
                 select (FlagCharge)new FlagCharge.Star(colour),
+            FlagCharge.Type.StarBand =>
+                from colour in AllColoursExceptDist(disallowedColour)
+                select (FlagCharge)new FlagCharge.StarBand(colour),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
@@ -101,11 +104,21 @@ public static class FlagCreator
             select (Flag)new Flag.VerticalTriband(left, middle, right, charge);
     }
 
-    private static IDistribution<Flag> HorizontalTribandDist() =>
-        from top in AllColoursDist()
-        from middle in AllColoursExceptDist(top)
-        from bottom in AllColoursExceptDist(middle)
-        select (Flag)new Flag.HorizontalTriband(top, middle, bottom);
+    private static IDistribution<Flag> HorizontalTribandDist()
+    {
+        var chargeTypeDist = WeightedDiscreteDistribution.New(
+        [
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.StarBand, 1),
+        ]);
+        
+        return from top in AllColoursDist()
+            from middle in AllColoursExceptDist(top)
+            from bottom in AllColoursExceptDist(middle)
+            from chargeType in chargeTypeDist
+            from charge in ChargeDist(chargeType, disallowedColour: middle)
+            select (Flag)new Flag.HorizontalTriband(top, middle, bottom, charge);
+    }
 
     private static IDistribution<Flag> CrossDist() =>
         from background in AllColoursDist()

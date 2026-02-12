@@ -63,6 +63,7 @@ public static class FlagImage
         {
             FlagCharge.None => [],
             FlagCharge.Star star => GetStarElements(star, radius),
+            FlagCharge.StarBand starBand => GetStarBandElements(starBand, radius),
             _ => throw new ArgumentOutOfRangeException(nameof(charge))
         };
 
@@ -72,6 +73,23 @@ public static class FlagImage
             centre: new PointF(9 * U, 6 * U),
             radius: radius, 
             fillColour: GetColor(star.Colour));
+    }
+
+    private static IEnumerable<SvgElement> GetStarBandElements(FlagCharge.StarBand starBand, float radius)
+    {
+        var distanceBetweenCentres = 2.5f * radius;
+        yield return CreateSvgStar(
+            centre: new PointF(9 * U - distanceBetweenCentres, 6 * U),
+            radius: radius, 
+            fillColour: GetColor(starBand.Colour));
+        yield return CreateSvgStar(
+            centre: new PointF(9 * U, 6 * U),
+            radius: radius, 
+            fillColour: GetColor(starBand.Colour));
+        yield return CreateSvgStar(
+            centre: new PointF(9 * U + distanceBetweenCentres, 6 * U),
+            radius: radius, 
+            fillColour: GetColor(starBand.Colour));
     }
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
@@ -185,7 +203,7 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgRectangle> GetHorizontalTribandFlagElements(Flag.HorizontalTriband verticalTriband)
+    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(Flag.HorizontalTriband verticalTriband)
     {
         yield return new SvgRectangle
         {
@@ -211,6 +229,11 @@ public static class FlagImage
             Width = 18 * U,
             Height = 4 * U
         };
+
+        foreach (var chargeElement in GetChargeElements(verticalTriband.Charge, radius: 1.5f * U))
+        {
+            yield return chargeElement;
+        }
     }
 
     private static IEnumerable<SvgRectangle> GetCrossFlagElements(Flag.Cross cross)
