@@ -50,15 +50,19 @@ public static class FlagCreator
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 
-    private static IDistribution<Flag> SolidFlagDist() =>
-        from colour in AllColoursDist()
-        from charge in ChargeDist(disallowedColour: colour)
-        select (Flag)new Flag.Solid(colour, charge);
-
-    private static IDistribution<FlagCharge> ChargeDist(FlagColour disallowedColour) =>
-        from chargeType in ChargeTypeDist()
-        from charge in ChargeDist(chargeType, disallowedColour)
-        select charge;
+    private static IDistribution<Flag> SolidFlagDist()
+    {
+        var chargeTypeDist = WeightedDiscreteDistribution.New(
+        [
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 1),
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 2),
+        ]);
+        
+        return from colour in AllColoursDist()
+            from chargeType in chargeTypeDist
+            from charge in ChargeDist(chargeType, disallowedColour: colour)
+            select (Flag)new Flag.Solid(colour, charge);
+    }
 
     private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour disallowedColour) =>
         chargeType switch
@@ -75,13 +79,6 @@ public static class FlagCreator
         from colour in AllColoursExceptDist(disallowedColour)
         select (FlagCharge)new FlagCharge.Star(colour);
 
-    private static IDistribution<FlagCharge.Type> ChargeTypeDist() =>
-        WeightedDiscreteDistribution.New(
-        [
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 1),
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 2),
-        ]);
-
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in AllColoursDist()
         from right in AllColoursExceptDist(left)
@@ -92,11 +89,21 @@ public static class FlagCreator
         from bottom in AllColoursExceptDist(top)
         select (Flag)new Flag.HorizontalDiband(top, bottom);
 
-    private static IDistribution<Flag> VerticalTribandDist() =>
-        from left in AllColoursDist()
-        from middle in AllColoursExceptDist(left)
-        from right in AllColoursExceptDist(middle)
-        select (Flag)new Flag.VerticalTriband(left, middle, right);
+    private static IDistribution<Flag> VerticalTribandDist()
+    {
+        var chargeTypeDist = WeightedDiscreteDistribution.New(
+        [
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 1),
+        ]);
+        
+        return from left in AllColoursDist()
+            from middle in AllColoursExceptDist(left)
+            from right in AllColoursExceptDist(middle)
+            from chargeType in chargeTypeDist
+            from charge in ChargeDist(chargeType, disallowedColour: middle)
+            select (Flag)new Flag.VerticalTriband(left, middle, right, charge);
+    }
 
     private static IDistribution<Flag> HorizontalTribandDist() =>
         from top in AllColoursDist()

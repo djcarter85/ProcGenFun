@@ -10,7 +10,7 @@ public abstract record Flag
 
     public sealed record HorizontalDiband(FlagColour Top, FlagColour Bottom) : Flag;
 
-    public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right) : Flag;
+    public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge) : Flag;
 
     public sealed record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom) : Flag;
 

@@ -52,25 +52,25 @@ public static class FlagImage
             Height = 12 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(solid.Charge))
+        foreach (var chargeElement in GetChargeElements(solid.Charge, radius: 3 * U))
         {
             yield return chargeElement;
         }
     }
 
-    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
+    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge, float radius) =>
         charge switch
         {
             FlagCharge.None => [],
-            FlagCharge.Star star => GetStarElements(star),
+            FlagCharge.Star star => GetStarElements(star, radius),
             _ => throw new ArgumentOutOfRangeException(nameof(charge))
         };
 
-    private static IEnumerable<SvgElement> GetStarElements(FlagCharge.Star star)
+    private static IEnumerable<SvgElement> GetStarElements(FlagCharge.Star star, float radius)
     {
         yield return CreateSvgStar(
             centre: new PointF(9 * U, 6 * U),
-            radius: 3 * U, 
+            radius: radius, 
             fillColour: GetColor(star.Colour));
     }
 
@@ -152,7 +152,7 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgRectangle> GetVerticalTribandFlagElements(Flag.VerticalTriband verticalTriband)
+    private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(Flag.VerticalTriband verticalTriband)
     {
         yield return new SvgRectangle
         {
@@ -178,6 +178,11 @@ public static class FlagImage
             Width = 6 * U,
             Height = 12 * U
         };
+
+        foreach (var chargeElement in GetChargeElements(verticalTriband.Charge, radius: 2 * U))
+        {
+            yield return chargeElement;
+        }
     }
 
     private static IEnumerable<SvgRectangle> GetHorizontalTribandFlagElements(Flag.HorizontalTriband verticalTriband)
