@@ -1,0 +1,40 @@
+@page "/flags"
+@using ProcGenFun.Blazor.Components
+@using ProcGenFun.Distributions
+@using ProcGenFun.Flags
+@using RandN
+@using RandN.Extensions
+@using Svg
+
+<PageTitle>Flags</PageTitle>
+
+<Title>Flags</Title>
+
+<div class="flex justify-center">
+  <Button Text="Generate Flags" OnClick="GenerateFlags" />
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 my-8 gap-8">
+  @foreach (var flagImage in this.flagImages)
+  {
+    <div>
+      @((MarkupString)flagImage.GetXML())
+    </div>
+  }
+</div>
+
+@code {
+  private readonly IRng rng = StandardRng.Create();
+  private IEnumerable<SvgDocument> flagImages = [];
+
+  public void GenerateFlags()
+  {
+    var flagImageDist =
+        from flag in FlagCreator.FlagDist()
+        select FlagImage.CreateSvg(flag, className: "shadow-2xl w-full");
+
+    var flagImagesDist = flagImageDist.Repeat(6);
+
+    this.flagImages = flagImagesDist.Sample(this.rng);
+  }
+}

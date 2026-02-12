@@ -9,16 +9,15 @@ public static class FlagImage
 {
     private const int U = 10;
 
-    public static SvgDocument CreateSvg(Flag flag)
+    public static SvgDocument CreateSvg(Flag flag, string? className = null)
     {
         var imageWidth = 18 * U;
         var imageHeight = 12 * U;
 
         var svgDocument = new SvgDocument
         {
-            Width = imageWidth,
-            Height = imageHeight,
-            ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
+            ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight),
+            CustomAttributes = { {"class", className} }
         };
 
         foreach (var child in GetFlagElements(flag))
