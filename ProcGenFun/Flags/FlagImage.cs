@@ -68,23 +68,48 @@ public static class FlagImage
 
     private static IEnumerable<SvgElement> GetStarElements(FlagCharge.Star star)
     {
-        yield return new SvgPath
+        yield return CreateSvgStar(
+            centre: new PointF(9 * U, 6 * U),
+            radius: 3 * U, 
+            fillColour: GetColor(star.Colour));
+    }
+
+    private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
+        new()
         {
-            PathData =
-            [
-                new SvgMoveToSegment(true, new PointF(0, -3 * U)),
-                new SvgLineSegment(true, new PointF(1.7634f * U, 5.427f * U)),
-                new SvgLineSegment(true, new PointF(-4.6166f * U, -3.354f * U)),
-                new SvgLineSegment(true, new PointF(5.7064f * U, 0)),
-                new SvgLineSegment(true, new PointF(-4.6166f * U, 3.354f * U)),
-                new SvgClosePathSegment(false)
-            ],
-            Fill = new SvgColourServer(GetColor(star.Colour)),
+            PathData = ClosedPath([
+                RadialPoint(radius, -0.5f * MathF.PI),
+                RadialPoint(radius, 0.3f * MathF.PI),
+                RadialPoint(radius, -0.9f * MathF.PI),
+                RadialPoint(radius, -0.1f * MathF.PI),
+                RadialPoint(radius, 0.7f * MathF.PI),
+            ]).ToPathData(),
+            Fill = new SvgColourServer(fillColour),
             Transforms =
             [
-                new SvgTranslate(9 * U, 6 * U)
+                new SvgTranslate(centre.X, centre.Y)
             ]
         };
+
+    private static PointF RadialPoint(float radius, float angle) => 
+        new(x: radius * MathF.Cos(angle), y: radius * MathF.Sin(angle));
+
+    private static IEnumerable<SvgPathSegment> ClosedPath(IEnumerable<PointF> points)
+    {
+        var isFirst = true;
+        foreach (var point in points)
+        {
+            if (isFirst)
+            {
+                yield return new SvgMoveToSegment(false, point);
+            }
+            else
+            {
+                yield return new SvgLineSegment(false, point);
+            }
+            
+            isFirst = false;
+        }
     }
 
     private static IEnumerable<SvgRectangle> GetVerticalDibandFlagElements(Flag.VerticalDiband verticalDiband)
