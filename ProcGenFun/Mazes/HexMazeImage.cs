@@ -82,22 +82,14 @@ public static class HexMazeImage
         return originCellHeightInPixels + nonOriginCellHeightInPixels * numberOfNonOriginCells + totalMarginInPixels;
     }
 
-    private static SvgPath DrawWalls(Maze<HexCell> maze, HexGrid grid)
-    {
-        var pathData = new SvgPathSegmentList();
-        foreach (var segment in CellWallPathSegments(maze, grid))
-        {
-            pathData.Add(segment);
-        }
-
-        return new SvgPath
+    private static SvgPath DrawWalls(Maze<HexCell> maze, HexGrid grid) =>
+        new()
         {
             Stroke = new SvgColourServer(MazeImage.WallColor),
             StrokeWidth = 1,
             Fill = SvgPaintServer.None,
-            PathData = pathData,
+            PathData = CellWallPathSegments(maze, grid).ToPathData(),
         };
-    }
 
     private static IEnumerable<SvgPathSegment> CellWallPathSegments(Maze<HexCell> maze, HexGrid grid)
     {
