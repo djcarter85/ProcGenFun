@@ -67,17 +67,13 @@ public static class FlagCreator
     private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour disallowedColour) =>
         chargeType switch
         {
-            FlagCharge.Type.None => NoChargeDist(),
-            FlagCharge.Type.Star => StarChargeDist(disallowedColour),
+            FlagCharge.Type.None =>
+                Singleton.New<FlagCharge>(new FlagCharge.None()),
+            FlagCharge.Type.Star =>
+                from colour in AllColoursExceptDist(disallowedColour)
+                select (FlagCharge)new FlagCharge.Star(colour),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
-
-    private static IDistribution<FlagCharge> NoChargeDist() => 
-        Singleton.New<FlagCharge>(new FlagCharge.None());
-
-    private static IDistribution<FlagCharge> StarChargeDist(FlagColour disallowedColour) => 
-        from colour in AllColoursExceptDist(disallowedColour)
-        select (FlagCharge)new FlagCharge.Star(colour);
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in AllColoursDist()
