@@ -4,6 +4,8 @@ using Svg;
 using System.Drawing;
 using Svg.Pathing;
 using Svg.Transforms;
+using static Flag;
+using static FlagCharge;
 
 public static class FlagImage
 {
@@ -31,27 +33,28 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetFlagElements(Flag flag) =>
         flag switch
         {
-            Flag.Solid solid => GetSolidFlagElements(solid),
-            Flag.VerticalDiband verticalDiband => GetVerticalDibandFlagElements(verticalDiband),
-            Flag.HorizontalDiband horizontalDiband => GetHorizontalDibandFlagElements(horizontalDiband),
-            Flag.VerticalTriband verticalTriband => GetVerticalTribandFlagElements(verticalTriband),
-            Flag.HorizontalTriband horizontalTriband => GetHorizontalTribandFlagElements(horizontalTriband),
-            Flag.Cross cross => GetCrossFlagElements(cross),
-            _ => throw new ArgumentOutOfRangeException(nameof(flag), flag, null),
+            Solid(var colour, var charge) => GetSolidFlagElements(colour, charge),
+            VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
+            HorizontalDiband(var top, var bottom) => GetHorizontalDibandFlagElements(top, bottom),
+            VerticalTriband(var left, var middle, var right, var charge) =>
+                GetVerticalTribandFlagElements(left, middle, right, charge),
+            HorizontalTriband(var top, var middle, var bottom, var charge) => 
+                GetHorizontalTribandFlagElements(top, middle, bottom, charge),
+            Cross(var background, var foreground) => GetCrossFlagElements(background, foreground),
         };
 
-    private static IEnumerable<SvgElement> GetSolidFlagElements(Flag.Solid solid)
+    private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(solid.Colour)),
+            Fill = new SvgColourServer(GetColor(colour)),
             X = 0,
             Y = 0,
             Width = 18 * U,
             Height = 12 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(solid.Charge, radius: 3 * U))
+        foreach (var chargeElement in GetChargeElements(charge, radius: 3 * U))
         {
             yield return chargeElement;
         }
@@ -60,35 +63,34 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge, float radius) =>
         charge switch
         {
-            FlagCharge.None => [],
-            FlagCharge.Star star => GetStarElements(star, radius),
-            FlagCharge.StarBand starBand => GetStarBandElements(starBand, radius),
-            _ => throw new ArgumentOutOfRangeException(nameof(charge))
+            None => [],
+            Star(var colour) => GetStarElements(colour, radius),
+            StarBand(var colour) => GetStarBandElements(colour, radius),
         };
 
-    private static IEnumerable<SvgElement> GetStarElements(FlagCharge.Star star, float radius)
+    private static IEnumerable<SvgElement> GetStarElements(FlagColour colour, float radius)
     {
         yield return CreateSvgStar(
             centre: new PointF(9 * U, 6 * U),
             radius: radius, 
-            fillColour: GetColor(star.Colour));
+            fillColour: GetColor(colour));
     }
 
-    private static IEnumerable<SvgElement> GetStarBandElements(FlagCharge.StarBand starBand, float radius)
+    private static IEnumerable<SvgElement> GetStarBandElements(FlagColour colour, float radius)
     {
         var distanceBetweenCentres = 2.5f * radius;
         yield return CreateSvgStar(
             centre: new PointF(9 * U - distanceBetweenCentres, 6 * U),
             radius: radius, 
-            fillColour: GetColor(starBand.Colour));
+            fillColour: GetColor(colour));
         yield return CreateSvgStar(
             centre: new PointF(9 * U, 6 * U),
             radius: radius, 
-            fillColour: GetColor(starBand.Colour));
+            fillColour: GetColor(colour));
         yield return CreateSvgStar(
             centre: new PointF(9 * U + distanceBetweenCentres, 6 * U),
             radius: radius, 
-            fillColour: GetColor(starBand.Colour));
+            fillColour: GetColor(colour));
     }
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
@@ -129,11 +131,11 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgRectangle> GetVerticalDibandFlagElements(Flag.VerticalDiband verticalDiband)
+    private static IEnumerable<SvgRectangle> GetVerticalDibandFlagElements(FlagColour left, FlagColour right)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalDiband.Left)),
+            Fill = new SvgColourServer(GetColor(left)),
             X = 0,
             Y = 0,
             Width = 9 * U,
@@ -141,7 +143,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalDiband.Right)),
+            Fill = new SvgColourServer(GetColor(right)),
             X = 9 * U,
             Y = 0,
             Width = 9 * U,
@@ -149,11 +151,11 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgRectangle> GetHorizontalDibandFlagElements(Flag.HorizontalDiband horizontalDiband)
+    private static IEnumerable<SvgRectangle> GetHorizontalDibandFlagElements(FlagColour top, FlagColour bottom)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(horizontalDiband.Top)),
+            Fill = new SvgColourServer(GetColor(top)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -161,7 +163,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(horizontalDiband.Bottom)),
+            Fill = new SvgColourServer(GetColor(bottom)),
             X = 0,
             Y = 6 * U,
             Width = 18 * U,
@@ -169,11 +171,11 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(Flag.VerticalTriband verticalTriband)
+    private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(FlagColour left, FlagColour middle, FlagColour right, FlagCharge charge)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Left)),
+            Fill = new SvgColourServer(GetColor(left)),
             X = 0,
             Y = 0,
             Width = 6 * U,
@@ -181,7 +183,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Middle)),
+            Fill = new SvgColourServer(GetColor(middle)),
             X = 6 * U,
             Y = 0,
             Width = 6 * U,
@@ -189,24 +191,24 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Right)),
+            Fill = new SvgColourServer(GetColor(right)),
             X = 12 * U,
             Y = 0,
             Width = 6 * U,
             Height = 12 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(verticalTriband.Charge, radius: 2 * U))
+        foreach (var chargeElement in GetChargeElements(charge, radius: 2 * U))
         {
             yield return chargeElement;
         }
     }
 
-    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(Flag.HorizontalTriband verticalTriband)
+    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(FlagColour top, FlagColour middle, FlagColour bottom, FlagCharge charge)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Top)),
+            Fill = new SvgColourServer(GetColor(top)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -214,7 +216,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Middle)),
+            Fill = new SvgColourServer(GetColor(middle)),
             X = 0,
             Y = 4 * U,
             Width = 18 * U,
@@ -222,24 +224,24 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(verticalTriband.Bottom)),
+            Fill = new SvgColourServer(GetColor(bottom)),
             X = 0,
             Y = 8 * U,
             Width = 18 * U,
             Height = 4 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(verticalTriband.Charge, radius: 1.5f * U))
+        foreach (var chargeElement in GetChargeElements(charge, radius: 1.5f * U))
         {
             yield return chargeElement;
         }
     }
 
-    private static IEnumerable<SvgRectangle> GetCrossFlagElements(Flag.Cross cross)
+    private static IEnumerable<SvgRectangle> GetCrossFlagElements(FlagColour background, FlagColour foreground)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(cross.Background)),
+            Fill = new SvgColourServer(GetColor(background)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -247,7 +249,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(cross.Foreground)),
+            Fill = new SvgColourServer(GetColor(foreground)),
             X = 8 * U,
             Y = 0,
             Width = 2 * U,
@@ -255,7 +257,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(cross.Foreground)),
+            Fill = new SvgColourServer(GetColor(foreground)),
             X = 0,
             Y = 5 * U,
             Width = 18 * U,

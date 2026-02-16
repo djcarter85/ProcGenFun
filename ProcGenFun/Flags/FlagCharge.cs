@@ -1,14 +1,13 @@
 ﻿namespace ProcGenFun.Flags;
 
-public abstract record FlagCharge
+using Dunet;
+
+[Union]
+public partial record FlagCharge
 {
-    private FlagCharge() { }
-
-    public sealed record None() : FlagCharge;
-
-    public sealed record Star(FlagColour Colour) : FlagCharge;
-
-    public sealed record StarBand(FlagColour Colour) : FlagCharge;
+    public partial record None();
+    public partial record Star(FlagColour Colour);
+    public partial record StarBand(FlagColour Colour);
 
     public enum Type { None, Star, StarBand }
 }

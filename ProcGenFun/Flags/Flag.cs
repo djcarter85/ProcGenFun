@@ -1,20 +1,16 @@
 namespace ProcGenFun.Flags;
 
-public abstract record Flag
+using Dunet;
+
+[Union]
+public partial record Flag
 {
-    private Flag() { }
-
-    public sealed record Solid(FlagColour Colour, FlagCharge Charge) : Flag;
-
-    public sealed record VerticalDiband(FlagColour Left, FlagColour Right) : Flag;
-
-    public sealed record HorizontalDiband(FlagColour Top, FlagColour Bottom) : Flag;
-
-    public sealed record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge) : Flag;
-
-    public sealed record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, FlagCharge Charge) : Flag;
-
-    public sealed record Cross(FlagColour Background, FlagColour Foreground) : Flag;
+    public partial record Solid(FlagColour Colour, FlagCharge Charge);
+    public partial record VerticalDiband(FlagColour Left, FlagColour Right);
+    public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom);
+    public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge);
+    public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, FlagCharge Charge);
+    public partial record Cross(FlagColour Background, FlagColour Foreground);
 
     public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband, HorizontalTriband, Cross }
 }
