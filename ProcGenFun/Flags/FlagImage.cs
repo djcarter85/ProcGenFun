@@ -250,18 +250,18 @@ public static class FlagImage
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(foreground)),
-            X = 8 * U,
-            Y = 0,
-            Width = 2 * U,
-            Height = 12 * U
-        };
-        yield return new SvgRectangle
-        {
-            Fill = new SvgColourServer(GetColor(foreground)),
             X = 0,
             Y = 5 * U,
             Width = 18 * U,
             Height = 2 * U
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(foreground)),
+            X = 8 * U,
+            Y = 0,
+            Width = 2 * U,
+            Height = 12 * U
         };
     }
 
