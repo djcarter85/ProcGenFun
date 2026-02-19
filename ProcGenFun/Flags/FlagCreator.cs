@@ -125,7 +125,8 @@ public static class FlagCreator
     private static IDistribution<Flag> CrossDist() =>
         from background in AllColoursDist()
         from foreground in AllColoursExceptDist(background)
-        select (Flag)new Cross(background, foreground);
+        from crossType in UniformDistribution.Create([CrossType.Regular, CrossType.Nordic])
+        select (Flag)new Cross(background, foreground, crossType);
 
     private static IDistribution<FlagColour> AllColoursDist() =>
         WeightedDiscreteDistribution.New(allColourWeightings);

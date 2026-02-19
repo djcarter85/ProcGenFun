@@ -40,7 +40,7 @@ public static class FlagImage
                 GetVerticalTribandFlagElements(left, middle, right, charge),
             HorizontalTriband(var top, var middle, var bottom, var charge) => 
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
-            Cross(var background, var foreground) => GetCrossFlagElements(background, foreground),
+            Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
@@ -237,7 +237,8 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgRectangle> GetCrossFlagElements(FlagColour background, FlagColour foreground)
+    private static IEnumerable<SvgRectangle> GetCrossFlagElements(
+        FlagColour background, FlagColour foreground, CrossType crossType)
     {
         yield return new SvgRectangle
         {
@@ -255,10 +256,18 @@ public static class FlagImage
             Width = 18 * U,
             Height = 2 * U
         };
+
+        var verticalBarLeft = crossType switch
+        {
+            CrossType.Regular => 8,
+            CrossType.Nordic => 5,
+            _ => throw new ArgumentOutOfRangeException(nameof(crossType), crossType, null)
+        };
+
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(GetColor(foreground)),
-            X = 8 * U,
+            X = verticalBarLeft * U,
             Y = 0,
             Width = 2 * U,
             Height = 12 * U
