@@ -61,6 +61,7 @@ public static class FlagCreator
         [
             new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 1),
             new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 2),
+            new Weighting<FlagCharge.Type>(FlagCharge.Type.Circle, 2),
         ]);
         
         return from colour in AllColoursDist()
@@ -80,6 +81,9 @@ public static class FlagCreator
             FlagCharge.Type.StarBand =>
                 from colour in AllColoursExceptDist(disallowedColour)
                 select (FlagCharge)new StarBand(colour),
+            FlagCharge.Type.Circle =>
+                from colour in AllColoursExceptDist(disallowedColour)
+                select (FlagCharge)new Circle(colour),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
