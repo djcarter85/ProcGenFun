@@ -283,6 +283,9 @@ public static class FlagImage
             FlagColour.Green => Color.FromArgb(0, 102, 51),
             FlagColour.LightBlue => Color.FromArgb(0, 158, 219),
             FlagColour.DarkBlue => Color.FromArgb(0, 56, 168),
+            FlagColour.Burgundy => Color.FromArgb(97, 39, 50),
+            FlagColour.Purple => Color.FromArgb(158, 55, 122),
+            FlagColour.Grey => Color.FromArgb(150, 150, 150),
             FlagColour.White => Color.White,
             FlagColour.Black => Color.Black,
             _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)

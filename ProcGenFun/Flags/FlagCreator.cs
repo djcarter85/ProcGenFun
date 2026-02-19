@@ -14,14 +14,17 @@ public static class FlagCreator
 {
     private static readonly IEnumerable<Weighting<FlagColour>> allColourWeightings =
     [
-        new(FlagColour.Red, 3),
-        new(FlagColour.Orange,1),
-        new(FlagColour.Yellow, 2),
-        new(FlagColour.Green, 3),
-        new(FlagColour.LightBlue, 2),
-        new(FlagColour.DarkBlue, 3),
-        new(FlagColour.White, 2),
-        new(FlagColour.Black, 1)
+        new(FlagColour.Red, 10),
+        new(FlagColour.Orange, 3),
+        new(FlagColour.Yellow, 6),
+        new(FlagColour.Green, 10),
+        new(FlagColour.LightBlue, 5),
+        new(FlagColour.DarkBlue, 10),
+        new(FlagColour.Burgundy, 2),
+        new(FlagColour.Purple, 2),
+        new(FlagColour.Grey, 1),
+        new(FlagColour.White, 7),
+        new(FlagColour.Black, 3)
     ];
 
     public static IDistribution<Flag> FlagDist() =>

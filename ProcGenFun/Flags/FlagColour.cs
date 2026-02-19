@@ -8,6 +8,9 @@ public enum FlagColour
     Green,
     LightBlue,
     DarkBlue,
+    Burgundy,
+    Purple,
+    Grey,
     White,
     Black       
 }
