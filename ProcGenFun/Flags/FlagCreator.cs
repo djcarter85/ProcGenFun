@@ -34,9 +34,9 @@ public static class FlagCreator
             [
                 new Weighting<Flag.Type>(Flag.Type.Solid, 1),
                 new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 2),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 2),
-                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 3),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 2),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 3),
+                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 4),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 3),
                 new Weighting<Flag.Type>(Flag.Type.Cross, 2),
             ]);
 
