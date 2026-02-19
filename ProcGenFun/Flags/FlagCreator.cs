@@ -80,7 +80,8 @@ public static class FlagCreator
                 select (FlagCharge)new Star(colour),
             FlagCharge.Type.StarBand =>
                 from colour in AllColoursExceptDist(disallowedColour)
-                select (FlagCharge)new StarBand(colour),
+                from count in Uniform.NewInclusive(1, 4)
+                select (FlagCharge)new StarBand(colour, count),
             FlagCharge.Type.Circle =>
                 from colour in AllColoursExceptDist(disallowedColour)
                 select (FlagCharge)new Circle(colour),

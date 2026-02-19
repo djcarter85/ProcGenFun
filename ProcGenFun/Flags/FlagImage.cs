@@ -65,7 +65,7 @@ public static class FlagImage
         {
             None => [],
             Star(var colour) => GetStarElements(colour, radius),
-            StarBand(var colour) => GetStarBandElements(colour, radius),
+            StarBand(var colour, var count) => GetStarBandElements(colour, count, radius),
             Circle(var colour) => GetCircleElements(colour, radius),
         };
 
@@ -77,21 +77,17 @@ public static class FlagImage
             fillColour: GetColor(colour));
     }
 
-    private static IEnumerable<SvgElement> GetStarBandElements(FlagColour colour, float radius)
+    private static IEnumerable<SvgElement> GetStarBandElements(FlagColour colour, int count, float radius)
     {
         var distanceBetweenCentres = 2.5f * radius;
-        yield return CreateSvgStar(
-            centre: new PointF(9 * U - distanceBetweenCentres, 6 * U),
-            radius: radius, 
-            fillColour: GetColor(colour));
-        yield return CreateSvgStar(
-            centre: new PointF(9 * U, 6 * U),
-            radius: radius, 
-            fillColour: GetColor(colour));
-        yield return CreateSvgStar(
-            centre: new PointF(9 * U + distanceBetweenCentres, 6 * U),
-            radius: radius, 
-            fillColour: GetColor(colour));
+        var firstCentreX = 9 * U - (count - 1) / 2f * distanceBetweenCentres;
+        for (int i = 0; i < count; i++)
+        {
+            yield return CreateSvgStar(
+                centre: new PointF(firstCentreX + i * distanceBetweenCentres, 6 * U),
+                radius: radius,
+                fillColour: GetColor(colour));
+        }
     }
 
     private static IEnumerable<SvgElement> GetCircleElements(FlagColour colour, float radius)
