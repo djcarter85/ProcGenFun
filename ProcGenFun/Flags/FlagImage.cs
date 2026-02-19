@@ -41,6 +41,7 @@ public static class FlagImage
             HorizontalTriband(var top, var middle, var bottom, var charge) => 
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
+            Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
@@ -274,6 +275,31 @@ public static class FlagImage
             Y = 0,
             Width = 2 * U,
             Height = 12 * U
+        };
+    }
+
+    private static IEnumerable<SvgElement> GetSaltireFlagElements(
+        FlagColour background, FlagColour foreground)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(background)),
+            X = 0,
+            Y = 0,
+            Width = 18 * U,
+            Height = 12 * U
+        };
+        yield return new SvgPath
+        {
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
+                new SvgMoveToSegment(false, new PointF(0, 12 * U)),
+                new SvgLineSegment(false, new PointF(18 * U, 0)),
+            }.ToPathData(),
+            Stroke = new SvgColourServer(GetColor(foreground)),
+            StrokeWidth = 2.5f * U
         };
     }
 

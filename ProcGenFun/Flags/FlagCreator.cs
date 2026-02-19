@@ -41,6 +41,7 @@ public static class FlagCreator
                 new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 4),
                 new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 3),
                 new Weighting<Flag.Type>(Flag.Type.Cross, 2),
+                new Weighting<Flag.Type>(Flag.Type.Saltire, 1),
             ]);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
@@ -52,6 +53,7 @@ public static class FlagCreator
             Flag.Type.VerticalTriband => VerticalTribandDist(),
             Flag.Type.HorizontalTriband => HorizontalTribandDist(),
             Flag.Type.Cross => CrossDist(),
+            Flag.Type.Saltire => SaltireDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 
@@ -135,6 +137,11 @@ public static class FlagCreator
         from foreground in AllColoursExceptDist(background)
         from crossType in UniformDistribution.Create([CrossType.Regular, CrossType.Nordic])
         select (Flag)new Cross(background, foreground, crossType);
+
+    private static IDistribution<Flag> SaltireDist() =>
+        from background in AllColoursDist()
+        from foreground in AllColoursExceptDist(background)
+        select (Flag)new Saltire(background, foreground);
 
     private static IDistribution<FlagColour> AllColoursDist() =>
         WeightedDiscreteDistribution.New(allColourWeightings);
