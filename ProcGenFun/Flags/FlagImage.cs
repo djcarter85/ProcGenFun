@@ -270,7 +270,7 @@ public static class FlagImage
                 new SvgLineSegment(true, new PointF(18 * U, 0)),
             }.ToPathData(),
             Stroke = new SvgColourServer(GetColor(foreground)),
-            StrokeWidth = 2 * U
+            StrokeWidth = 2.5f * U
         };
     }
 
