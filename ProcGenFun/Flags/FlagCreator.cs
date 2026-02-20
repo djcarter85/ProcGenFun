@@ -27,9 +27,6 @@ public static class FlagCreator
         FlagColour.Black
     ];
 
-    private static readonly IEnumerable<Weighting<FlagColour>> allColourWeightings =
-        allColours.Select(c => new Weighting<FlagColour>(c, ColourWeighting(c)));
-
     public static IDistribution<Flag> FlagDist() =>
         from flagType in FlagTypeDist()
         from flag in FlagDist(flagType)
@@ -147,10 +144,13 @@ public static class FlagCreator
         select (Flag)new Saltire(background, foreground);
 
     private static IDistribution<FlagColour> AllColoursDist() =>
-        WeightedDiscreteDistribution.New(allColourWeightings);
+        ColourDist(allColours);
 
     private static IDistribution<FlagColour> AllColoursExceptDist(FlagColour exceptColour) =>
-        WeightedDiscreteDistribution.New(allColourWeightings.Where(w => w.Value != exceptColour));
+        ColourDist(allColours.Where(c => c != exceptColour));
+    
+    private static IDistribution<FlagColour> ColourDist(IEnumerable<FlagColour> colours) =>
+        WeightedDiscreteDistribution.New(colours.Select(c => new Weighting<FlagColour>(c, ColourWeighting(c))));
 
     private static int ColourWeighting(FlagColour colour) =>
         colour switch
