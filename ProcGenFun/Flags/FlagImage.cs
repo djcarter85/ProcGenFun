@@ -241,7 +241,7 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgRectangle> GetCrossFlagElements(
+    private static IEnumerable<SvgElement> GetCrossFlagElements(
         FlagColour background, FlagColour foreground, CrossType crossType)
     {
         yield return new SvgRectangle
@@ -252,29 +252,25 @@ public static class FlagImage
             Width = 18 * U,
             Height = 12 * U
         };
-        yield return new SvgRectangle
-        {
-            Fill = new SvgColourServer(GetColor(foreground)),
-            X = 0,
-            Y = 5 * U,
-            Width = 18 * U,
-            Height = 2 * U
-        };
 
-        var verticalBarLeft = crossType switch
+        var verticalBarCentre = crossType switch
         {
-            CrossType.Regular => 8,
-            CrossType.Nordic => 5,
+            CrossType.Regular => 9,
+            CrossType.Nordic => 6,
             _ => throw new ArgumentOutOfRangeException(nameof(crossType), crossType, null)
         };
-
-        yield return new SvgRectangle
+        
+        yield return new SvgPath
         {
-            Fill = new SvgColourServer(GetColor(foreground)),
-            X = verticalBarLeft * U,
-            Y = 0,
-            Width = 2 * U,
-            Height = 12 * U
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(verticalBarCentre * U, 0)),
+                new SvgLineSegment(true, new PointF(0, 12 * U)),
+                new SvgMoveToSegment(false, new PointF(0, 6 * U)),
+                new SvgLineSegment(true, new PointF(18 * U, 0)),
+            }.ToPathData(),
+            Stroke = new SvgColourServer(GetColor(foreground)),
+            StrokeWidth = 2 * U
         };
     }
 
