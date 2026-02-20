@@ -2,15 +2,17 @@
 
 public enum FlagColour
 {
-    Red,
-    Orange,
-    Yellow,
-    Green,
-    LightBlue,
-    DarkBlue,
-    Burgundy,
-    Purple,
-    Grey,
     White,
-    Black       
+    Red,
+    DarkBlue,
+    RoyalBlue,
+    LightBlue,
+    DarkGreen,
+    LightGreen,
+    Gold,
+    Black,
+    Maroon,
+    Orange,
+    Brown,
+    Purple,
 }

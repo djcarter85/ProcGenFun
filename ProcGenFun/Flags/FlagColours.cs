@@ -7,23 +7,31 @@ public static class FlagColours
 {
     private static readonly IEnumerable<FlagColour> all =
     [
-        FlagColour.Red,
-        FlagColour.Orange,
-        FlagColour.Yellow,
-        FlagColour.Green,
-        FlagColour.LightBlue,
-        FlagColour.DarkBlue,
-        FlagColour.Burgundy,
-        FlagColour.Purple,
-        FlagColour.Grey,
         FlagColour.White,
-        FlagColour.Black
+        FlagColour.Red,
+        FlagColour.DarkBlue,
+        FlagColour.RoyalBlue,
+        FlagColour.DarkGreen,
+        FlagColour.Gold,
+        FlagColour.Black,
+        FlagColour.LightGreen,
+        FlagColour.LightBlue,
+        FlagColour.Maroon,
+        FlagColour.Orange,
+        FlagColour.Brown,
+        FlagColour.Purple,
     ];
 
     private static readonly IEnumerable<ColourPairing> disallowedColourPairings =
     [
-        new(FlagColour.Red, FlagColour.Burgundy),
-        new(FlagColour.DarkBlue, FlagColour.Burgundy),
+        new (FlagColour.Red, FlagColour.LightGreen),
+        new (FlagColour.Red, FlagColour.DarkGreen),
+        new (FlagColour.Red, FlagColour.Maroon),
+        new (FlagColour.Red, FlagColour.Brown),
+        new (FlagColour.RoyalBlue, FlagColour.Brown),
+        new (FlagColour.RoyalBlue, FlagColour.Maroon),
+        new (FlagColour.RoyalBlue, FlagColour.LightGreen),
+        new (FlagColour.DarkBlue, FlagColour.DarkGreen),
     ];
 
     public static IDistribution<FlagColour> AllDist() => ColourDist(all);
@@ -45,17 +53,19 @@ public static class FlagColours
     private static int GetWeighting(FlagColour colour) =>
         colour switch
         {
-            FlagColour.Red => 10,
-            FlagColour.Orange => 3,
-            FlagColour.Yellow => 6,
-            FlagColour.Green => 10,
-            FlagColour.LightBlue => 5,
-            FlagColour.DarkBlue => 10,
-            FlagColour.Burgundy => 2,
+            FlagColour.White => 100,
+            FlagColour.Red => 95,
+            FlagColour.DarkBlue => 90,
+            FlagColour.RoyalBlue => 75,
+            FlagColour.DarkGreen => 70,
+            FlagColour.Gold => 70,
+            FlagColour.Black => 65,
+            FlagColour.LightGreen => 55,
+            FlagColour.LightBlue => 40,
+            FlagColour.Orange => 25,
+            FlagColour.Maroon => 10,
+            FlagColour.Brown => 10,
             FlagColour.Purple => 2,
-            FlagColour.Grey => 1,
-            FlagColour.White => 7,
-            FlagColour.Black => 3,
             _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
         };
     

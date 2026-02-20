@@ -302,17 +302,19 @@ public static class FlagImage
     private static Color GetColor(FlagColour colour) =>
         colour switch
         {
-            FlagColour.Red => Color.FromArgb(206, 17, 38),
-            FlagColour.Orange => Color.FromArgb(255, 104, 32),
-            FlagColour.Yellow => Color.FromArgb(255, 215, 0),
-            FlagColour.Green => Color.FromArgb(0, 102, 51),
-            FlagColour.LightBlue => Color.FromArgb(0, 158, 219),
-            FlagColour.DarkBlue => Color.FromArgb(0, 56, 168),
-            FlagColour.Burgundy => Color.FromArgb(97, 39, 50),
-            FlagColour.Purple => Color.FromArgb(158, 55, 122),
-            FlagColour.Grey => Color.FromArgb(150, 150, 150),
-            FlagColour.White => Color.White,
-            FlagColour.Black => Color.Black,
+            FlagColour.White => Color.FromArgb(255, 255, 255),
+            FlagColour.Red => Color.FromArgb(200, 16, 46),
+            FlagColour.DarkBlue => Color.FromArgb(0, 51, 160),
+            FlagColour.RoyalBlue => Color.FromArgb(6, 102, 219),
+            FlagColour.DarkGreen => Color.FromArgb(0, 102, 56),
+            FlagColour.Gold => Color.FromArgb(252, 209, 22),
+            FlagColour.Black => Color.FromArgb(0, 0, 0),
+            FlagColour.LightGreen => Color.FromArgb(0, 153, 28),
+            FlagColour.LightBlue => Color.FromArgb(108, 207, 246),
+            FlagColour.Maroon => Color.FromArgb(122, 38, 58),
+            FlagColour.Orange => Color.FromArgb(255, 130, 0),
+            FlagColour.Brown => Color.FromArgb(139, 94, 60),
+            FlagColour.Purple => Color.FromArgb(102, 0, 153),
             _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
         };
 }
