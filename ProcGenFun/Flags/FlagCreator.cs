@@ -12,20 +12,23 @@ using static FlagCharge;
 
 public static class FlagCreator
 {
-    private static readonly IEnumerable<Weighting<FlagColour>> allColourWeightings =
+    private static readonly IEnumerable<FlagColour> allColours =
     [
-        new(FlagColour.Red, 10),
-        new(FlagColour.Orange, 3),
-        new(FlagColour.Yellow, 6),
-        new(FlagColour.Green, 10),
-        new(FlagColour.LightBlue, 5),
-        new(FlagColour.DarkBlue, 10),
-        new(FlagColour.Burgundy, 2),
-        new(FlagColour.Purple, 2),
-        new(FlagColour.Grey, 1),
-        new(FlagColour.White, 7),
-        new(FlagColour.Black, 3)
+        FlagColour.Red,
+        FlagColour.Orange,
+        FlagColour.Yellow,
+        FlagColour.Green,
+        FlagColour.LightBlue,
+        FlagColour.DarkBlue,
+        FlagColour.Burgundy,
+        FlagColour.Purple,
+        FlagColour.Grey,
+        FlagColour.White,
+        FlagColour.Black
     ];
+
+    private static readonly IEnumerable<Weighting<FlagColour>> allColourWeightings =
+        allColours.Select(c => new Weighting<FlagColour>(c, ColourWeighting(c)));
 
     public static IDistribution<Flag> FlagDist() =>
         from flagType in FlagTypeDist()
@@ -148,4 +151,21 @@ public static class FlagCreator
 
     private static IDistribution<FlagColour> AllColoursExceptDist(FlagColour exceptColour) =>
         WeightedDiscreteDistribution.New(allColourWeightings.Where(w => w.Value != exceptColour));
+
+    private static int ColourWeighting(FlagColour colour) =>
+        colour switch
+        {
+            FlagColour.Red => 10,
+            FlagColour.Orange => 3,
+            FlagColour.Yellow => 6,
+            FlagColour.Green => 10,
+            FlagColour.LightBlue => 5,
+            FlagColour.DarkBlue => 10,
+            FlagColour.Burgundy => 2,
+            FlagColour.Purple => 2,
+            FlagColour.Grey => 1,
+            FlagColour.White => 7,
+            FlagColour.Black => 3,
+            _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
+        };
 }
