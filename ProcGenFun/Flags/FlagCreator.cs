@@ -5,28 +5,12 @@ using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using static Flag;
 using static FlagCharge;
 
 public static class FlagCreator
 {
-    private static readonly IEnumerable<FlagColour> allColours =
-    [
-        FlagColour.Red,
-        FlagColour.Orange,
-        FlagColour.Yellow,
-        FlagColour.Green,
-        FlagColour.LightBlue,
-        FlagColour.DarkBlue,
-        FlagColour.Burgundy,
-        FlagColour.Purple,
-        FlagColour.Grey,
-        FlagColour.White,
-        FlagColour.Black
-    ];
-
     public static IDistribution<Flag> FlagDist() =>
         from flagType in FlagTypeDist()
         from flag in FlagDist(flagType)
@@ -66,38 +50,38 @@ public static class FlagCreator
             new Weighting<FlagCharge.Type>(FlagCharge.Type.Circle, 2),
         ]);
         
-        return from colour in AllColoursDist()
+        return from colour in FlagColours.AllDist()
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, disallowedColour: colour)
+            from charge in ChargeDist(chargeType, backgroundColour: colour)
             select (Flag)new Solid(colour, charge);
     }
 
-    private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour disallowedColour) =>
+    private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour backgroundColour) =>
         chargeType switch
         {
             FlagCharge.Type.None =>
                 Singleton.New<FlagCharge>(new None()),
             FlagCharge.Type.Star =>
-                from colour in AllColoursExceptDist(disallowedColour)
+                from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
                 select (FlagCharge)new Star(colour),
             FlagCharge.Type.StarBand =>
-                from colour in AllColoursExceptDist(disallowedColour)
+                from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
                 from count in Uniform.NewInclusive(1, 4)
                 select (FlagCharge)new StarBand(colour, count),
             FlagCharge.Type.Circle =>
-                from colour in AllColoursExceptDist(disallowedColour)
+                from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
                 select (FlagCharge)new Circle(colour),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
     private static IDistribution<Flag> VerticalDibandDist() =>
-        from left in AllColoursDist()
-        from right in AllColoursExceptDist(left)
+        from left in FlagColours.AllDist()
+        from right in FlagColours.AllowedAdjacentToDist(left)
         select (Flag)new VerticalDiband(left, right);
 
     private static IDistribution<Flag> HorizontalDibandDist() =>
-        from top in AllColoursDist()
-        from bottom in AllColoursExceptDist(top)
+        from top in FlagColours.AllDist()
+        from bottom in FlagColours.AllowedAdjacentToDist(top)
         select (Flag)new HorizontalDiband(top, bottom);
 
     private static IDistribution<Flag> VerticalTribandDist()
@@ -108,11 +92,11 @@ public static class FlagCreator
             new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 1),
         ]);
         
-        return from left in AllColoursDist()
-            from middle in AllColoursExceptDist(left)
-            from right in AllColoursExceptDist(middle)
+        return from left in FlagColours.AllDist()
+            from middle in FlagColours.AllowedAdjacentToDist(left)
+            from right in FlagColours.AllowedAdjacentToDist(middle)
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, disallowedColour: middle)
+            from charge in ChargeDist(chargeType, backgroundColour: middle)
             select (Flag)new VerticalTriband(left, middle, right, charge);
     }
 
@@ -124,48 +108,22 @@ public static class FlagCreator
             new Weighting<FlagCharge.Type>(FlagCharge.Type.StarBand, 1),
         ]);
         
-        return from top in AllColoursDist()
-            from middle in AllColoursExceptDist(top)
-            from bottom in AllColoursExceptDist(middle)
+        return from top in FlagColours.AllDist()
+            from middle in FlagColours.AllowedAdjacentToDist(top)
+            from bottom in FlagColours.AllowedAdjacentToDist(middle)
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, disallowedColour: middle)
+            from charge in ChargeDist(chargeType, backgroundColour: middle)
             select (Flag)new HorizontalTriband(top, middle, bottom, charge);
     }
 
     private static IDistribution<Flag> CrossDist() =>
-        from background in AllColoursDist()
-        from foreground in AllColoursExceptDist(background)
+        from background in FlagColours.AllDist()
+        from foreground in FlagColours.AllowedAdjacentToDist(background)
         from crossType in UniformDistribution.Create([CrossType.Regular, CrossType.Nordic])
         select (Flag)new Cross(background, foreground, crossType);
 
     private static IDistribution<Flag> SaltireDist() =>
-        from background in AllColoursDist()
-        from foreground in AllColoursExceptDist(background)
+        from background in FlagColours.AllDist()
+        from foreground in FlagColours.AllowedAdjacentToDist(background)
         select (Flag)new Saltire(background, foreground);
-
-    private static IDistribution<FlagColour> AllColoursDist() =>
-        ColourDist(allColours);
-
-    private static IDistribution<FlagColour> AllColoursExceptDist(FlagColour exceptColour) =>
-        ColourDist(allColours.Where(c => c != exceptColour));
-    
-    private static IDistribution<FlagColour> ColourDist(IEnumerable<FlagColour> colours) =>
-        WeightedDiscreteDistribution.New(colours.Select(c => new Weighting<FlagColour>(c, ColourWeighting(c))));
-
-    private static int ColourWeighting(FlagColour colour) =>
-        colour switch
-        {
-            FlagColour.Red => 10,
-            FlagColour.Orange => 3,
-            FlagColour.Yellow => 6,
-            FlagColour.Green => 10,
-            FlagColour.LightBlue => 5,
-            FlagColour.DarkBlue => 10,
-            FlagColour.Burgundy => 2,
-            FlagColour.Purple => 2,
-            FlagColour.Grey => 1,
-            FlagColour.White => 7,
-            FlagColour.Black => 3,
-            _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
-        };
 }
