@@ -23,10 +23,13 @@ public static class FlagColours
     public static IDistribution<FlagColour> AllDist() => ColourDist(all);
 
     public static IDistribution<FlagColour> AllowedAdjacentToDist(FlagColour adjacentColour) => 
-        ColourDist(all.Where(c => c != adjacentColour));
+        ColourDist(AllowedAdjacentTo(adjacentColour));
 
     private static IDistribution<FlagColour> ColourDist(IEnumerable<FlagColour> colours) =>
         WeightedDiscreteDistribution.New(colours.Select(c => new Weighting<FlagColour>(c, GetWeighting(c))));
+
+    private static IEnumerable<FlagColour> AllowedAdjacentTo(FlagColour adjacentColour) => 
+        all.Where(c => c != adjacentColour);
 
     private static int GetWeighting(FlagColour colour) =>
         colour switch
