@@ -26,6 +26,7 @@ public static class FlagCreator
                 new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 3),
                 new Weighting<Flag.Type>(Flag.Type.Cross, 2),
                 new Weighting<Flag.Type>(Flag.Type.Saltire, 1),
+                new Weighting<Flag.Type>(Flag.Type.Quartered, 1),
                 new Weighting<Flag.Type>(Flag.Type.HorizontalStriped, 1),
             ]);
 
@@ -39,6 +40,7 @@ public static class FlagCreator
             Flag.Type.HorizontalTriband => HorizontalTribandDist(),
             Flag.Type.Cross => CrossDist(),
             Flag.Type.Saltire => SaltireDist(),
+            Flag.Type.Quartered => QuarteredDist(),
             Flag.Type.HorizontalStriped => HorizontalStripedDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
@@ -128,6 +130,13 @@ public static class FlagCreator
         from background in FlagColours.AllDist()
         from foreground in FlagColours.AllowedAdjacentToDist(background)
         select (Flag)new Saltire(background, foreground);
+
+    private static IDistribution<Flag> QuarteredDist() =>
+        from topLeft in FlagColours.AllDist()
+        from topRight in FlagColours.AllowedAdjacentToDist(topLeft)
+        from bottomRight in FlagColours.AllowedAdjacentToDist(topRight)
+        from bottomLeft in FlagColours.AllowedAdjacentToDist([topLeft, bottomRight])
+        select (Flag)new Quartered(topLeft, topRight, bottomRight, bottomLeft);
 
     private static IDistribution<Flag> HorizontalStripedDist() =>
         from colour1 in FlagColours.AllDist()

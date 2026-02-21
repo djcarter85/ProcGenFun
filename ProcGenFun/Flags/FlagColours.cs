@@ -36,14 +36,17 @@ public static class FlagColours
 
     public static IDistribution<FlagColour> AllDist() => ColourDist(all);
 
-    public static IDistribution<FlagColour> AllowedAdjacentToDist(FlagColour adjacentColour) => 
-        ColourDist(AllowedAdjacentTo(adjacentColour));
+    public static IDistribution<FlagColour> AllowedAdjacentToDist(FlagColour adjacentColour) =>
+        AllowedAdjacentToDist([adjacentColour]);
+
+    public static IDistribution<FlagColour> AllowedAdjacentToDist(IEnumerable<FlagColour> adjacentColours) =>
+        ColourDist(AllowedAdjacentTo(adjacentColours));
 
     private static IDistribution<FlagColour> ColourDist(IEnumerable<FlagColour> colours) =>
         WeightedDiscreteDistribution.New(colours.Select(c => new Weighting<FlagColour>(c, GetWeighting(c))));
 
-    private static IEnumerable<FlagColour> AllowedAdjacentTo(FlagColour adjacentColour) =>
-        all.Except([adjacentColour]).Except(DisallowedAdjacentTo(adjacentColour));
+    private static IEnumerable<FlagColour> AllowedAdjacentTo(IEnumerable<FlagColour> adjacentColours) =>
+        all.Except(adjacentColours).Except(adjacentColours.SelectMany(DisallowedAdjacentTo));
 
     private static IEnumerable<FlagColour> DisallowedAdjacentTo(FlagColour adjacentColour) =>
         disallowedColourPairings.Where(p => p.Colour1 == adjacentColour).Select(p => p.Colour2)

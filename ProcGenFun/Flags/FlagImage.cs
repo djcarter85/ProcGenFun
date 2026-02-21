@@ -42,6 +42,7 @@ public static class FlagImage
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
+            Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
         };
 
@@ -297,6 +298,43 @@ public static class FlagImage
             }.ToPathData(),
             Stroke = new SvgColourServer(GetColor(foreground)),
             StrokeWidth = 2.5f * U
+        };
+    }
+
+    private static IEnumerable<SvgElement> GetQuarteredFlagElements(
+        FlagColour topLeft, FlagColour topRight, FlagColour bottomRight, FlagColour bottomLeft)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(topLeft)),
+            X = 0,
+            Y = 0,
+            Width = 9 * U,
+            Height = 6 * U
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(topRight)),
+            X = 9 * U,
+            Y = 0,
+            Width = 9 * U,
+            Height = 6 * U
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(bottomRight)),
+            X = 9 * U,
+            Y = 6 * U,
+            Width = 9 * U,
+            Height = 6 * U
+        };
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(bottomLeft)),
+            X = 0,
+            Y = 6 * U,
+            Width = 9 * U,
+            Height = 6 * U
         };
     }
 
