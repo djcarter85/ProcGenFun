@@ -42,7 +42,7 @@ public static class FlagImage
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
-            HorizontalStriped(var colour1, var colour2) => GetHorizontalStripedFlagElements(colour1, colour2),
+            HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
@@ -301,9 +301,8 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetHorizontalStripedFlagElements(
-        FlagColour colour1, FlagColour colour2)
+        FlagColour colour1, FlagColour colour2, int stripeCount)
     {
-        var stripeCount = 4;
         var stripeHeight = 12f * U / stripeCount;
 
         for (var i = 0; i < stripeCount; i++)

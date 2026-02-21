@@ -132,5 +132,6 @@ public static class FlagCreator
     private static IDistribution<Flag> HorizontalStripedDist() =>
         from colour1 in FlagColours.AllDist()
         from colour2 in FlagColours.AllowedAdjacentToDist(colour1)
-        select (Flag)new HorizontalStriped(colour1, colour2);
+        from stripeCount in UniformDistribution.Create([5, 7, 9, 11, 13])
+        select (Flag)new HorizontalStriped(colour1, colour2, stripeCount);
 }
