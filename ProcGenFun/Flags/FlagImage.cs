@@ -40,6 +40,7 @@ public static class FlagImage
                 GetVerticalTribandFlagElements(left, middle, right, charge),
             HorizontalTriband(var top, var middle, var bottom, var charge) =>
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
+            DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
@@ -241,6 +242,47 @@ public static class FlagImage
         {
             yield return chargeElement;
         }
+    }
+
+    private static IEnumerable<SvgElement> GetDiagonalBicolourFlagElements(
+        FlagColour left, FlagColour right, Diagonal diagonal)
+    {
+        yield return new SvgPath
+        {
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(0, 12 * U)),
+                new SvgLineSegment(
+                    false,
+                    diagonal switch
+                    {
+                        Diagonal.Down => new PointF(18 * U, 12 * U),
+                        Diagonal.Up => new PointF(18 * U, 0),
+                        _ => throw new NotImplementedException()
+                    }),
+                new SvgClosePathSegment(false)
+            }.ToPathData(),
+            Fill = new SvgColourServer(GetColor(left)),
+        };
+        yield return new SvgPath
+        {
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(18 * U, 0)),
+                new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
+                new SvgLineSegment(
+                    false,
+                    diagonal switch
+                    {
+                        Diagonal.Down => new PointF(0, 0),
+                        Diagonal.Up => new PointF(0, 12 * U),
+                        _ => throw new NotImplementedException()
+                    }),
+                new SvgClosePathSegment(false)
+            }.ToPathData(),
+            Fill = new SvgColourServer(GetColor(right)),
+        };
     }
 
     private static IEnumerable<SvgElement> GetCrossFlagElements(

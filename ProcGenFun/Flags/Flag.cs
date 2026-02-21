@@ -10,12 +10,27 @@ public partial record Flag
     public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom);
     public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge);
     public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, FlagCharge Charge);
+    public partial record DiagonalBicolour(FlagColour Left, FlagColour Right, Diagonal Diagonal);
     public partial record Cross(FlagColour Background, FlagColour Foreground, CrossType CrossType);
     public partial record Saltire(FlagColour Background, FlagColour Foreground);
     public partial record Quartered(FlagColour TopLeft, FlagColour TopRight, FlagColour BottomRight, FlagColour BottomLeft);
     public partial record HorizontalStriped(FlagColour Colour1, FlagColour Colour2, int StripeCount);
 
-    public enum Type { Solid, VerticalDiband, HorizontalDiband, VerticalTriband, HorizontalTriband, Cross, Saltire, Quartered, HorizontalStriped }
+    public enum Type
+    {
+        Solid,
+        VerticalDiband,
+        HorizontalDiband,
+        VerticalTriband,
+        HorizontalTriband,
+        DiagonalBicolour,
+        Cross,
+        Saltire,
+        Quartered,
+        HorizontalStriped
+    }
 }
 
 public enum CrossType { Regular, Nordic }
+
+public enum Diagonal { Down, Up }

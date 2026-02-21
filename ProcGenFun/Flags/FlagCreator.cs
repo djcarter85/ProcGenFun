@@ -24,6 +24,7 @@ public static class FlagCreator
                 new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 3),
                 new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 4),
                 new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 3),
+                new Weighting<Flag.Type>(Flag.Type.DiagonalBicolour, 1),
                 new Weighting<Flag.Type>(Flag.Type.Cross, 2),
                 new Weighting<Flag.Type>(Flag.Type.Saltire, 1),
                 new Weighting<Flag.Type>(Flag.Type.Quartered, 1),
@@ -38,6 +39,7 @@ public static class FlagCreator
             Flag.Type.HorizontalDiband => HorizontalDibandDist(),
             Flag.Type.VerticalTriband => VerticalTribandDist(),
             Flag.Type.HorizontalTriband => HorizontalTribandDist(),
+            Flag.Type.DiagonalBicolour => DiagonalBicolourDist(),
             Flag.Type.Cross => CrossDist(),
             Flag.Type.Saltire => SaltireDist(),
             Flag.Type.Quartered => QuarteredDist(),
@@ -119,6 +121,12 @@ public static class FlagCreator
             from charge in ChargeDist(chargeType, backgroundColour: middle)
             select (Flag)new HorizontalTriband(top, middle, bottom, charge);
     }
+
+    private static IDistribution<Flag> DiagonalBicolourDist() =>
+        from left in FlagColours.AllDist()
+        from right in FlagColours.AllowedAdjacentToDist(left)
+        from diagonal in UniformDistribution.Create([Diagonal.Down, Diagonal.Up])
+        select (Flag)new DiagonalBicolour(left, right, diagonal);
 
     private static IDistribution<Flag> CrossDist() =>
         from background in FlagColours.AllDist()
