@@ -19,7 +19,7 @@ public static class FlagImage
         var svgDocument = new SvgDocument
         {
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight),
-            CustomAttributes = { {"class", className} }
+            CustomAttributes = { { "class", className } }
         };
 
         foreach (var child in GetFlagElements(flag))
@@ -38,10 +38,11 @@ public static class FlagImage
             HorizontalDiband(var top, var bottom) => GetHorizontalDibandFlagElements(top, bottom),
             VerticalTriband(var left, var middle, var right, var charge) =>
                 GetVerticalTribandFlagElements(left, middle, right, charge),
-            HorizontalTriband(var top, var middle, var bottom, var charge) => 
+            HorizontalTriband(var top, var middle, var bottom, var charge) =>
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
+            HorizontalStriped(var colour1, var colour2) => GetHorizontalStripedFlagElements(colour1, colour2),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
@@ -74,7 +75,7 @@ public static class FlagImage
     {
         yield return CreateSvgStar(
             centre: new PointF(9 * U, 6 * U),
-            radius: radius, 
+            radius: radius,
             fillColour: GetColor(colour));
     }
 
@@ -94,7 +95,7 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetCircleElements(FlagColour colour, float radius)
     {
         yield return new SvgCircle
-            { CenterX = 9 * U, CenterY = 6 * U, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
+        { CenterX = 9 * U, CenterY = 6 * U, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
     }
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
@@ -114,7 +115,7 @@ public static class FlagImage
             ]
         };
 
-    private static PointF RadialPoint(float radius, float angle) => 
+    private static PointF RadialPoint(float radius, float angle) =>
         new(x: radius * MathF.Cos(angle), y: radius * MathF.Sin(angle));
 
     private static IEnumerable<SvgPathSegment> ClosedPath(IEnumerable<PointF> points)
@@ -130,7 +131,7 @@ public static class FlagImage
             {
                 yield return new SvgLineSegment(false, point);
             }
-            
+
             isFirst = false;
         }
     }
@@ -259,7 +260,7 @@ public static class FlagImage
             CrossType.Nordic => 6,
             _ => throw new ArgumentOutOfRangeException(nameof(crossType), crossType, null)
         };
-        
+
         yield return new SvgPath
         {
             PathData = new SvgPathSegment[]
@@ -297,6 +298,27 @@ public static class FlagImage
             Stroke = new SvgColourServer(GetColor(foreground)),
             StrokeWidth = 2.5f * U
         };
+    }
+
+    private static IEnumerable<SvgElement> GetHorizontalStripedFlagElements(
+        FlagColour colour1, FlagColour colour2)
+    {
+        var stripeCount = 4;
+        var stripeHeight = 12f * U / stripeCount;
+
+        for (var i = 0; i < stripeCount; i++)
+        {
+            var colour = i % 2 == 0 ? colour1 : colour2;
+
+            yield return new SvgRectangle
+            {
+                Fill = new SvgColourServer(GetColor(colour)),
+                X = 0,
+                Y = stripeHeight * i,
+                Width = 18 * U,
+                Height = stripeHeight
+            };
+        }
     }
 
     private static Color GetColor(FlagColour colour) =>
