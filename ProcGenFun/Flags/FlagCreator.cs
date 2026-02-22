@@ -134,10 +134,17 @@ public static class FlagCreator
         from crossType in UniformDistribution.Create([CrossType.Regular, CrossType.Nordic])
         select (Flag)new Cross(background, foreground, crossType);
 
-    private static IDistribution<Flag> SaltireDist() =>
-        from background in FlagColours.AllDist()
-        from foreground in FlagColours.AllowedAdjacentToDist(background)
-        select (Flag)new Saltire(background, foreground);
+    private static IDistribution<Flag> SaltireDist()
+    {
+        IDistribution<FlagColour> EastWestFieldDist(FlagColour northSouthField, bool fieldColoursAreSame) => 
+            fieldColoursAreSame ? Singleton.New(northSouthField) : FlagColours.AllExceptDist(northSouthField);
+
+        return from northSouthField in FlagColours.AllDist()
+            from fieldColoursAreSame in Bernoulli.FromRatio(4, 5)
+            from eastWestfield in EastWestFieldDist(northSouthField, fieldColoursAreSame)
+            from foreground in FlagColours.AllowedAdjacentToDist([northSouthField, eastWestfield])
+            select (Flag)new Saltire(northSouthField, eastWestfield, foreground);
+    }
 
     private static IDistribution<Flag> QuarteredDist() =>
         from topLeft in FlagColours.AllDist()

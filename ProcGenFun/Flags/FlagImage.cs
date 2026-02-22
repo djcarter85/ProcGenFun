@@ -42,7 +42,7 @@ public static class FlagImage
                 GetHorizontalTribandFlagElements(top, middle, bottom, charge),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
-            Saltire(var background, var foreground) => GetSaltireFlagElements(background, foreground),
+            Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
         };
@@ -319,16 +319,34 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetSaltireFlagElements(
-        FlagColour background, FlagColour foreground)
+        FlagColour northSouthField, FlagColour eastWestField, FlagColour foreground)
     {
-        yield return new SvgRectangle
+        yield return new SvgPath
         {
-            Fill = new SvgColourServer(GetColor(background)),
-            X = 0,
-            Y = 0,
-            Width = 18 * U,
-            Height = 12 * U
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(18 * U, 0)),
+                new SvgLineSegment(false, new PointF(0, 12 * U)),
+                new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
+                new SvgClosePathSegment(false)
+            }.ToPathData(),
+            Fill = new SvgColourServer(GetColor(northSouthField)),
         };
+        
+        yield return new SvgPath
+        {
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(0, 12 * U)),
+                new SvgLineSegment(false, new PointF(18 * U, 0)),
+                new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
+                new SvgClosePathSegment(false)
+            }.ToPathData(),
+            Fill = new SvgColourServer(GetColor(eastWestField)),
+        };
+        
         yield return new SvgPath
         {
             PathData = new SvgPathSegment[]
