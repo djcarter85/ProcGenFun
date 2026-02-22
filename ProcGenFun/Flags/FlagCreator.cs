@@ -19,16 +19,16 @@ public static class FlagCreator
     private static IDistribution<Flag.Type> FlagTypeDist() =>
         WeightedDiscreteDistribution.New(
             [
-                new Weighting<Flag.Type>(Flag.Type.Solid, 1),
-                new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 2),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 3),
-                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 4),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 3),
-                new Weighting<Flag.Type>(Flag.Type.DiagonalBicolour, 1),
-                new Weighting<Flag.Type>(Flag.Type.Cross, 2),
-                new Weighting<Flag.Type>(Flag.Type.Saltire, 1),
-                new Weighting<Flag.Type>(Flag.Type.Quartered, 1),
-                new Weighting<Flag.Type>(Flag.Type.HorizontalStriped, 1),
+                new Weighting<Flag.Type>(Flag.Type.Solid, 15),
+                new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 25),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 35),
+                new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 50),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalTriband, 45),
+                new Weighting<Flag.Type>(Flag.Type.DiagonalBicolour, 5),
+                new Weighting<Flag.Type>(Flag.Type.Cross, 25),
+                new Weighting<Flag.Type>(Flag.Type.Saltire, 15),
+                new Weighting<Flag.Type>(Flag.Type.Quartered, 10),
+                new Weighting<Flag.Type>(Flag.Type.HorizontalStriped, 10),
             ]);
 
     private static IDistribution<Flag> FlagDist(Flag.Type flagType) =>
