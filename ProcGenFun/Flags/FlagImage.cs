@@ -34,6 +34,7 @@ public static class FlagImage
         flag switch
         {
             Solid(var colour, var charge) => GetSolidFlagElements(colour, charge),
+            Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
             HorizontalDiband(var top, var bottom) => GetHorizontalDibandFlagElements(top, bottom),
             VerticalTriband(var left, var middle, var right, var charge) =>
@@ -62,6 +63,27 @@ public static class FlagImage
         {
             yield return chargeElement;
         }
+    }
+
+    private static IEnumerable<SvgElement> GetCantonFlagElements(FlagColour field, FlagColour cantonColour)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(field)),
+            X = 0,
+            Y = 0,
+            Width = 18 * U,
+            Height = 12 * U
+        };
+        
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(GetColor(cantonColour)),
+            X = 0,
+            Y = 0,
+            Width = 9 * U,
+            Height = 6 * U
+        };
     }
 
     private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge, float radius) =>

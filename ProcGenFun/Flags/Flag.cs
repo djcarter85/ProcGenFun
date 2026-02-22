@@ -6,6 +6,7 @@ using Dunet;
 public partial record Flag
 {
     public partial record Solid(FlagColour Colour, FlagCharge Charge);
+    public partial record Canton(FlagColour Field, FlagColour CantonColour);
     public partial record VerticalDiband(FlagColour Left, FlagColour Right);
     public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom);
     public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge);
@@ -19,6 +20,7 @@ public partial record Flag
     public enum Type
     {
         Solid,
+        Canton,
         VerticalDiband,
         HorizontalDiband,
         VerticalTriband,

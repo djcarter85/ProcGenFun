@@ -20,6 +20,7 @@ public static class FlagCreator
         WeightedDiscreteDistribution.New(
             [
                 new Weighting<Flag.Type>(Flag.Type.Solid, 15),
+                new Weighting<Flag.Type>(Flag.Type.Canton, 15),
                 new Weighting<Flag.Type>(Flag.Type.VerticalDiband, 25),
                 new Weighting<Flag.Type>(Flag.Type.HorizontalDiband, 35),
                 new Weighting<Flag.Type>(Flag.Type.VerticalTriband, 50),
@@ -35,6 +36,7 @@ public static class FlagCreator
         flagType switch
         {
             Flag.Type.Solid => SolidFlagDist(),
+            Flag.Type.Canton => CantonFlagDist(),
             Flag.Type.VerticalDiband => VerticalDibandDist(),
             Flag.Type.HorizontalDiband => HorizontalDibandDist(),
             Flag.Type.VerticalTriband => VerticalTribandDist(),
@@ -61,6 +63,11 @@ public static class FlagCreator
             from charge in ChargeDist(chargeType, backgroundColour: colour)
             select (Flag)new Solid(colour, charge);
     }
+
+    private static IDistribution<Flag> CantonFlagDist() =>
+        from field in FlagColours.AllDist()
+        from cantonColour in FlagColours.AllowedAdjacentToDist(field)
+        select (Flag)new Canton(field, cantonColour);
 
     private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour backgroundColour) =>
         chargeType switch
