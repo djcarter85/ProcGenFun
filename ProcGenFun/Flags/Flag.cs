@@ -32,7 +32,3 @@ public partial record Flag
         HorizontalStriped
     }
 }
-
-public enum CrossType { Regular, Nordic }
-
-public enum Diagonal { Down, Up }
