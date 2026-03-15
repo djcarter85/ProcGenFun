@@ -1,7 +1,7 @@
 ﻿namespace ProcGenFun.Flags;
 
-using Svg;
 using System.Drawing;
+using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
 using static Flag;
