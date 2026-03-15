@@ -31,7 +31,7 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetFlagElements(Flag flag) =>
-        GetFlagPatternElements(flag.Pattern).Concat(GetChargeElements(flag.Charge));
+        GetFlagPatternElements(flag.Pattern).Concat(GetChargesElements(flag.Charges));
 
     private static IEnumerable<SvgElement> GetFlagPatternElements(FlagPattern pattern) =>
         pattern switch
@@ -81,11 +81,13 @@ public static class FlagImage
             Height = 6 * U
         };
     }
+    
+    private static IEnumerable<SvgElement> GetChargesElements(IEnumerable<FlagCharge> charges) =>
+        charges.SelectMany(GetChargeElements);
 
     private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
         charge switch
         {
-            None => [],
             Star(var colour, var size) => GetStarElements(colour, radius: size * U),
             StarBand(var colour, var count, var size) => GetStarBandElements(colour, count, radius: size * U),
             Circle(var colour, var size) => GetCircleElements(colour, radius: size * U),
