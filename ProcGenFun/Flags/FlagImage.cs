@@ -59,7 +59,7 @@ public static class FlagImage
             Height = 12 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(charge, radius: 3 * U))
+        foreach (var chargeElement in GetChargeElements(charge))
         {
             yield return chargeElement;
         }
@@ -86,13 +86,13 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge, float radius) =>
+    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
         charge switch
         {
             None => [],
-            Star(var colour) => GetStarElements(colour, radius),
-            StarBand(var colour, var count) => GetStarBandElements(colour, count, radius),
-            Circle(var colour) => GetCircleElements(colour, radius),
+            Star(var colour, var size) => GetStarElements(colour, radius: size * U),
+            StarBand(var colour, var count, var size) => GetStarBandElements(colour, count, radius: size * U),
+            Circle(var colour, var size) => GetCircleElements(colour, radius: size * U),
         };
 
     private static IEnumerable<SvgElement> GetStarElements(FlagColour colour, float radius)
@@ -227,7 +227,7 @@ public static class FlagImage
             Height = 12 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(charge, radius: 2 * U))
+        foreach (var chargeElement in GetChargeElements(charge))
         {
             yield return chargeElement;
         }
@@ -260,7 +260,7 @@ public static class FlagImage
             Height = 4 * U
         };
 
-        foreach (var chargeElement in GetChargeElements(charge, radius: 1.5f * U))
+        foreach (var chargeElement in GetChargeElements(charge))
         {
             yield return chargeElement;
         }

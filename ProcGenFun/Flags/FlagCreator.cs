@@ -58,7 +58,7 @@ public static class FlagCreator
         
         return from colour in FlagColours.AllDist()
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, backgroundColour: colour)
+            from charge in ChargeDist(chargeType, backgroundColour: colour, size: 3)
             select (Flag)new Solid(colour, charge);
     }
 
@@ -67,21 +67,21 @@ public static class FlagCreator
         from cantonColour in FlagColours.AllowedAdjacentToDist(field)
         select (Flag)new Canton(field, cantonColour);
 
-    private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour backgroundColour) =>
+    private static IDistribution<FlagCharge> ChargeDist(FlagCharge.Type chargeType, FlagColour backgroundColour, float size) =>
         chargeType switch
         {
             FlagCharge.Type.None =>
                 Singleton.New<FlagCharge>(new None()),
             FlagCharge.Type.Star =>
                 from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-                select (FlagCharge)new Star(colour),
+                select (FlagCharge)new Star(colour, size),
             FlagCharge.Type.StarBand =>
                 from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
                 from count in Uniform.NewInclusive(1, 4)
-                select (FlagCharge)new StarBand(colour, count),
+                select (FlagCharge)new StarBand(colour, count, size),
             FlagCharge.Type.Circle =>
                 from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-                select (FlagCharge)new Circle(colour),
+                select (FlagCharge)new Circle(colour, size),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
@@ -107,7 +107,7 @@ public static class FlagCreator
             from middle in FlagColours.AllowedAdjacentToDist(left)
             from right in FlagColours.AllowedAdjacentToDist(middle)
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, backgroundColour: middle)
+            from charge in ChargeDist(chargeType, backgroundColour: middle, size: 2)
             select (Flag)new VerticalTriband(left, middle, right, charge);
     }
 
@@ -123,7 +123,7 @@ public static class FlagCreator
             from middle in FlagColours.AllowedAdjacentToDist(top)
             from bottom in FlagColours.AllowedAdjacentToDist(middle)
             from chargeType in chargeTypeDist
-            from charge in ChargeDist(chargeType, backgroundColour: middle)
+            from charge in ChargeDist(chargeType, backgroundColour: middle, size: 1.5f)
             select (Flag)new HorizontalTriband(top, middle, bottom, charge);
     }
 
