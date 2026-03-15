@@ -2,15 +2,17 @@ namespace ProcGenFun.Flags;
 
 using Dunet;
 
+public record Flag(FlagPattern Pattern, FlagCharge Charge);
+
 [Union]
-public partial record Flag
+public partial record FlagPattern
 {
-    public partial record Solid(FlagColour Colour, FlagCharge Charge);
+    public partial record Solid(FlagColour Colour);
     public partial record Canton(FlagColour Field, FlagColour CantonColour);
     public partial record VerticalDiband(FlagColour Left, FlagColour Right);
     public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom);
-    public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right, FlagCharge Charge);
-    public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, FlagCharge Charge);
+    public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right);
+    public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom);
     public partial record DiagonalBicolour(FlagColour Left, FlagColour Right, Diagonal Diagonal);
     public partial record Cross(FlagColour Background, FlagColour Foreground, CrossType CrossType);
     public partial record Saltire(FlagColour NorthSouthField, FlagColour EastWestField, FlagColour Foreground);

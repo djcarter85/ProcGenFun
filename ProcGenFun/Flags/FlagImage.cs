@@ -4,7 +4,7 @@ using System.Drawing;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
-using static Flag;
+using static FlagPattern;
 using static FlagCharge;
 
 public static class FlagImage
@@ -31,16 +31,17 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetFlagElements(Flag flag) =>
-        flag switch
+        GetFlagPatternElements(flag.Pattern).Concat(GetChargeElements(flag.Charge));
+
+    private static IEnumerable<SvgElement> GetFlagPatternElements(FlagPattern pattern) =>
+        pattern switch
         {
-            Solid(var colour, var charge) => GetSolidFlagElements(colour, charge),
+            Solid(var colour) => GetSolidFlagElements(colour),
             Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
             HorizontalDiband(var top, var bottom) => GetHorizontalDibandFlagElements(top, bottom),
-            VerticalTriband(var left, var middle, var right, var charge) =>
-                GetVerticalTribandFlagElements(left, middle, right, charge),
-            HorizontalTriband(var top, var middle, var bottom, var charge) =>
-                GetHorizontalTribandFlagElements(top, middle, bottom, charge),
+            VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
+            HorizontalTriband(var top, var middle, var bottom) => GetHorizontalTribandFlagElements(top, middle, bottom),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
@@ -48,7 +49,7 @@ public static class FlagImage
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
         };
 
-    private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour, FlagCharge charge)
+    private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour)
     {
         yield return new SvgRectangle
         {
@@ -58,11 +59,6 @@ public static class FlagImage
             Width = 18 * U,
             Height = 12 * U
         };
-
-        foreach (var chargeElement in GetChargeElements(charge))
-        {
-            yield return chargeElement;
-        }
     }
 
     private static IEnumerable<SvgElement> GetCantonFlagElements(FlagColour field, FlagColour cantonColour)
@@ -200,7 +196,7 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(FlagColour left, FlagColour middle, FlagColour right, FlagCharge charge)
+    private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(FlagColour left, FlagColour middle, FlagColour right)
     {
         yield return new SvgRectangle
         {
@@ -226,14 +222,9 @@ public static class FlagImage
             Width = 6 * U,
             Height = 12 * U
         };
-
-        foreach (var chargeElement in GetChargeElements(charge))
-        {
-            yield return chargeElement;
-        }
     }
 
-    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(FlagColour top, FlagColour middle, FlagColour bottom, FlagCharge charge)
+    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(FlagColour top, FlagColour middle, FlagColour bottom)
     {
         yield return new SvgRectangle
         {
@@ -259,11 +250,6 @@ public static class FlagImage
             Width = 18 * U,
             Height = 4 * U
         };
-
-        foreach (var chargeElement in GetChargeElements(charge))
-        {
-            yield return chargeElement;
-        }
     }
 
     private static IEnumerable<SvgElement> GetDiagonalBicolourFlagElements(
