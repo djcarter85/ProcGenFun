@@ -5,7 +5,7 @@ using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
 using static FlagPattern;
-using static FlagCharge;
+using static FlagChargeShape;
 
 public static class FlagImage
 {
@@ -86,11 +86,11 @@ public static class FlagImage
         charges.SelectMany(GetChargeElements);
 
     private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
-        charge switch
+        charge.Shape switch
         {
-            Star(var colour, var size) => GetStarElements(colour, radius: size * U),
-            StarBand(var colour, var count, var size) => GetStarBandElements(colour, count, radius: size * U),
-            Circle(var colour, var size) => GetCircleElements(colour, radius: size * U),
+            Star(var colour) => GetStarElements(colour, radius: charge.Size * U),
+            StarBand(var colour, var count) => GetStarBandElements(colour, count, radius: charge.Size * U),
+            Circle(var colour) => GetCircleElements(colour, radius: charge.Size * U),
         };
 
     private static IEnumerable<SvgElement> GetStarElements(FlagColour colour, float radius)

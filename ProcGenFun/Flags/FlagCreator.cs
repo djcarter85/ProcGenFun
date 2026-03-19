@@ -5,7 +5,7 @@ using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 using static FlagPattern;
-using static FlagCharge;
+using static FlagChargeShape;
 
 public static class FlagCreator
 {
@@ -51,9 +51,9 @@ public static class FlagCreator
     {
         var chargeTypeDist = WeightedDiscreteDistribution.New(
         [
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 1),
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 2),
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.Circle, 2),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 1),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Star, 2),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Circle, 2),
         ]);
 
         return from colour in FlagColours.AllDist()
@@ -67,29 +67,29 @@ public static class FlagCreator
         from cantonColour in FlagColours.AllowedAdjacentToDist(field)
         select new Flag(new Canton(field, cantonColour), []);
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagCharge.Type chargeType,
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type chargeType,
         FlagColour backgroundColour, float size) =>
         chargeType switch
         {
-            FlagCharge.Type.None => Singleton.New<IReadOnlyList<FlagCharge>>([]),
-            FlagCharge.Type.Star => StarChargeDist(backgroundColour, size),
-            FlagCharge.Type.StarBand => StarBandChargeDist(backgroundColour, size),
-            FlagCharge.Type.Circle => CircleChargeDist(backgroundColour, size),
+            FlagChargeShape.Type.None => Singleton.New<IReadOnlyList<FlagCharge>>([]),
+            FlagChargeShape.Type.Star => StarChargeDist(backgroundColour, size),
+            FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColour, size),
+            FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColour, size),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new Star(colour, size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new Star(colour), size) };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
         from count in Uniform.NewInclusive(1, 4)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new StarBand(colour, count, size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new StarBand(colour, count), size) };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new Circle(colour, size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new Circle(colour), size) };
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in FlagColours.AllDist()
@@ -105,8 +105,8 @@ public static class FlagCreator
     {
         var chargeTypeDist = WeightedDiscreteDistribution.New(
         [
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 1),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 3),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Star, 1),
         ]);
 
         return from left in FlagColours.AllDist()
@@ -121,8 +121,8 @@ public static class FlagCreator
     {
         var chargeTypeDist = WeightedDiscreteDistribution.New(
         [
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
-            new Weighting<FlagCharge.Type>(FlagCharge.Type.StarBand, 1),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 3),
+            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.StarBand, 1),
         ]);
 
         return from top in FlagColours.AllDist()
