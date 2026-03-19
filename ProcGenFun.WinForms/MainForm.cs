@@ -42,4 +42,9 @@ public partial class MainForm : Form
     {
         new FlagsForm(this.rng).Show();
     }
+
+    private void MapsButton_Click(object sender, EventArgs e)
+    {
+        new MapsForm(this.rng).Show();
+    }
 }
