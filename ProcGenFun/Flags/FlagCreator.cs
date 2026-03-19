@@ -57,9 +57,9 @@ public static class FlagCreator
         ]);
 
         return from colour in FlagColours.AllDist()
-            from chargeType in chargeTypeDist
-            from charges in ChargesDist(chargeType, backgroundColour: colour, size: 3)
-            select new Flag(new Solid(colour), charges);
+               from chargeType in chargeTypeDist
+               from charges in ChargesDist(chargeType, backgroundColour: colour, size: 3)
+               select new Flag(new Solid(colour), charges);
     }
 
     private static IDistribution<Flag> CantonFlagDist() =>
@@ -80,16 +80,16 @@ public static class FlagCreator
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>{new Star(colour, size)};
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new Star(colour, size) };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
         from count in Uniform.NewInclusive(1, 4)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>{new StarBand(colour, count, size)};
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new StarBand(colour, count, size) };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>{new Circle(colour, size)};
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new Circle(colour, size) };
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in FlagColours.AllDist()
@@ -108,13 +108,13 @@ public static class FlagCreator
             new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
             new Weighting<FlagCharge.Type>(FlagCharge.Type.Star, 1),
         ]);
-        
+
         return from left in FlagColours.AllDist()
-            from middle in FlagColours.AllowedAdjacentToDist(left)
-            from right in FlagColours.AllowedAdjacentToDist(middle)
-            from chargeType in chargeTypeDist
-            from charge in ChargesDist(chargeType, backgroundColour: middle, size: 2)
-            select new Flag(new VerticalTriband(left, middle, right), charge);
+               from middle in FlagColours.AllowedAdjacentToDist(left)
+               from right in FlagColours.AllowedAdjacentToDist(middle)
+               from chargeType in chargeTypeDist
+               from charge in ChargesDist(chargeType, backgroundColour: middle, size: 2)
+               select new Flag(new VerticalTriband(left, middle, right), charge);
     }
 
     private static IDistribution<Flag> HorizontalTribandDist()
@@ -124,13 +124,13 @@ public static class FlagCreator
             new Weighting<FlagCharge.Type>(FlagCharge.Type.None, 3),
             new Weighting<FlagCharge.Type>(FlagCharge.Type.StarBand, 1),
         ]);
-        
+
         return from top in FlagColours.AllDist()
-            from middle in FlagColours.AllowedAdjacentToDist(top)
-            from bottom in FlagColours.AllowedAdjacentToDist(middle)
-            from chargeType in chargeTypeDist
-            from charge in ChargesDist(chargeType, backgroundColour: middle, size: 1.5f)
-            select new Flag(new HorizontalTriband(top, middle, bottom), charge);
+               from middle in FlagColours.AllowedAdjacentToDist(top)
+               from bottom in FlagColours.AllowedAdjacentToDist(middle)
+               from chargeType in chargeTypeDist
+               from charge in ChargesDist(chargeType, backgroundColour: middle, size: 1.5f)
+               select new Flag(new HorizontalTriband(top, middle, bottom), charge);
     }
 
     private static IDistribution<Flag> DiagonalBicolourDist() =>
@@ -147,14 +147,14 @@ public static class FlagCreator
 
     private static IDistribution<Flag> SaltireDist()
     {
-        IDistribution<FlagColour> EastWestFieldDist(FlagColour northSouthField, bool fieldColoursAreSame) => 
+        IDistribution<FlagColour> EastWestFieldDist(FlagColour northSouthField, bool fieldColoursAreSame) =>
             fieldColoursAreSame ? Singleton.New(northSouthField) : FlagColours.AllExceptDist(northSouthField);
 
         return from northSouthField in FlagColours.AllDist()
-            from fieldColoursAreSame in Bernoulli.FromRatio(4, 5)
-            from eastWestfield in EastWestFieldDist(northSouthField, fieldColoursAreSame)
-            from foreground in FlagColours.AllowedAdjacentToDist([northSouthField, eastWestfield])
-            select new Flag(new Saltire(northSouthField, eastWestfield, foreground), []);
+               from fieldColoursAreSame in Bernoulli.FromRatio(4, 5)
+               from eastWestfield in EastWestFieldDist(northSouthField, fieldColoursAreSame)
+               from foreground in FlagColours.AllowedAdjacentToDist([northSouthField, eastWestfield])
+               select new Flag(new Saltire(northSouthField, eastWestfield, foreground), []);
     }
 
     private static IDistribution<Flag> QuarteredDist() =>
