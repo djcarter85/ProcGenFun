@@ -24,6 +24,30 @@ public static class MapImage
             ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight)
         };
 
+        svgDocument.Children.Add(new SvgDefinitionList
+        {
+            Children =
+            {
+                new SvgPath
+                {
+                    ID = "arrow",
+                    PathData =
+                    [
+                        new SvgMoveToSegment(false, new PointF(0, 0)),
+                        new SvgLineSegment(true, new PointF(VectorLength, 0)),
+                        new SvgLineSegment(true, new PointF(-ArrowHeadSize, -ArrowHeadSize)),
+                        new SvgMoveToSegment(true, new PointF(0, 2 * ArrowHeadSize)),
+                        new SvgLineSegment(true, new PointF(ArrowHeadSize, -ArrowHeadSize)),
+                    ],
+                    Stroke = new SvgColourServer(Theme.Blue500),
+                    StrokeLineCap = SvgStrokeLineCap.Round,
+                    StrokeLineJoin = SvgStrokeLineJoin.Round,
+                    StrokeWidth = VectorWidth,
+                    Fill = new SvgColourServer(Color.Transparent),
+                }
+            }
+        });
+
         svgDocument.Children.Add(new SvgRectangle
         {
             X = 0,
@@ -46,25 +70,19 @@ public static class MapImage
         return svgDocument;
     }
 
-    private static SvgPath SvgArrow(GridPoint gridPoint, Vector2 vector)
+    private static SvgUse SvgArrow(GridPoint gridPoint, Vector2 vector)
     {
         var pointX = Margin + gridPoint.X * CellSize;
         var pointY = Margin + gridPoint.Y * CellSize;
 
-        return new SvgPath
+        return new SvgUse
         {
-            PathData =
+            ReferencedElement = new Uri("#arrow", UriKind.Relative),
+            Transforms =
             [
-                new SvgMoveToSegment(false, new PointF(pointX, pointY)),
-                new SvgLineSegment(true, new PointF(VectorLength, 0)),
-                new SvgLineSegment(true, new PointF(-ArrowHeadSize, -ArrowHeadSize)),
-                new SvgMoveToSegment(true, new PointF(0, 2 * ArrowHeadSize)),
-                new SvgLineSegment(true, new PointF(ArrowHeadSize, -ArrowHeadSize)),
-            ],
-            Stroke = new SvgColourServer(Theme.Blue500),
-            StrokeWidth = VectorWidth,
-            Fill = new SvgColourServer(Color.Transparent),
-            Transforms = [new SvgRotate(RadiansToDegrees(vector.ThetaRadians), pointX, pointY)]
+                new SvgTranslate(pointX, pointY),
+                new SvgRotate(RadiansToDegrees(vector.ThetaRadians)),
+            ]
         };
     }
 
