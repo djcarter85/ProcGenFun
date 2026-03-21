@@ -19,6 +19,10 @@ public static class DistributionExtensions
         where T : notnull =>
         from samples in dist.Repeat(sampleCount)
         select GetProbabilityDensities(sampleCount, samples);
+    
+    public static IDistribution<IReadOnlyDictionary<TKey, TValue>> ToDictionaryDist<TKey, TValue>(
+        this IEnumerable<TKey> keys, IDistribution<TValue> valueDist) where TKey : notnull =>
+        new DictionaryDistribution<TKey, TValue>(keys, valueDist);
 
     private static IReadOnlyDictionary<T, double> GetProbabilityDensities<T>(
         int sampleCount, IEnumerable<T> samples)
@@ -53,5 +57,21 @@ public static class DistributionExtensions
             result = Sample(rng);
             return true;
         }
+    }
+
+    private class DictionaryDistribution<TKey, TValue>(IEnumerable<TKey> keys, IDistribution<TValue> valueDist)
+        : IDistribution<IReadOnlyDictionary<TKey, TValue>> 
+        where TKey : notnull
+    {
+        public IReadOnlyDictionary<TKey, TValue> Sample<TRng>(TRng rng)
+            where TRng : notnull, IRng =>
+            keys.ToDictionary(
+                k => k,
+                _ => valueDist.Sample(rng));
+
+        public bool TrySample<TRng>(
+            TRng rng, [MaybeNullWhen(false)] out IReadOnlyDictionary<TKey, TValue> result)
+            where TRng : notnull, IRng =>
+            throw new NotImplementedException();
     }
 }
