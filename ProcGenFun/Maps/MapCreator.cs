@@ -49,6 +49,18 @@ public static class MapCreator
 
 public static class Perlin
 {
+    public static IDistribution<IFunction1> Perlin1Dist(double min, double max, int frequency)
+    {
+        var step = (max - min) / frequency;
+        var xValues = Enumerable.Range(0, frequency + 1).Select(i => min + i * step);
+        
+        var amplitudeDist = Uniform.NewInclusive(-1d, 1d);
+
+        return
+            from integerAmplitudes in xValues.ToDictionaryDist(amplitudeDist)
+            select (IFunction1)new Perlin1(integerAmplitudes, step, min);
+    }
+    
     public static IDistribution<IFunction2> Perlin2Dist(float min, float max, int frequency)
     {
         var step = (max - min) / frequency;
@@ -66,6 +78,22 @@ public static class Perlin
     private static IDistribution<Vector2> GradientVectorDist() =>
         from thetaRadians in Uniform.New(0f, 2 * MathF.PI)
         select Vector2.Unit(thetaRadians);
+
+    private class Perlin1(IReadOnlyDictionary<double, double> integerAmplitudes, double step, double min) : IFunction1
+    {
+        public double Evaluate(double x)
+        {
+            var xBefore = (int)((x - min) / step) + min;
+            var xAfter = xBefore + step;
+
+            var t = (x - xBefore) / step;
+            
+            var yBefore = integerAmplitudes[xBefore];
+            var yAfter = integerAmplitudes[xAfter];
+            
+            return yBefore + t * (yAfter - yBefore);
+        }
+    }
     
     private class Perlin2(IReadOnlyDictionary<Point2, Vector2> gradientVectors, float step, float min) : IFunction2
     {
@@ -105,4 +133,9 @@ public record Point2(float X, float Y)
 public interface IFunction2
 {
     float Evaluate(Point2 point);
+}
+
+public interface IFunction1
+{
+    double Evaluate(double x);
 }
