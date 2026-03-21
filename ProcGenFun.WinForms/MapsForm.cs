@@ -17,15 +17,17 @@ public partial class MapsForm : Form
 
     private void CreateMapButton_Click(object sender, EventArgs e)
     {
-        var imageDist =
-            from map in MapCreator.MapDist()
-            let svg = MapImage.Create(map)
-            select svg.Draw();
+        var perlinDist = Perlin.Perlin1Dist(min: 0d, max: 1000d, frequency: 4);
+        var period = 0.1d;
 
-        var image = imageDist.Sample(this.rng);
+        var ysDist =
+            from perlin in perlinDist
+            select Enumerable.Range(0, 10_001).Select(x => perlin.Evaluate(x* period)).ToArray();
 
-        this.pictureBox.Width = image.Width;
-        this.pictureBox.Height = image.Height;
-        this.pictureBox.Image = image;
+        var ys = ysDist.Sample(this.rng);
+
+        this.formsPlot.Reset();
+        this.formsPlot.Plot.Add.Signal(ys, period);
+        this.formsPlot.Refresh();
     }
 }

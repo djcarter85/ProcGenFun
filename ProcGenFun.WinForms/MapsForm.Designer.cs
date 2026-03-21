@@ -28,45 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.createMapButton = new Button();
-            this.pictureBox = new PictureBox();
-            ((System.ComponentModel.ISupportInitialize)this.pictureBox).BeginInit();
-            this.SuspendLayout();
+            createMapButton = new Button();
+            formsPlot = new ScottPlot.WinForms.FormsPlot();
+            SuspendLayout();
             // 
             // createMapButton
             // 
-            this.createMapButton.Location = new Point(12, 12);
-            this.createMapButton.Name = "createMapButton";
-            this.createMapButton.Size = new Size(124, 54);
-            this.createMapButton.TabIndex = 0;
-            this.createMapButton.Text = "Create Map";
-            this.createMapButton.UseVisualStyleBackColor = true;
-            this.createMapButton.Click += this.CreateMapButton_Click;
+            createMapButton.Location = new Point(12, 12);
+            createMapButton.Name = "createMapButton";
+            createMapButton.Size = new Size(124, 54);
+            createMapButton.TabIndex = 0;
+            createMapButton.Text = "Create Map";
+            createMapButton.UseVisualStyleBackColor = true;
+            createMapButton.Click += CreateMapButton_Click;
             // 
-            // pictureBox
+            // formsPlot1
             // 
-            this.pictureBox.Location = new Point(12, 72);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new Size(100, 50);
-            this.pictureBox.TabIndex = 1;
-            this.pictureBox.TabStop = false;
+            formsPlot.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            formsPlot.DisplayScale = 1F;
+            formsPlot.Location = new Point(12, 72);
+            formsPlot.Name = "formsPlot1";
+            formsPlot.Size = new Size(776, 561);
+            formsPlot.TabIndex = 1;
             // 
             // MapsForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 645);
-            this.Controls.Add(this.pictureBox);
-            this.Controls.Add(this.createMapButton);
+            this.Controls.Add(formsPlot);
+            this.Controls.Add(createMapButton);
             this.Name = "MapsForm";
             this.Text = "Maps";
-            ((System.ComponentModel.ISupportInitialize)this.pictureBox).EndInit();
-            this.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
 
         private Button createMapButton;
-        private PictureBox pictureBox;
+        private ScottPlot.WinForms.FormsPlot formsPlot;
     }
 }

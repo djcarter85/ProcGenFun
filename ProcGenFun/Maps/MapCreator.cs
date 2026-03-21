@@ -17,7 +17,7 @@ public static class MapCreator
              from y in Enumerable.Range(0, gridSquares + 1)
              select new GridPoint(x, y)).ToList();
 
-        return 
+        return
             from gridPointVectors in GradientPointVectorsDist(gridPoints)
             select new Map(gridPointVectors);
     }
@@ -31,7 +31,7 @@ public static class MapCreator
         select Vector2.Unit(thetaRadians);
 
     private class DictionaryDist<TKey, TValue>(IEnumerable<TKey> gridPoints, IDistribution<TValue> valueDist)
-        : IDistribution<IReadOnlyDictionary<TKey, TValue>> 
+        : IDistribution<IReadOnlyDictionary<TKey, TValue>>
         where TKey : notnull
     {
         public IReadOnlyDictionary<TKey, TValue> Sample<TRng>(TRng rng)
@@ -53,14 +53,14 @@ public static class Perlin
     {
         var step = (max - min) / frequency;
         var xValues = Enumerable.Range(0, frequency + 1).Select(i => min + i * step);
-        
+
         var amplitudeDist = Uniform.NewInclusive(-1d, 1d);
 
         return
             from integerAmplitudes in xValues.ToDictionaryDist(amplitudeDist)
             select (IFunction1)new Perlin1(integerAmplitudes, step, min);
     }
-    
+
     public static IDistribution<IFunction2> Perlin2Dist(float min, float max, int frequency)
     {
         var step = (max - min) / frequency;
@@ -83,27 +83,32 @@ public static class Perlin
     {
         public double Evaluate(double x)
         {
-            var xBefore = (int)((x - min) / step) + min;
+            if (integerAmplitudes.TryGetValue(x, out var value))
+            {
+                return value;
+            }
+
+            var xBefore = step * (int)((x - min) / step) + min;
             var xAfter = xBefore + step;
 
             var t = (x - xBefore) / step;
-            
+
             var yBefore = integerAmplitudes[xBefore];
             var yAfter = integerAmplitudes[xAfter];
-            
+
             return yBefore + t * (yAfter - yBefore);
         }
     }
-    
+
     private class Perlin2(IReadOnlyDictionary<Point2, Vector2> gradientVectors, float step, float min) : IFunction2
     {
         public float Evaluate(Point2 point)
         {
             // TODO: add argument validation
-            
+
             var floorPointX = (int)((point.X - min) / step) + min;
             var floorPointY = (int)((point.Y - min) / step) + min;
-            
+
             var floorPoint = new Point2(floorPointX, floorPointY);
 
             IEnumerable<Point2> cornerPoints =
@@ -123,10 +128,10 @@ public static class Perlin
 
 public record Point2(float X, float Y)
 {
-    public static Vector2 operator -(Point2 left, Point2 right) => 
+    public static Vector2 operator -(Point2 left, Point2 right) =>
         Vector2.FromXY(left.X - right.X, left.Y - right.Y);
-    
-    public static Point2 operator +(Point2 left, Vector2 right) => 
+
+    public static Point2 operator +(Point2 left, Vector2 right) =>
         new(left.X + right.X, left.Y + right.Y);
 }
 
