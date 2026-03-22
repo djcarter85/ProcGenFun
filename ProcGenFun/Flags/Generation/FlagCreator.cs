@@ -1,11 +1,12 @@
-namespace ProcGenFun.Flags;
+namespace ProcGenFun.Flags.Generation;
 
 using ProcGenFun.Distributions;
+using ProcGenFun.Flags.Model;
 using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
-using static FlagPattern;
-using static FlagChargeShape;
+using static ProcGenFun.Flags.Model.FlagPattern;
+using static ProcGenFun.Flags.Model.FlagChargeShape;
 
 public static class FlagCreator
 {

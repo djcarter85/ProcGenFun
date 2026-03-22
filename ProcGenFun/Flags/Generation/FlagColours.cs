@@ -1,6 +1,7 @@
-namespace ProcGenFun.Flags;
+namespace ProcGenFun.Flags.Generation;
 
 using ProcGenFun.Distributions;
+using ProcGenFun.Flags.Model;
 using RandN;
 
 public static class FlagColours

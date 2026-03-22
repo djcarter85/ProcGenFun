@@ -1,11 +1,12 @@
-﻿namespace ProcGenFun.Flags;
+﻿namespace ProcGenFun.Flags.Images;
 
 using System.Drawing;
+using ProcGenFun.Flags.Model;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
-using static FlagPattern;
-using static FlagChargeShape;
+using static ProcGenFun.Flags.Model.FlagPattern;
+using static ProcGenFun.Flags.Model.FlagChargeShape;
 
 public static class FlagImage
 {
@@ -33,7 +34,7 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetFlagElements(Flag flag) =>
         GetFlagPatternElements(flag.Pattern).Concat(GetChargesElements(flag.Charges));
 
-    private static IEnumerable<SvgElement> GetFlagPatternElements(FlagPattern pattern) =>
+    private static IEnumerable<SvgElement> GetFlagPatternElements(Model.FlagPattern pattern) =>
         pattern switch
         {
             Solid(var colour) => GetSolidFlagElements(colour),

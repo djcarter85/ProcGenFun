@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun.Flags;
+﻿namespace ProcGenFun.Flags.Model;
 
 public record FlagCharge(
     FlagChargeShape Shape,

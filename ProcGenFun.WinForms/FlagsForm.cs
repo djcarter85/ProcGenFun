@@ -2,6 +2,8 @@
 
 using ProcGenFun.Distributions;
 using ProcGenFun.Flags;
+using ProcGenFun.Flags.Generation;
+using ProcGenFun.Flags.Images;
 using RandN;
 using RandN.Extensions;
 

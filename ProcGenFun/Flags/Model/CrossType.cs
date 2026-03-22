@@ -1,3 +1,3 @@
-namespace ProcGenFun.Flags;
+namespace ProcGenFun.Flags.Model;
 
 public enum CrossType { Regular, Nordic }
