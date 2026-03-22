@@ -85,17 +85,23 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetChargesElements(IEnumerable<FlagCharge> charges) =>
         charges.Select(GetChargeElement);
 
-    private static SvgElement GetChargeElement(FlagCharge charge) =>
-        charge.Shape switch
+    private static SvgElement GetChargeElement(FlagCharge charge)
+    {
+        var chargeElement = charge.Shape switch
         {
             Star(var colour) => GetStarElement(colour, radius: charge.Size * U),
             StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: charge.Size * U),
             Circle(var colour) => GetCircleElement(colour, radius: charge.Size * U),
         };
 
+        chargeElement.Transforms = [new SvgTranslate(9 * U, 6 * U)];
+        
+        return chargeElement;
+    }
+
     private static SvgElement GetStarElement(FlagColour colour, float radius) =>
         CreateSvgStar(
-            centre: new PointF(9 * U, 6 * U),
+            centre: PointF.Empty,
             radius: radius,
             fillColour: GetColor(colour));
 
@@ -104,12 +110,12 @@ public static class FlagImage
         var groupElement = new SvgGroup();
         
         var distanceBetweenCentres = 2.5f * radius;
-        var firstCentreX = 9 * U - (count - 1) / 2f * distanceBetweenCentres;
+        var firstCentreX = -(count - 1) / 2f * distanceBetweenCentres;
         for (int i = 0; i < count; i++)
         {
             groupElement.Children.Add(
                 CreateSvgStar(
-                    centre: new PointF(firstCentreX + i * distanceBetweenCentres, 6 * U),
+                    centre: new PointF(firstCentreX + i * distanceBetweenCentres, 0),
                     radius: radius,
                     fillColour: GetColor(colour)));
         }
@@ -119,7 +125,7 @@ public static class FlagImage
 
     private static SvgElement GetCircleElement(FlagColour colour, float radius) =>
         new SvgCircle
-            { CenterX = 9 * U, CenterY = 6 * U, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
+            { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
         new()
