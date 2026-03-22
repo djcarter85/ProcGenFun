@@ -83,42 +83,43 @@ public static class FlagImage
     }
     
     private static IEnumerable<SvgElement> GetChargesElements(IEnumerable<FlagCharge> charges) =>
-        charges.SelectMany(GetChargeElements);
+        charges.Select(GetChargeElement);
 
-    private static IEnumerable<SvgElement> GetChargeElements(FlagCharge charge) =>
+    private static SvgElement GetChargeElement(FlagCharge charge) =>
         charge.Shape switch
         {
-            Star(var colour) => GetStarElements(colour, radius: charge.Size * U),
-            StarBand(var colour, var count) => GetStarBandElements(colour, count, radius: charge.Size * U),
-            Circle(var colour) => GetCircleElements(colour, radius: charge.Size * U),
+            Star(var colour) => GetStarElement(colour, radius: charge.Size * U),
+            StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: charge.Size * U),
+            Circle(var colour) => GetCircleElement(colour, radius: charge.Size * U),
         };
 
-    private static IEnumerable<SvgElement> GetStarElements(FlagColour colour, float radius)
-    {
-        yield return CreateSvgStar(
+    private static SvgElement GetStarElement(FlagColour colour, float radius) =>
+        CreateSvgStar(
             centre: new PointF(9 * U, 6 * U),
             radius: radius,
             fillColour: GetColor(colour));
-    }
 
-    private static IEnumerable<SvgElement> GetStarBandElements(FlagColour colour, int count, float radius)
+    private static SvgElement GetStarBandElement(FlagColour colour, int count, float radius)
     {
+        var groupElement = new SvgGroup();
+        
         var distanceBetweenCentres = 2.5f * radius;
         var firstCentreX = 9 * U - (count - 1) / 2f * distanceBetweenCentres;
         for (int i = 0; i < count; i++)
         {
-            yield return CreateSvgStar(
-                centre: new PointF(firstCentreX + i * distanceBetweenCentres, 6 * U),
-                radius: radius,
-                fillColour: GetColor(colour));
+            groupElement.Children.Add(
+                CreateSvgStar(
+                    centre: new PointF(firstCentreX + i * distanceBetweenCentres, 6 * U),
+                    radius: radius,
+                    fillColour: GetColor(colour)));
         }
+
+        return groupElement;
     }
 
-    private static IEnumerable<SvgElement> GetCircleElements(FlagColour colour, float radius)
-    {
-        yield return new SvgCircle
-        { CenterX = 9 * U, CenterY = 6 * U, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
-    }
+    private static SvgElement GetCircleElement(FlagColour colour, float radius) =>
+        new SvgCircle
+            { CenterX = 9 * U, CenterY = 6 * U, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
         new()
