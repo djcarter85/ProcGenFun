@@ -9,5 +9,5 @@ public partial record FlagChargeShape
     public partial record StarBand(FlagColour Colour, int Count);
     public partial record Circle(FlagColour Colour);
     
-    public enum Type { None, Star, StarBand, Circle }
+    public enum Type { Star, StarBand, Circle }
 }

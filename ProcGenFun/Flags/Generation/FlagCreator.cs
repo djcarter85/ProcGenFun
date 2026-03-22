@@ -49,8 +49,8 @@ public static class FlagCreator
 
     private static IDistribution<Flag> SolidFlagDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
-            .Add(FlagChargeShape.Type.None, 1)
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
+            .Add(null, 1)
             .Add(FlagChargeShape.Type.Star, 2)
             .Add(FlagChargeShape.Type.Circle, 2)
             .Build();
@@ -66,11 +66,11 @@ public static class FlagCreator
         from cantonColour in FlagColours.AllowedAdjacentToDist(field)
         select new Flag(new Canton(field, cantonColour), []);
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type chargeType,
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type? chargeType,
         FlagColour backgroundColour, float size) =>
         chargeType switch
         {
-            FlagChargeShape.Type.None => Singleton.New<IReadOnlyList<FlagCharge>>([]),
+            null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             FlagChargeShape.Type.Star => StarChargeDist(backgroundColour, size),
             FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColour, size),
             FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColour, size),
@@ -161,8 +161,8 @@ public static class FlagCreator
 
     private static IDistribution<Flag> VerticalTribandDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
-            .Add(FlagChargeShape.Type.None, 3)
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
+            .Add(null, 3)
             .Add(FlagChargeShape.Type.Star, 1)
             .Build();
 
@@ -176,8 +176,8 @@ public static class FlagCreator
 
     private static IDistribution<Flag> HorizontalTribandDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
-            .Add(FlagChargeShape.Type.None, 3)
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
+            .Add(null, 3)
             .Add(FlagChargeShape.Type.StarBand, 1)
             .Build();
 
