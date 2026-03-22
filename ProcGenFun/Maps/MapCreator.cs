@@ -49,12 +49,12 @@ public static class MapCreator
 
 public static class Perlin
 {
-    public static IDistribution<IFunction1> Perlin1Dist(double min, double max, int frequency)
+    public static IDistribution<IFunction1> Perlin1Dist(double min, double max, int frequency, double amplitude)
     {
         var step = (max - min) / frequency;
         var xValues = Enumerable.Range(0, frequency + 1).Select(i => min + i * step);
 
-        var amplitudeDist = Uniform.NewInclusive(-1d, 1d);
+        var amplitudeDist = Uniform.NewInclusive(-amplitude, amplitude);
 
         return
             from integerAmplitudes in xValues.ToDictionaryDist(amplitudeDist)
