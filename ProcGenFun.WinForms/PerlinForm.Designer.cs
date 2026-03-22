@@ -1,6 +1,6 @@
 ﻿namespace ProcGenFun.WinForms
 {
-    partial class MapsForm
+    partial class PerlinForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            createMapButton = new Button();
+            reRollButton = new Button();
             formsPlot = new ScottPlot.WinForms.FormsPlot();
             SuspendLayout();
             // 
             // createMapButton
             // 
-            createMapButton.Location = new Point(12, 12);
-            createMapButton.Name = "createMapButton";
-            createMapButton.Size = new Size(124, 54);
-            createMapButton.TabIndex = 0;
-            createMapButton.Text = "Create Map";
-            createMapButton.UseVisualStyleBackColor = true;
-            createMapButton.Click += CreateMapButton_Click;
+            reRollButton.Location = new Point(12, 12);
+            reRollButton.Name = "reRollButton";
+            reRollButton.Size = new Size(124, 54);
+            reRollButton.TabIndex = 0;
+            reRollButton.Text = "Re-roll";
+            reRollButton.UseVisualStyleBackColor = true;
+            reRollButton.Click += ReRollButton_Click;
             // 
             // formsPlot1
             // 
@@ -51,21 +51,21 @@
             formsPlot.Size = new Size(776, 561);
             formsPlot.TabIndex = 1;
             // 
-            // MapsForm
+            // PerlinForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 645);
             this.Controls.Add(formsPlot);
-            this.Controls.Add(createMapButton);
-            this.Name = "MapsForm";
-            this.Text = "Maps";
+            this.Controls.Add(reRollButton);
+            this.Name = "PerlinForm";
+            this.Text = "Perlin";
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Button createMapButton;
+        private Button reRollButton;
         private ScottPlot.WinForms.FormsPlot formsPlot;
     }
 }

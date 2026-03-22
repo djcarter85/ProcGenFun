@@ -4,7 +4,7 @@ using ProcGenFun.Maps;
 using RandN;
 using RandN.Extensions;
 
-public partial class MapsForm : Form
+public partial class PerlinForm : Form
 {
     private const double InitialAmplitude = 1d;
     private const double MinX = 0d;
@@ -12,7 +12,7 @@ public partial class MapsForm : Form
     
     private readonly IRng rng;
 
-    public MapsForm(IRng rng)
+    public PerlinForm(IRng rng)
     {
         this.rng = rng;
 
@@ -21,9 +21,9 @@ public partial class MapsForm : Form
         this.SetAxisLimits();
     }
 
-    private void CreateMapButton_Click(object sender, EventArgs e)
+    private void ReRollButton_Click(object sender, EventArgs e)
     {
-        var perlinDist = Perlin.Perlin1Dist(min: MinX, max: MaxX, frequency: 4, amplitude: InitialAmplitude);
+        var perlinDist = Perlin.Perlin1Dist(min: MinX, max: MaxX, frequency: 1, amplitude: InitialAmplitude);
 
         var numberOfPoints = 10_000;
         var period = (MaxX - MinX) / numberOfPoints;

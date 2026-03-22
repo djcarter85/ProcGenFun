@@ -45,6 +45,6 @@ public partial class MainForm : Form
 
     private void MapsButton_Click(object sender, EventArgs e)
     {
-        new MapsForm(this.rng).Show();
+        new PerlinForm(this.rng).Show();
     }
 }
