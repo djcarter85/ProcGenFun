@@ -112,10 +112,48 @@ public static class FlagCreator
                 FlagChargeVerticalLocation.Centre)
         };
 
-    private static IDistribution<Flag> VerticalDibandDist() =>
-        from left in FlagColours.AllDist()
-        from right in FlagColours.AllowedAdjacentToDist(left)
-        select new Flag(new VerticalDiband(left, right), []);
+    private static IDistribution<Flag> VerticalDibandDist()
+    {
+        var chargeLocationDist = WeightedDiscreteDistribution.New([
+            new Weighting<FlagChargeHorizontalLocation?>(null, 4),
+            new Weighting<FlagChargeHorizontalLocation?>(FlagChargeHorizontalLocation.Left, 1),
+            new Weighting<FlagChargeHorizontalLocation?>(FlagChargeHorizontalLocation.Right, 1),
+        ]);
+        
+        return from left in FlagColours.AllDist()
+            from right in FlagColours.AllowedAdjacentToDist(left)
+            from chargeLocation in chargeLocationDist
+            from charges in VerticalDibandChargesDist(chargeLocation, left, right)
+            select new Flag(new VerticalDiband(left, right), charges);
+
+        IDistribution<IReadOnlyList<FlagCharge>> VerticalDibandChargesDist(
+            FlagChargeHorizontalLocation? chargeLocation, FlagColour left, FlagColour right) =>
+            chargeLocation switch
+            {
+                FlagChargeHorizontalLocation.Left =>
+                    from colour in FlagColours.AllowedAdjacentToDist(left)
+                    select (IReadOnlyList<FlagCharge>)
+                    [
+                        new FlagCharge(new Star(colour),
+                            1.5f,
+                            FlagChargeHorizontalLocation.Left,
+                            FlagChargeVerticalLocation.Centre)
+                    ],
+                FlagChargeHorizontalLocation.Centre =>
+                    throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null),
+                FlagChargeHorizontalLocation.Right => 
+                    from colour in FlagColours.AllowedAdjacentToDist(right)
+                    select (IReadOnlyList<FlagCharge>)
+                    [
+                        new FlagCharge(new Star(colour),
+                            1.5f,
+                            FlagChargeHorizontalLocation.Right,
+                            FlagChargeVerticalLocation.Centre)
+                    ],
+                null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
+                _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
+            };
+    }
 
     private static IDistribution<Flag> HorizontalDibandDist() =>
         from top in FlagColours.AllDist()

@@ -104,10 +104,12 @@ public static class FlagImage
         return chargeElement;
     }
 
-    private static int GetChargeCentreX(FlagChargeHorizontalLocation chargeHorizontalLocation) =>
+    private static float GetChargeCentreX(FlagChargeHorizontalLocation chargeHorizontalLocation) =>
         chargeHorizontalLocation switch
         {
+            FlagChargeHorizontalLocation.Left => 4.5f * U,
             FlagChargeHorizontalLocation.Centre => 9 * U,
+            FlagChargeHorizontalLocation.Right => 13.5f * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeHorizontalLocation), chargeHorizontalLocation, null)
         };
 
