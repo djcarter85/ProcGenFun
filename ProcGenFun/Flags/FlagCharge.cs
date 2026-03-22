@@ -1,3 +1,7 @@
 ﻿namespace ProcGenFun.Flags;
 
-public record FlagCharge(FlagChargeShape Shape, float Size);
+public record FlagCharge(
+    FlagChargeShape Shape,
+    float Size,
+    FlagChargeHorizontalLocation HorizontalLocation,
+    FlagChargeVerticalLocation VerticalLocation);

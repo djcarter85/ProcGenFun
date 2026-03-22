@@ -94,10 +94,29 @@ public static class FlagImage
             Circle(var colour) => GetCircleElement(colour, radius: charge.Size * U),
         };
 
-        chargeElement.Transforms = [new SvgTranslate(9 * U, 6 * U)];
+        chargeElement.Transforms =
+        [
+            new SvgTranslate(
+                x: GetChargeCentreX(charge.HorizontalLocation),
+                y: GetChargeCentreY(charge.VerticalLocation))
+        ];
         
         return chargeElement;
     }
+
+    private static int GetChargeCentreX(FlagChargeHorizontalLocation chargeHorizontalLocation) =>
+        chargeHorizontalLocation switch
+        {
+            FlagChargeHorizontalLocation.Centre => 9 * U,
+            _ => throw new ArgumentOutOfRangeException(nameof(chargeHorizontalLocation), chargeHorizontalLocation, null)
+        };
+
+    private static int GetChargeCentreY(FlagChargeVerticalLocation chargeVerticalLocation) =>
+        chargeVerticalLocation switch
+        {
+            FlagChargeVerticalLocation.Centre => 6 * U,
+            _ => throw new ArgumentOutOfRangeException(nameof(chargeVerticalLocation), chargeVerticalLocation, null)
+        };
 
     private static SvgElement GetStarElement(FlagColour colour, float radius) =>
         CreateSvgStar(

@@ -80,16 +80,37 @@ public static class FlagCreator
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new Star(colour), size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
+        {
+            new(
+                new Star(colour),
+                size,
+                FlagChargeHorizontalLocation.Centre,
+                FlagChargeVerticalLocation.Centre)
+        };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(FlagColour backgroundColour, float size) =>
+    private static IDistribution<IReadOnlyList<FlagCharge>>
+        StarBandChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
         from count in Uniform.NewInclusive(1, 4)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new StarBand(colour, count), size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
+        {
+            new(
+                new StarBand(colour, count), 
+                size, 
+                FlagChargeHorizontalLocation.Centre,
+                FlagChargeVerticalLocation.Centre)
+        };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(FlagColour backgroundColour, float size) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge> { new(new Circle(colour), size) };
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
+        {
+            new(new Circle(colour),
+                size,
+                FlagChargeHorizontalLocation.Centre,
+                FlagChargeVerticalLocation.Centre)
+        };
 
     private static IDistribution<Flag> VerticalDibandDist() =>
         from left in FlagColours.AllDist()
