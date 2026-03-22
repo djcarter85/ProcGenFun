@@ -39,13 +39,8 @@ public partial class PerlinForm : Form
 
     private void DrawFunction(IFunction1 function1)
     {
-        var numberOfPoints = 10_000;
-        var period = (MaxX - MinX) / numberOfPoints;
-
-        var ys = Enumerable.Range(0, numberOfPoints + 1).Select(x => function1.Evaluate(x * period)).ToArray();
-
         this.formsPlot.Reset();
-        this.formsPlot.Plot.Add.Signal(ys, period);
+        this.formsPlot.Plot.Add.Function(function1.Evaluate);
         this.SetAxisLimits();
         this.formsPlot.Refresh();
     }
