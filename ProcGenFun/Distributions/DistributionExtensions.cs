@@ -41,6 +41,9 @@ public static class DistributionExtensions
         return new RepeatDistribution<T>(dist, count);
     }
 
+    public static IDistribution<IEnumerable<T>> Traverse<T>(this IEnumerable<IDistribution<T>> source) =>
+        new TraverseDistribution<T>(source);
+
     private class RepeatDistribution<T>(IDistribution<T> dist, int count) : IDistribution<IEnumerable<T>>
     {
         public IEnumerable<T> Sample<TRng>(TRng rng) where TRng : notnull, IRng
@@ -72,6 +75,15 @@ public static class DistributionExtensions
         public bool TrySample<TRng>(
             TRng rng, [MaybeNullWhen(false)] out IReadOnlyDictionary<TKey, TValue> result)
             where TRng : notnull, IRng =>
+            throw new NotImplementedException();
+    }
+
+    private class TraverseDistribution<T>(IEnumerable<IDistribution<T>> source) : IDistribution<IEnumerable<T>>
+    {
+        public IEnumerable<T> Sample<TRng>(TRng rng) where TRng : notnull, IRng => 
+            source.Select(distribution => distribution.Sample(rng));
+
+        public bool TrySample<TRng>(TRng rng, [MaybeNullWhen(false)] out IEnumerable<T> result) where TRng : notnull, IRng => 
             throw new NotImplementedException();
     }
 }

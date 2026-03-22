@@ -30,9 +30,11 @@
         {
             reRollButton = new Button();
             formsPlot = new ScottPlot.WinForms.FormsPlot();
+            backButton = new Button();
+            forwardButton = new Button();
             SuspendLayout();
             // 
-            // createMapButton
+            // reRollButton
             // 
             reRollButton.Location = new Point(12, 12);
             reRollButton.Name = "reRollButton";
@@ -42,20 +44,42 @@
             reRollButton.UseVisualStyleBackColor = true;
             reRollButton.Click += ReRollButton_Click;
             // 
-            // formsPlot1
+            // formsPlot
             // 
             formsPlot.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             formsPlot.DisplayScale = 1F;
             formsPlot.Location = new Point(12, 72);
-            formsPlot.Name = "formsPlot1";
+            formsPlot.Name = "formsPlot";
             formsPlot.Size = new Size(776, 561);
             formsPlot.TabIndex = 1;
+            // 
+            // backButton
+            // 
+            backButton.Location = new Point(181, 23);
+            backButton.Name = "backButton";
+            backButton.Size = new Size(63, 32);
+            backButton.TabIndex = 2;
+            backButton.Text = "<";
+            backButton.UseVisualStyleBackColor = true;
+            backButton.Click += BackButton_Click;
+            // 
+            // forwardButton
+            // 
+            forwardButton.Location = new Point(250, 23);
+            forwardButton.Name = "forwardButton";
+            forwardButton.Size = new Size(63, 32);
+            forwardButton.TabIndex = 3;
+            forwardButton.Text = ">";
+            forwardButton.UseVisualStyleBackColor = true;
+            forwardButton.Click += ForwardButton_Click;
             // 
             // PerlinForm
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 645);
+            this.Controls.Add(forwardButton);
+            this.Controls.Add(backButton);
             this.Controls.Add(formsPlot);
             this.Controls.Add(reRollButton);
             this.Name = "PerlinForm";
@@ -67,5 +91,7 @@
 
         private Button reRollButton;
         private ScottPlot.WinForms.FormsPlot formsPlot;
+        private Button backButton;
+        private Button forwardButton;
     }
 }

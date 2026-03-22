@@ -7,6 +7,17 @@ using RandN.Extensions;
 
 public static class Perlin
 {
+    public static IDistribution<IEnumerable<IFunction1>> LayeredPerlin1Dist(double min, double max, double initialAmplitude, int layers)
+    {
+        var distributions = 
+            from layer in Enumerable.Range(0, layers)
+            let frequency = Pow(2, layer)
+            select Perlin1Dist(min, max, frequency, initialAmplitude / frequency);
+        
+        return distributions.Traverse()
+            .Select(Function1.Accumulate);
+    }
+
     public static IDistribution<IFunction1> Perlin1Dist(double min, double max, int frequency, double amplitude)
     {
         var step = (max - min) / frequency;
@@ -17,6 +28,17 @@ public static class Perlin
         return
             from integerAmplitudes in xValues.ToDictionaryDist(amplitudeDist)
             select (IFunction1)new Perlin1(integerAmplitudes, step, min);
+    }
+
+    private static int Pow(int x, int exp)
+    {
+        var result = 1; 
+        for (var i = 0; i < exp; i++)
+        {
+            result *= x;
+        }
+        
+        return result;
     }
 
     private class Perlin1(IReadOnlyDictionary<double, double> integerAmplitudes, double step, double min) : IFunction1
