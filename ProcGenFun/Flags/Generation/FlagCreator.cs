@@ -16,20 +16,19 @@ public static class FlagCreator
         select flag;
 
     private static IDistribution<FlagPattern.Type> FlagTypeDist() =>
-        WeightedDiscreteDistribution.New(
-        [
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.Solid, 15),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.Canton, 15),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.VerticalDiband, 25),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.HorizontalDiband, 35),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.VerticalTriband, 50),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.HorizontalTriband, 45),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.DiagonalBicolour, 5),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.Cross, 25),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.Saltire, 15),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.Quartered, 10),
-            new Weighting<FlagPattern.Type>(FlagPattern.Type.HorizontalStriped, 10),
-        ]);
+        WeightedDiscreteDistributionBuilder<FlagPattern.Type>.Empty()
+            .Add(FlagPattern.Type.Solid, 15)
+            .Add(FlagPattern.Type.Canton, 15)
+            .Add(FlagPattern.Type.VerticalDiband, 25)
+            .Add(FlagPattern.Type.HorizontalDiband, 35)
+            .Add(FlagPattern.Type.VerticalTriband, 50)
+            .Add(FlagPattern.Type.HorizontalTriband, 45)
+            .Add(FlagPattern.Type.DiagonalBicolour, 5)
+            .Add(FlagPattern.Type.Cross, 25)
+            .Add(FlagPattern.Type.Saltire, 15)
+            .Add(FlagPattern.Type.Quartered, 10)
+            .Add(FlagPattern.Type.HorizontalStriped, 10)
+            .Build();
 
     private static IDistribution<Flag> FlagDist(FlagPattern.Type flagType) =>
         flagType switch
@@ -50,12 +49,11 @@ public static class FlagCreator
 
     private static IDistribution<Flag> SolidFlagDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistribution.New(
-        [
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 1),
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Star, 2),
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Circle, 2),
-        ]);
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
+            .Add(FlagChargeShape.Type.None, 1)
+            .Add(FlagChargeShape.Type.Star, 2)
+            .Add(FlagChargeShape.Type.Circle, 2)
+            .Build();
 
         return from colour in FlagColours.AllDist()
                from chargeType in chargeTypeDist
@@ -115,11 +113,11 @@ public static class FlagCreator
 
     private static IDistribution<Flag> VerticalDibandDist()
     {
-        var chargeLocationDist = WeightedDiscreteDistribution.New([
-            new Weighting<FlagChargeHorizontalLocation?>(null, 4),
-            new Weighting<FlagChargeHorizontalLocation?>(FlagChargeHorizontalLocation.Left, 1),
-            new Weighting<FlagChargeHorizontalLocation?>(FlagChargeHorizontalLocation.Right, 1),
-        ]);
+        var chargeLocationDist = WeightedDiscreteDistributionBuilder<FlagChargeHorizontalLocation?>.Empty()
+            .Add(null, 4)
+            .Add(FlagChargeHorizontalLocation.Left, 1)
+            .Add(FlagChargeHorizontalLocation.Right, 1)
+            .Build();
         
         return from left in FlagColours.AllDist()
             from right in FlagColours.AllowedAdjacentToDist(left)
@@ -163,11 +161,10 @@ public static class FlagCreator
 
     private static IDistribution<Flag> VerticalTribandDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistribution.New(
-        [
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 3),
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.Star, 1),
-        ]);
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
+            .Add(FlagChargeShape.Type.None, 3)
+            .Add(FlagChargeShape.Type.Star, 1)
+            .Build();
 
         return from left in FlagColours.AllDist()
                from middle in FlagColours.AllowedAdjacentToDist(left)
@@ -179,11 +176,10 @@ public static class FlagCreator
 
     private static IDistribution<Flag> HorizontalTribandDist()
     {
-        var chargeTypeDist = WeightedDiscreteDistribution.New(
-        [
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.None, 3),
-            new Weighting<FlagChargeShape.Type>(FlagChargeShape.Type.StarBand, 1),
-        ]);
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
+            .Add(FlagChargeShape.Type.None, 3)
+            .Add(FlagChargeShape.Type.StarBand, 1)
+            .Build();
 
         return from top in FlagColours.AllDist()
                from middle in FlagColours.AllowedAdjacentToDist(top)
