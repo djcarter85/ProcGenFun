@@ -10,7 +10,7 @@ public static class SolidFlagCreator
     public static IDistribution<Flag> Dist() =>
         from colour in FlagColours.AllDist()
         from chargeType in ChargeTypeDist()
-        from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: colour, size: 3, horizontalLocation: FlagChargeHorizontalLocation.Centre)
+        from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [colour], size: 3, horizontalLocation: FlagChargeHorizontalLocation.Centre)
         select new Flag(new FlagPattern.Solid(colour), charges);
 
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
