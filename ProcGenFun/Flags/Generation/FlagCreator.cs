@@ -57,7 +57,7 @@ public static class FlagCreator
 
         return from colour in FlagColours.AllDist()
                from chargeType in chargeTypeDist
-               from charges in ChargesDist(chargeType, backgroundColour: colour, size: 3)
+               from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: colour, size: 3)
                select new Flag(new Solid(colour), charges);
     }
 
@@ -65,51 +65,6 @@ public static class FlagCreator
         from field in FlagColours.AllDist()
         from cantonColour in FlagColours.AllowedAdjacentToDist(field)
         select new Flag(new Canton(field, cantonColour), []);
-
-    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type? chargeType,
-        FlagColour backgroundColour, float size) =>
-        chargeType switch
-        {
-            null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
-            FlagChargeShape.Type.Star => StarChargeDist(backgroundColour, size),
-            FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColour, size),
-            FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColour, size),
-            _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
-        };
-
-    private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(FlagColour backgroundColour, float size) =>
-        from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
-        {
-            new(
-                new Star(colour),
-                size,
-                FlagChargeHorizontalLocation.Centre,
-                FlagChargeVerticalLocation.Centre)
-        };
-
-    private static IDistribution<IReadOnlyList<FlagCharge>>
-        StarBandChargeDist(FlagColour backgroundColour, float size) =>
-        from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        from count in Uniform.NewInclusive(1, 4)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
-        {
-            new(
-                new StarBand(colour, count), 
-                size, 
-                FlagChargeHorizontalLocation.Centre,
-                FlagChargeVerticalLocation.Centre)
-        };
-
-    private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(FlagColour backgroundColour, float size) =>
-        from colour in FlagColours.AllowedAdjacentToDist(backgroundColour)
-        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
-        {
-            new(new Circle(colour),
-                size,
-                FlagChargeHorizontalLocation.Centre,
-                FlagChargeVerticalLocation.Centre)
-        };
 
     private static IDistribution<Flag> VerticalDibandDist()
     {
@@ -170,7 +125,7 @@ public static class FlagCreator
                from middle in FlagColours.AllowedAdjacentToDist(left)
                from right in FlagColours.AllowedAdjacentToDist(middle)
                from chargeType in chargeTypeDist
-               from charge in ChargesDist(chargeType, backgroundColour: middle, size: 2)
+               from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: middle, size: 2)
                select new Flag(new VerticalTriband(left, middle, right), charge);
     }
 
@@ -185,7 +140,7 @@ public static class FlagCreator
                from middle in FlagColours.AllowedAdjacentToDist(top)
                from bottom in FlagColours.AllowedAdjacentToDist(middle)
                from chargeType in chargeTypeDist
-               from charge in ChargesDist(chargeType, backgroundColour: middle, size: 1.5f)
+               from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: middle, size: 1.5f)
                select new Flag(new HorizontalTriband(top, middle, bottom), charge);
     }
 
