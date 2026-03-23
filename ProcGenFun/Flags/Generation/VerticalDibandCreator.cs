@@ -27,25 +27,11 @@ public static class VerticalDibandCreator
         chargeLocation switch
         {
             FlagChargeHorizontalLocation.Left =>
-                from colour in FlagColours.AllowedAdjacentToDist(left)
-                select (IReadOnlyList<FlagCharge>)
-                [
-                    new FlagCharge(new FlagChargeShape.Star(colour),
-                        1.5f,
-                        FlagChargeHorizontalLocation.Left,
-                        FlagChargeVerticalLocation.Centre)
-                ],
+                FlagChargeCreator.ChargesDist(FlagChargeShape.Type.Star, left, 1.5f, FlagChargeHorizontalLocation.Left),
             FlagChargeHorizontalLocation.Centre =>
                 throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null),
             FlagChargeHorizontalLocation.Right =>
-                from colour in FlagColours.AllowedAdjacentToDist(right)
-                select (IReadOnlyList<FlagCharge>)
-                [
-                    new FlagCharge(new FlagChargeShape.Star(colour),
-                        1.5f,
-                        FlagChargeHorizontalLocation.Right,
-                        FlagChargeVerticalLocation.Centre)
-                ],
+                FlagChargeCreator.ChargesDist(FlagChargeShape.Type.Star, right, 1.5f, FlagChargeHorizontalLocation.Right),
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
