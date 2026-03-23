@@ -3,10 +3,7 @@ namespace ProcGenFun.Flags.Generation;
 using ProcGenFun.Distributions;
 using ProcGenFun.Flags.Model;
 using RandN;
-using RandN.Distributions;
 using RandN.Extensions;
-using static ProcGenFun.Flags.Model.FlagPattern;
-using static ProcGenFun.Flags.Model.FlagChargeShape;
 
 public static class FlagCreator
 {
@@ -33,151 +30,17 @@ public static class FlagCreator
     private static IDistribution<Flag> FlagDist(FlagPattern.Type flagType) =>
         flagType switch
         {
-            FlagPattern.Type.Solid => SolidFlagDist(),
-            FlagPattern.Type.Canton => CantonFlagDist(),
-            FlagPattern.Type.VerticalDiband => VerticalDibandDist(),
-            FlagPattern.Type.HorizontalDiband => HorizontalDibandDist(),
-            FlagPattern.Type.VerticalTriband => VerticalTribandDist(),
-            FlagPattern.Type.HorizontalTriband => HorizontalTribandDist(),
-            FlagPattern.Type.DiagonalBicolour => DiagonalBicolourDist(),
-            FlagPattern.Type.Cross => CrossDist(),
-            FlagPattern.Type.Saltire => SaltireDist(),
-            FlagPattern.Type.Quartered => QuarteredDist(),
-            FlagPattern.Type.HorizontalStriped => HorizontalStripedDist(),
+            FlagPattern.Type.Solid => SolidFlagCreator.Dist(),
+            FlagPattern.Type.Canton => CantonFlagCreator.Dist(),
+            FlagPattern.Type.VerticalDiband => VerticalDibandCreator.Dist(),
+            FlagPattern.Type.HorizontalDiband => HorizontalDibandCreator.Dist(),
+            FlagPattern.Type.VerticalTriband => VerticalTribandCreator.Dist(),
+            FlagPattern.Type.HorizontalTriband => HorizontalTribandCreator.Dist(),
+            FlagPattern.Type.DiagonalBicolour => DiagonalBicolourCreator.Dist(),
+            FlagPattern.Type.Cross => CrossCreator.Dist(),
+            FlagPattern.Type.Saltire => SaltireCreator.Dist(),
+            FlagPattern.Type.Quartered => QuarteredCreator.Dist(),
+            FlagPattern.Type.HorizontalStriped => HorizontalStripedCreator.Dist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
-
-    private static IDistribution<Flag> SolidFlagDist()
-    {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 1)
-            .Add(FlagChargeShape.Type.Star, 2)
-            .Add(FlagChargeShape.Type.Circle, 2)
-            .Build();
-
-        return from colour in FlagColours.AllDist()
-               from chargeType in chargeTypeDist
-               from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: colour, size: 3)
-               select new Flag(new Solid(colour), charges);
-    }
-
-    private static IDistribution<Flag> CantonFlagDist() =>
-        from field in FlagColours.AllDist()
-        from cantonColour in FlagColours.AllowedAdjacentToDist(field)
-        select new Flag(new Canton(field, cantonColour), []);
-
-    private static IDistribution<Flag> VerticalDibandDist()
-    {
-        var chargeLocationDist = WeightedDiscreteDistributionBuilder<FlagChargeHorizontalLocation?>.Empty()
-            .Add(null, 4)
-            .Add(FlagChargeHorizontalLocation.Left, 1)
-            .Add(FlagChargeHorizontalLocation.Right, 1)
-            .Build();
-        
-        return from left in FlagColours.AllDist()
-            from right in FlagColours.AllowedAdjacentToDist(left)
-            from chargeLocation in chargeLocationDist
-            from charges in VerticalDibandChargesDist(chargeLocation, left, right)
-            select new Flag(new VerticalDiband(left, right), charges);
-
-        IDistribution<IReadOnlyList<FlagCharge>> VerticalDibandChargesDist(
-            FlagChargeHorizontalLocation? chargeLocation, FlagColour left, FlagColour right) =>
-            chargeLocation switch
-            {
-                FlagChargeHorizontalLocation.Left =>
-                    from colour in FlagColours.AllowedAdjacentToDist(left)
-                    select (IReadOnlyList<FlagCharge>)
-                    [
-                        new FlagCharge(new Star(colour),
-                            1.5f,
-                            FlagChargeHorizontalLocation.Left,
-                            FlagChargeVerticalLocation.Centre)
-                    ],
-                FlagChargeHorizontalLocation.Centre =>
-                    throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null),
-                FlagChargeHorizontalLocation.Right => 
-                    from colour in FlagColours.AllowedAdjacentToDist(right)
-                    select (IReadOnlyList<FlagCharge>)
-                    [
-                        new FlagCharge(new Star(colour),
-                            1.5f,
-                            FlagChargeHorizontalLocation.Right,
-                            FlagChargeVerticalLocation.Centre)
-                    ],
-                null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
-                _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
-            };
-    }
-
-    private static IDistribution<Flag> HorizontalDibandDist() =>
-        from top in FlagColours.AllDist()
-        from bottom in FlagColours.AllowedAdjacentToDist(top)
-        select new Flag(new HorizontalDiband(top, bottom), []);
-
-    private static IDistribution<Flag> VerticalTribandDist()
-    {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 3)
-            .Add(FlagChargeShape.Type.Star, 1)
-            .Build();
-
-        return from left in FlagColours.AllDist()
-               from middle in FlagColours.AllowedAdjacentToDist(left)
-               from right in FlagColours.AllowedAdjacentToDist(middle)
-               from chargeType in chargeTypeDist
-               from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: middle, size: 2)
-               select new Flag(new VerticalTriband(left, middle, right), charge);
-    }
-
-    private static IDistribution<Flag> HorizontalTribandDist()
-    {
-        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 3)
-            .Add(FlagChargeShape.Type.StarBand, 1)
-            .Build();
-
-        return from top in FlagColours.AllDist()
-               from middle in FlagColours.AllowedAdjacentToDist(top)
-               from bottom in FlagColours.AllowedAdjacentToDist(middle)
-               from chargeType in chargeTypeDist
-               from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: middle, size: 1.5f)
-               select new Flag(new HorizontalTriband(top, middle, bottom), charge);
-    }
-
-    private static IDistribution<Flag> DiagonalBicolourDist() =>
-        from left in FlagColours.AllDist()
-        from right in FlagColours.AllowedAdjacentToDist(left)
-        from diagonal in UniformDistribution.Create([Diagonal.Down, Diagonal.Up])
-        select new Flag(new DiagonalBicolour(left, right, diagonal), []);
-
-    private static IDistribution<Flag> CrossDist() =>
-        from background in FlagColours.AllDist()
-        from foreground in FlagColours.AllowedAdjacentToDist(background)
-        from crossType in UniformDistribution.Create([CrossType.Regular, CrossType.Nordic])
-        select new Flag(new Cross(background, foreground, crossType), []);
-
-    private static IDistribution<Flag> SaltireDist()
-    {
-        IDistribution<FlagColour> EastWestFieldDist(FlagColour northSouthField, bool fieldColoursAreSame) =>
-            fieldColoursAreSame ? Singleton.New(northSouthField) : FlagColours.AllExceptDist(northSouthField);
-
-        return from northSouthField in FlagColours.AllDist()
-               from fieldColoursAreSame in Bernoulli.FromRatio(4, 5)
-               from eastWestfield in EastWestFieldDist(northSouthField, fieldColoursAreSame)
-               from foreground in FlagColours.AllowedAdjacentToDist([northSouthField, eastWestfield])
-               select new Flag(new Saltire(northSouthField, eastWestfield, foreground), []);
-    }
-
-    private static IDistribution<Flag> QuarteredDist() =>
-        from topLeft in FlagColours.AllDist()
-        from topRight in FlagColours.AllowedAdjacentToDist(topLeft)
-        from bottomRight in FlagColours.AllowedAdjacentToDist(topRight)
-        from bottomLeft in FlagColours.AllowedAdjacentToDist([topLeft, bottomRight])
-        select new Flag(new Quartered(topLeft, topRight, bottomRight, bottomLeft), []);
-
-    private static IDistribution<Flag> HorizontalStripedDist() =>
-        from colour1 in FlagColours.AllDist()
-        from colour2 in FlagColours.AllowedAdjacentToDist(colour1)
-        from stripeCount in UniformDistribution.Create([5, 7, 9, 11, 13])
-        select new Flag(new HorizontalStriped(colour1, colour2, stripeCount), []);
 }

@@ -1,0 +1,23 @@
+namespace ProcGenFun.Flags.Generation;
+
+using ProcGenFun.Distributions;
+using ProcGenFun.Flags.Model;
+using RandN;
+using RandN.Extensions;
+
+public static class SolidFlagCreator
+{
+    public static IDistribution<Flag> Dist()
+    {
+        var chargeTypeDist = WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
+            .Add(null, 1)
+            .Add(FlagChargeShape.Type.Star, 2)
+            .Add(FlagChargeShape.Type.Circle, 2)
+            .Build();
+
+        return from colour in FlagColours.AllDist()
+            from chargeType in chargeTypeDist
+            from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColour: colour, size: 3)
+            select new Flag(new FlagPattern.Solid(colour), charges);
+    }
+}
