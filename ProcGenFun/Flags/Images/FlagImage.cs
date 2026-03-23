@@ -93,6 +93,8 @@ public static class FlagImage
             Star(var colour) => GetStarElement(colour, radius: GetRadius(charge.Size)),
             StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: GetRadius(charge.Size)),
             Circle(var colour) => GetCircleElement(colour, radius: GetRadius(charge.Size)),
+            Plus(var colour) => GetPlusElement(colour, radius: GetRadius(charge.Size)),
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
         chargeElement.Transforms =
@@ -157,6 +159,19 @@ public static class FlagImage
     private static SvgElement GetCircleElement(FlagColour colour, float radius) =>
         new SvgCircle
             { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
+
+    private static SvgElement GetPlusElement(FlagColour colour, float radius) =>
+        new SvgPath
+        {
+            Stroke = new SvgColourServer(GetColor(colour)),
+            StrokeWidth = 0.5f * radius,
+            PathData = [
+                new SvgMoveToSegment(false, new PointF(0, -radius)),
+                new SvgLineSegment(false, new PointF(0, radius)),
+                new SvgMoveToSegment(false, new PointF(-radius, 0)),
+                new SvgLineSegment(false, new PointF(radius, 0)),
+            ]
+        };
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
         new()

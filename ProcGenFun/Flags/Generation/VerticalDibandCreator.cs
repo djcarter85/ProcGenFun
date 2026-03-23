@@ -44,5 +44,6 @@ public static class VerticalDibandCreator
         WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
             .Add(FlagChargeShape.Type.Star, 5)
             .Add(FlagChargeShape.Type.Circle, 1)
+            .Add(FlagChargeShape.Type.Plus, 1)
             .Build();
 }

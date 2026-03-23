@@ -18,6 +18,7 @@ public static class FlagChargeCreator
             FlagChargeShape.Type.Star => StarChargeDist(backgroundColours, size, horizontalLocation),
             FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColours, size, horizontalLocation),
             FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColours, size, horizontalLocation),
+            FlagChargeShape.Type.Plus => PlusChargeDist(backgroundColours, size, horizontalLocation),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
@@ -52,6 +53,17 @@ public static class FlagChargeCreator
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
             new(new FlagChargeShape.Circle(colour),
+                size,
+                horizontalLocation,
+                FlagChargeVerticalLocation.Centre)
+        };
+
+    private static IDistribution<IReadOnlyList<FlagCharge>> PlusChargeDist(
+        IEnumerable<FlagColour> backgroundColours, FlagChargeSize size, FlagChargeHorizontalLocation horizontalLocation) =>
+        from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
+        {
+            new(new FlagChargeShape.Plus(colour),
                 size,
                 horizontalLocation,
                 FlagChargeVerticalLocation.Centre)
