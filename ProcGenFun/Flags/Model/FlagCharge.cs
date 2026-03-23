@@ -2,6 +2,6 @@
 
 public record FlagCharge(
     FlagChargeShape Shape,
-    float Size,
+    FlagChargeSize Size,
     FlagChargeHorizontalLocation HorizontalLocation,
     FlagChargeVerticalLocation VerticalLocation);

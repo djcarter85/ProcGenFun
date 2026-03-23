@@ -10,7 +10,7 @@ public static class FlagChargeCreator
     public static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
         FlagChargeShape.Type? chargeType,
         IEnumerable<FlagColour> backgroundColours,
-        float size,
+        FlagChargeSize size,
         FlagChargeHorizontalLocation horizontalLocation) =>
         chargeType switch
         {
@@ -22,7 +22,7 @@ public static class FlagChargeCreator
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(
-        IEnumerable<FlagColour> backgroundColours, float size, FlagChargeHorizontalLocation horizontalLocation) =>
+        IEnumerable<FlagColour> backgroundColours, FlagChargeSize size, FlagChargeHorizontalLocation horizontalLocation) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
@@ -34,7 +34,7 @@ public static class FlagChargeCreator
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(
-        IEnumerable<FlagColour> backgroundColours, float size, FlagChargeHorizontalLocation horizontalLocation) =>
+        IEnumerable<FlagColour> backgroundColours, FlagChargeSize size, FlagChargeHorizontalLocation horizontalLocation) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         from count in Uniform.NewInclusive(1, 4)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
@@ -47,7 +47,7 @@ public static class FlagChargeCreator
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(
-        IEnumerable<FlagColour> backgroundColours, float size, FlagChargeHorizontalLocation horizontalLocation) =>
+        IEnumerable<FlagColour> backgroundColours, FlagChargeSize size, FlagChargeHorizontalLocation horizontalLocation) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {

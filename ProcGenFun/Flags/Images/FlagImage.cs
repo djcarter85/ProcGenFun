@@ -90,9 +90,9 @@ public static class FlagImage
     {
         var chargeElement = charge.Shape switch
         {
-            Star(var colour) => GetStarElement(colour, radius: charge.Size * U),
-            StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: charge.Size * U),
-            Circle(var colour) => GetCircleElement(colour, radius: charge.Size * U),
+            Star(var colour) => GetStarElement(colour, radius: GetRadius(charge.Size)),
+            StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: GetRadius(charge.Size)),
+            Circle(var colour) => GetCircleElement(colour, radius: GetRadius(charge.Size)),
         };
 
         chargeElement.Transforms =
@@ -104,6 +104,15 @@ public static class FlagImage
         
         return chargeElement;
     }
+
+    private static float GetRadius(FlagChargeSize size) =>
+        size switch
+        {
+            FlagChargeSize.Small => 1.5f * U,
+            FlagChargeSize.Medium => 2 * U,
+            FlagChargeSize.Large => 3 * U,
+            _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
+        };
 
     private static float GetChargeCentreX(FlagChargeHorizontalLocation chargeHorizontalLocation) =>
         chargeHorizontalLocation switch
