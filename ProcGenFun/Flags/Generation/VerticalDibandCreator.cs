@@ -27,12 +27,22 @@ public static class VerticalDibandCreator
         chargeLocation switch
         {
             FlagChargeHorizontalLocation.Left =>
-                FlagChargeCreator.ChargesDist(FlagChargeShape.Type.Star, left, 1.5f, FlagChargeHorizontalLocation.Left),
+                from chargeType in ChargeTypeDist()
+                from charges in FlagChargeCreator.ChargesDist(chargeType, left, 1.5f, FlagChargeHorizontalLocation.Left)
+                select charges,
             FlagChargeHorizontalLocation.Centre =>
                 throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null),
             FlagChargeHorizontalLocation.Right =>
-                FlagChargeCreator.ChargesDist(FlagChargeShape.Type.Star, right, 1.5f, FlagChargeHorizontalLocation.Right),
+                from chargeType in ChargeTypeDist()
+                from charges in FlagChargeCreator.ChargesDist(chargeType, right, 1.5f, FlagChargeHorizontalLocation.Right)
+                select charges,
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
+
+    private static IDistribution<FlagChargeShape.Type> ChargeTypeDist() =>
+        WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
+            .Add(FlagChargeShape.Type.Star, 5)
+            .Add(FlagChargeShape.Type.Circle, 1)
+            .Build();
 }
