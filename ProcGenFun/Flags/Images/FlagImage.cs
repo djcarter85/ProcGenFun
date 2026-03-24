@@ -37,24 +37,24 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetFlagPatternElements(Model.FlagPattern pattern) =>
         pattern switch
         {
-            Solid(var colour) => GetSolidFlagElements(colour),
+            Solid(var field) => GetSolidFlagElements(field),
             Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
             HorizontalDiband(var top, var bottom, var fimbriation) => GetHorizontalDibandFlagElements(top, bottom, fimbriation),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
             HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
-            Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
+            Cross(var field, var foreground, var crossType) => GetCrossFlagElements(field, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
         };
 
-    private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour colour)
+    private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour field)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(colour)),
+            Fill = new SvgColourServer(GetColor(field)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -387,11 +387,11 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetCrossFlagElements(
-        FlagColour background, FlagColour foreground, CrossType crossType)
+        FlagColour field, FlagColour foreground, CrossType crossType)
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(background)),
+            Fill = new SvgColourServer(GetColor(field)),
             X = 0,
             Y = 0,
             Width = 18 * U,
