@@ -128,6 +128,7 @@ public static class FlagImage
     private static int GetChargeCentreY(FlagChargeVerticalLocation chargeVerticalLocation) =>
         chargeVerticalLocation switch
         {
+            FlagChargeVerticalLocation.Top => 3 * U,
             FlagChargeVerticalLocation.Centre => 6 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeVerticalLocation), chargeVerticalLocation, null)
         };
