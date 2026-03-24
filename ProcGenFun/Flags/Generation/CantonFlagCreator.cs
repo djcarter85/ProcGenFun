@@ -17,7 +17,8 @@ public static class CantonFlagCreator
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
         WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
             .Add(null, 1)
-            .Add(FlagChargeShape.Type.Star, 5)
+            .Add(FlagChargeShape.Type.Star, 8)
+            .Add(FlagChargeShape.Type.Plus, 4)
             .Add(FlagChargeShape.Type.Circle, 2)
             .Build();
 }
