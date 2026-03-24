@@ -42,7 +42,7 @@ public static class FlagImage
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
             HorizontalDiband(var top, var bottom, var fimbriation) => GetHorizontalDibandFlagElements(top, bottom, fimbriation),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
-            HorizontalTriband(var top, var middle, var bottom) => GetHorizontalTribandFlagElements(top, middle, bottom),
+            HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
             Cross(var background, var foreground, var crossType) => GetCrossFlagElements(background, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
@@ -294,7 +294,8 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(FlagColour top, FlagColour middle, FlagColour bottom)
+    private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(
+        FlagColour top, FlagColour middle, FlagColour bottom, FlagColour? fimbriation)
     {
         yield return new SvgRectangle
         {
@@ -320,6 +321,28 @@ public static class FlagImage
             Width = 18 * U,
             Height = 4 * U
         };
+
+        if (fimbriation != null)
+        {
+            yield return new SvgLine
+            {
+                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                StrokeWidth = 0.75f * U,
+                StartX = 0,
+                StartY = 4 * U,
+                EndX = 18 * U,
+                EndY = 4 * U,
+            };
+            yield return new SvgLine
+            {
+                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                StrokeWidth = 0.75f * U,
+                StartX = 0,
+                StartY = 8 * U,
+                EndX = 18 * U,
+                EndY = 8 * U,
+            };
+        }
     }
 
     private static IEnumerable<SvgElement> GetDiagonalBicolourFlagElements(
