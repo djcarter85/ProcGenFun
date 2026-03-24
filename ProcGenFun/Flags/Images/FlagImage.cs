@@ -40,7 +40,7 @@ public static class FlagImage
             Solid(var colour) => GetSolidFlagElements(colour),
             Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
-            HorizontalDiband(var top, var bottom) => GetHorizontalDibandFlagElements(top, bottom),
+            HorizontalDiband(var top, var bottom, var fimbriation) => GetHorizontalDibandFlagElements(top, bottom, fimbriation),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
             HorizontalTriband(var top, var middle, var bottom) => GetHorizontalTribandFlagElements(top, middle, bottom),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
@@ -232,7 +232,8 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgRectangle> GetHorizontalDibandFlagElements(FlagColour top, FlagColour bottom)
+    private static IEnumerable<SvgElement> GetHorizontalDibandFlagElements(
+        FlagColour top, FlagColour bottom, FlagColour? fimbriation)
     {
         yield return new SvgRectangle
         {
@@ -250,6 +251,19 @@ public static class FlagImage
             Width = 18 * U,
             Height = 6 * U
         };
+
+        if (fimbriation != null)
+        {
+            yield return new SvgLine
+            {
+                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                StrokeWidth = 0.75f * U,
+                StartX = 0,
+                StartY = 6 * U,
+                EndX = 18 * U,
+                EndY = 6 * U,
+            };
+        }
     }
 
     private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(FlagColour left, FlagColour middle, FlagColour right)

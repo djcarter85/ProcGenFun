@@ -37,6 +37,10 @@ public static class DistributionExtensions
         return new RepeatDistribution<T>(dist, count);
     }
 
+    public static IDistribution<TResult?> Nullable<TResult>(this IDistribution<TResult> source)
+        where TResult : struct =>
+        from value in source select (TResult?)value;
+
     private class RepeatDistribution<T>(IDistribution<T> dist, int count) : IDistribution<IEnumerable<T>>
     {
         public IEnumerable<T> Sample<TRng>(TRng rng) where TRng : notnull, IRng
