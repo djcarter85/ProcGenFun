@@ -12,7 +12,7 @@ public static class HorizontalTribandCreator
         from middle in FlagColours.AllowedAdjacentToDist(top)
         from bottom in FlagColours.AllowedAdjacentToDist(middle)
         from chargeType in ChargeTypeDist()
-        from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: FlagChargeSize.Small, horizontalLocation: FlagChargeHorizontalLocation.Centre)
+        from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: FlagChargeSize.Small, horizontalLocation: FlagChargeHorizontalLocation.Centre, verticalLocation: FlagChargeVerticalLocation.Centre)
         select new Flag(new FlagPattern.HorizontalTriband(top, middle, bottom), charge);
 
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>

@@ -11,7 +11,7 @@ public static class HorizontalDibandCreator
         from top in FlagColours.AllDist()
         from bottom in FlagColours.AllowedAdjacentToDist(top)
         from chargeType in ChargeTypeDist()
-        from charges in FlagChargeCreator.ChargesDist(chargeType, [top, bottom], size: FlagChargeSize.Large, FlagChargeHorizontalLocation.Centre)
+        from charges in FlagChargeCreator.ChargesDist(chargeType, [top, bottom], size: FlagChargeSize.Large, FlagChargeHorizontalLocation.Centre, FlagChargeVerticalLocation.Centre)
         select new Flag(new FlagPattern.HorizontalDiband(top, bottom), charges);
 
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
