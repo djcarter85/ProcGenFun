@@ -119,8 +119,7 @@ public static class FlagImage
     private static float GetChargeCentreX(FlagChargeLocation chargeLocation) =>
         chargeLocation switch
         {
-            FlagChargeLocation.TopLeft => 4.5f * U,
-            FlagChargeLocation.CentreLeft => 4.5f * U,
+            FlagChargeLocation.TopLeft or FlagChargeLocation.CentreLeft => 4.5f * U,
             FlagChargeLocation.Centre => 9 * U,
             FlagChargeLocation.CentreRight => 13.5f * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
@@ -130,9 +129,7 @@ public static class FlagImage
         chargeLocation switch
         {
             FlagChargeLocation.TopLeft => 3 * U,
-            FlagChargeLocation.CentreLeft => 6 * U,
-            FlagChargeLocation.Centre => 6 * U,
-            FlagChargeLocation.CentreRight => 6 * U,
+            FlagChargeLocation.CentreLeft or FlagChargeLocation.Centre or FlagChargeLocation.CentreRight => 6 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
