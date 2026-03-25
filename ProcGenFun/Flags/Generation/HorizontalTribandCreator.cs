@@ -14,7 +14,7 @@ public static class HorizontalTribandCreator
         from bottom in FlagColours.AllowedAdjacentToDist(middle)
         from fimbriation in FimbriationDist([top, middle, bottom])
         from chargeType in ChargeTypeDist()
-        from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: FlagChargeSize.Small, horizontalLocation: FlagChargeHorizontalLocation.Centre, verticalLocation: FlagChargeVerticalLocation.Centre)
+        from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: FlagChargeSize.Small, FlagChargeLocation.Centre)
         select new Flag(new FlagPattern.HorizontalTriband(top, middle, bottom, fimbriation), charge);
 
     private static IDistribution<FlagColour?> FimbriationDist(IEnumerable<FlagColour> adjacentColours) =>

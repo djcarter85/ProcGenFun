@@ -100,8 +100,8 @@ public static class FlagImage
         chargeElement.Transforms =
         [
             new SvgTranslate(
-                x: GetChargeCentreX(charge.HorizontalLocation),
-                y: GetChargeCentreY(charge.VerticalLocation))
+                x: GetChargeCentreX(charge.Location),
+                y: GetChargeCentreY(charge.Location))
         ];
         
         return chargeElement;
@@ -116,21 +116,24 @@ public static class FlagImage
             _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
         };
 
-    private static float GetChargeCentreX(FlagChargeHorizontalLocation chargeHorizontalLocation) =>
-        chargeHorizontalLocation switch
+    private static float GetChargeCentreX(FlagChargeLocation chargeLocation) =>
+        chargeLocation switch
         {
-            FlagChargeHorizontalLocation.Left => 4.5f * U,
-            FlagChargeHorizontalLocation.Centre => 9 * U,
-            FlagChargeHorizontalLocation.Right => 13.5f * U,
-            _ => throw new ArgumentOutOfRangeException(nameof(chargeHorizontalLocation), chargeHorizontalLocation, null)
+            FlagChargeLocation.TopLeft => 4.5f * U,
+            FlagChargeLocation.CentreLeft => 4.5f * U,
+            FlagChargeLocation.Centre => 9 * U,
+            FlagChargeLocation.CentreRight => 13.5f * U,
+            _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
-    private static int GetChargeCentreY(FlagChargeVerticalLocation chargeVerticalLocation) =>
-        chargeVerticalLocation switch
+    private static int GetChargeCentreY(FlagChargeLocation chargeLocation) =>
+        chargeLocation switch
         {
-            FlagChargeVerticalLocation.Top => 3 * U,
-            FlagChargeVerticalLocation.Centre => 6 * U,
-            _ => throw new ArgumentOutOfRangeException(nameof(chargeVerticalLocation), chargeVerticalLocation, null)
+            FlagChargeLocation.TopLeft => 3 * U,
+            FlagChargeLocation.CentreLeft => 6 * U,
+            FlagChargeLocation.Centre => 6 * U,
+            FlagChargeLocation.CentreRight => 6 * U,
+            _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
     private static SvgElement GetStarElement(FlagColour colour, float radius) =>

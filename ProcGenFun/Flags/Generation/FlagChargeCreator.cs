@@ -11,38 +11,34 @@ public static class FlagChargeCreator
         FlagChargeShape.Type? chargeType,
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
-        FlagChargeHorizontalLocation horizontalLocation,
-        FlagChargeVerticalLocation verticalLocation) =>
+        FlagChargeLocation location) =>
         chargeType switch
         {
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
-            FlagChargeShape.Type.Star => StarChargeDist(backgroundColours, size, horizontalLocation, verticalLocation),
-            FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColours, size, horizontalLocation, verticalLocation),
-            FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColours, size, horizontalLocation, verticalLocation),
-            FlagChargeShape.Type.Plus => PlusChargeDist(backgroundColours, size, horizontalLocation, verticalLocation),
+            FlagChargeShape.Type.Star => StarChargeDist(backgroundColours, size, location),
+            FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColours, size, location),
+            FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColours, size, location),
+            FlagChargeShape.Type.Plus => PlusChargeDist(backgroundColours, size, location),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
-        FlagChargeHorizontalLocation horizontalLocation,
-        FlagChargeVerticalLocation verticalLocation) =>
+        FlagChargeLocation location) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
             new(
                 new FlagChargeShape.Star(colour),
                 size,
-                horizontalLocation,
-                verticalLocation)
+                location)
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
-        FlagChargeHorizontalLocation horizontalLocation,
-        FlagChargeVerticalLocation verticalLocation) =>
+        FlagChargeLocation location) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         from count in Uniform.NewInclusive(1, 4)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
@@ -50,35 +46,30 @@ public static class FlagChargeCreator
             new(
                 new FlagChargeShape.StarBand(colour, count),
                 size,
-                horizontalLocation,
-                verticalLocation)
+                location)
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
-        FlagChargeHorizontalLocation horizontalLocation,
-        FlagChargeVerticalLocation verticalLocation) =>
+        FlagChargeLocation location) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
             new(new FlagChargeShape.Circle(colour),
                 size,
-                horizontalLocation,
-                verticalLocation)
+                location)
         };
 
     private static IDistribution<IReadOnlyList<FlagCharge>> PlusChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
-        FlagChargeHorizontalLocation horizontalLocation,
-        FlagChargeVerticalLocation verticalLocation) =>
+        FlagChargeLocation location) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
             new(new FlagChargeShape.Plus(colour),
                 size,
-                horizontalLocation,
-                verticalLocation)
+                location)
         };
 }

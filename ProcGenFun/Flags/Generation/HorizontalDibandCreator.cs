@@ -39,6 +39,5 @@ public static class HorizontalDibandCreator
             chargeType,
             adjacentColours.ExcludingNull(),
             size: FlagChargeSize.Large,
-            FlagChargeHorizontalLocation.Centre,
-            FlagChargeVerticalLocation.Centre);
+            FlagChargeLocation.Centre);
 }

@@ -15,26 +15,24 @@ public static class VerticalDibandCreator
         from charges in ChargesDist(chargeLocation, left, right)
         select new Flag(new FlagPattern.VerticalDiband(left, right), charges);
 
-    private static IDistribution<FlagChargeHorizontalLocation?> ChargeLocationDist() =>
-        WeightedDiscreteDistributionBuilder<FlagChargeHorizontalLocation?>.Empty()
+    private static IDistribution<FlagChargeLocation?> ChargeLocationDist() =>
+        WeightedDiscreteDistributionBuilder<FlagChargeLocation?>.Empty()
             .Add(null, 4)
-            .Add(FlagChargeHorizontalLocation.Left, 1)
-            .Add(FlagChargeHorizontalLocation.Right, 1)
+            .Add(FlagChargeLocation.CentreLeft, 1)
+            .Add(FlagChargeLocation.CentreRight, 1)
             .Build();
 
     private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
-        FlagChargeHorizontalLocation? chargeLocation, FlagColour left, FlagColour right) =>
+        FlagChargeLocation? chargeLocation, FlagColour left, FlagColour right) =>
         chargeLocation switch
         {
-            FlagChargeHorizontalLocation.Left =>
+            FlagChargeLocation.CentreLeft =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Small, FlagChargeHorizontalLocation.Left, FlagChargeVerticalLocation.Centre)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Small, FlagChargeLocation.CentreLeft)
                 select charges,
-            FlagChargeHorizontalLocation.Centre =>
-                throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null),
-            FlagChargeHorizontalLocation.Right =>
+            FlagChargeLocation.CentreRight =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Small, FlagChargeHorizontalLocation.Right, FlagChargeVerticalLocation.Centre)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Small, FlagChargeLocation.CentreRight)
                 select charges,
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
