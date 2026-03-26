@@ -17,7 +17,6 @@ window.shareUtils = {
       // Share using the Web Share API
       await navigator.share({
         files: [file],
-        title: "Generated Flag",
       });
     } catch (error) {
       if (error.name !== "AbortError") {
