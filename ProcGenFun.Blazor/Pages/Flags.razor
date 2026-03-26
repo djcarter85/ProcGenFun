@@ -43,7 +43,9 @@
         from flag in FlagCreator.FlagDist()
         select FlagImage.CreateSvg(flag, className: "shadow-2xl w-full");
 
-    var flagImagesDist = flagImageDist.Repeat(6);
+    var flagImagesDist =
+        from flagImages in flagImageDist.Repeat(6)
+        select flagImages.ToReadOnly();
 
     this.flagImages = flagImagesDist.Sample(this.rng);
   }
