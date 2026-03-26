@@ -1,4 +1,4 @@
-﻿namespace ProcGenFun.Flags.Images;
+namespace ProcGenFun.Flags.Images;
 
 using System.Drawing;
 using ProcGenFun.Flags.Model;
@@ -10,7 +10,7 @@ using static ProcGenFun.Flags.Model.FlagChargeShape;
 
 public static class FlagImage
 {
-    private const int U = 10;
+    private const int U = 100;
 
     public static SvgDocument CreateSvg(Flag flag, string? className = null)
     {
