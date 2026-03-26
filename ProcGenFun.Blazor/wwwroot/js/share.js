@@ -18,7 +18,6 @@ window.shareUtils = {
       await navigator.share({
         files: [file],
         title: "Generated Flag",
-        text: "Check out this procedurally generated flag!",
       });
     } catch (error) {
       if (error.name !== "AbortError") {
