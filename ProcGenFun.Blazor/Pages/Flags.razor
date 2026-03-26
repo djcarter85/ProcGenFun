@@ -7,6 +7,7 @@
 @using RandN
 @using RandN.Extensions
 @using Svg
+@inject IJSRuntime JS
 
 <PageTitle>Flags</PageTitle>
 
@@ -19,8 +20,15 @@
 <div class="grid grid-cols-2 sm:grid-cols-3 my-8 gap-8">
   @foreach (var flagImage in this.flagImages)
   {
-    <div>
-      @((MarkupString)flagImage.GetXML())
+    <div class="flex flex-col items-center">
+      <div>
+        @((MarkupString)flagImage.GetXML())
+      </div>
+      <button 
+        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        @onclick="async () => await ShareFlag(flagImage)">
+        Share
+      </button>
     </div>
   }
 </div>
@@ -38,5 +46,18 @@
     var flagImagesDist = flagImageDist.Repeat(6);
 
     this.flagImages = flagImagesDist.Sample(this.rng);
+  }
+
+  private async Task ShareFlag(SvgDocument flagImage)
+  {
+    try
+    {
+      var svgContent = flagImage.GetXML();
+      await JS.InvokeVoidAsync("shareUtils.shareFlag", svgContent);
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Error sharing flag: {ex.Message}");
+    }
   }
 }
