@@ -241,7 +241,7 @@ public static class FlagImage
             X = 0,
             Y = 0,
             Width = 18 * U,
-            Height = 100
+            Height = 6 * U
         };
         yield return new SvgRectangle
         {
