@@ -20,7 +20,7 @@
 <div class="grid grid-cols-2 sm:grid-cols-3 my-8 gap-8">
   @foreach (var flagImage in this.flagImages)
   {
-    <div class="flex flex-col items-center gap-2">
+    <div class="flex flex-col items-end gap-2">
       <div>
         @((MarkupString)flagImage.GetXML())
       </div>
