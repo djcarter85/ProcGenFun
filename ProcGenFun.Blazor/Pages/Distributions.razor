@@ -22,7 +22,9 @@
         </select>
     </div>
 
-    <Button Text="Generate Histogram" OnClick="GenerateHistogram" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
+    <Button OnClick="GenerateHistogram" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium>
+        Generate Histogram
+    </Button>
 </div>
 
 @if (histogram != null)
@@ -34,7 +36,8 @@
     var maxHeight = histogram.Buckets.Max(b => b.Count) * 1.1;
 
     var viewBox = $"{minX} -{maxHeight} {width} {maxHeight}";
-    <svg width="200" height="200" viewBox="@viewBox" class="border bg-blue-200 border-blue-500 w-full" preserveAspectRatio="none">
+    <svg width="200" height="200" viewBox="@viewBox" class="border bg-blue-200 border-blue-500 w-full"
+         preserveAspectRatio="none">
         @foreach (var bucket in histogram.Buckets)
         {
             var x = bucket.Centre - histogram.BucketWidth / 2;

@@ -1,10 +1,10 @@
 <button class="@Class" @onclick="OnClick">
-    @Text
+    @ChildContent
 </button>
 
 @code {
     [Parameter]
-    public required string Text { get; set; }
+    public required RenderFragment? ChildContent { get; set; }
 
     [Parameter]
     public required ButtonStyle Style { get; set; }
@@ -23,7 +23,7 @@
         "border border-blue-800 rounded-lg",
         Style == ButtonStyle.Outline ? "text-blue-800 hover:bg-blue-600 hover:text-gray-50" : "",
         Style == ButtonStyle.Filled ? "bg-blue-800 text-gray-50 hover:bg-blue-600" : "",
-        Size == ButtonSize.Small ? "text-sm px-3 py-1" : "",
+        Size == ButtonSize.Small ? "text-sm p-2" : "",
         Size == ButtonSize.Medium ? "text-base px-5 py-2" : "",
     });
 }
