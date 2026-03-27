@@ -10,13 +10,20 @@
     public required ButtonStyle Style { get; set; }
 
     [Parameter]
+    public required ButtonSize Size { get; set; }
+
+    [Parameter]
     public required Action OnClick { get; set; }
 
     public enum ButtonStyle { Filled, Outline }
+    
+    public enum ButtonSize { Small, Medium }
 
     private string Class => string.Join(" ", new[]{
-        "px-5 py-2 border border-blue-800 rounded-lg",
+        "border border-blue-800 rounded-lg",
         Style == ButtonStyle.Outline ? "text-blue-800 hover:bg-blue-600 hover:text-gray-50" : "",
         Style == ButtonStyle.Filled ? "bg-blue-800 text-gray-50 hover:bg-blue-600" : "",
+        Size == ButtonSize.Small ? "text-sm px-3 py-1" : "",
+        Size == ButtonSize.Medium ? "text-base px-5 py-2" : "",
     });
 }

@@ -27,17 +27,17 @@
         </select>
     </div>
 
-    <Button Text="Generate Maze" OnClick="GenerateMaze" Style=Button.ButtonStyle.Filled />
+    <Button Text="Generate Maze" OnClick="GenerateMaze" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
 </div>
 
 
 @if (images != null)
 {
     <div class="mt-4">
-        <Button Text="&laquo;" OnClick="GoToFirstImage" Style=Button.ButtonStyle.Filled />
-        <Button Text="&lt;" OnClick="GoToPreviousImage" Style=Button.ButtonStyle.Filled />
-        <Button Text="&gt;" OnClick="GoToNextImage" Style=Button.ButtonStyle.Filled />
-        <Button Text="&raquo;" OnClick="GoToLastImage" Style=Button.ButtonStyle.Filled />
+        <Button Text="&laquo;" OnClick="GoToFirstImage" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
+        <Button Text="&lt;" OnClick="GoToPreviousImage" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
+        <Button Text="&gt;" OnClick="GoToNextImage" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
+        <Button Text="&raquo;" OnClick="GoToLastImage" Style=Button.ButtonStyle.Filled Size=Button.ButtonSize.Medium />
 
         <span>@(this.selectedImageIndex + 1) of @this.images.Count</span>
     </div>
