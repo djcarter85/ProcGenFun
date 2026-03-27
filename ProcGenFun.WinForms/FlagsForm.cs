@@ -23,7 +23,7 @@ public partial class FlagsForm : Form
         var imageDist =
             from flag in FlagCreator.FlagDist()
             let svg = FlagImage.CreateSvg(flag)
-            select svg.Draw();
+            select svg.Draw(rasterWidth: 180, rasterHeight: 120);
 
         var imagesDist = imageDist.Repeat(9);
 
