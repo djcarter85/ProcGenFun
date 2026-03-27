@@ -54,7 +54,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(field)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(field)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -66,7 +66,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(field)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(field)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -75,7 +75,7 @@ public static class FlagImage
         
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(cantonColour)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(cantonColour)),
             X = 0,
             Y = 0,
             Width = 9 * U,
@@ -137,7 +137,7 @@ public static class FlagImage
         CreateSvgStar(
             centre: PointF.Empty,
             radius: radius,
-            fillColour: GetColor(colour));
+            fillColour: FlagImageColours.GetColor(colour));
 
     private static SvgElement GetStarBandElement(FlagColour colour, int count, float radius)
     {
@@ -151,7 +151,7 @@ public static class FlagImage
                 CreateSvgStar(
                     centre: new PointF(firstCentreX + i * distanceBetweenCentres, 0),
                     radius: radius,
-                    fillColour: GetColor(colour)));
+                    fillColour: FlagImageColours.GetColor(colour)));
         }
 
         return groupElement;
@@ -159,12 +159,12 @@ public static class FlagImage
 
     private static SvgElement GetCircleElement(FlagColour colour, float radius) =>
         new SvgCircle
-            { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(GetColor(colour)) };
+            { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(FlagImageColours.GetColor(colour)) };
 
     private static SvgElement GetPlusElement(FlagColour colour, float radius) =>
         new SvgPath
         {
-            Stroke = new SvgColourServer(GetColor(colour)),
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(colour)),
             StrokeWidth = 0.5f * radius,
             PathData = [
                 new SvgMoveToSegment(false, new PointF(0, -radius)),
@@ -216,7 +216,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(left)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(left)),
             X = 0,
             Y = 0,
             Width = 9 * U,
@@ -224,7 +224,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(right)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(right)),
             X = 9 * U,
             Y = 0,
             Width = 9 * U,
@@ -237,7 +237,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(top)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(top)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -245,7 +245,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(bottom)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(bottom)),
             X = 0,
             Y = 6 * U,
             Width = 18 * U,
@@ -256,7 +256,7 @@ public static class FlagImage
         {
             yield return new SvgLine
             {
-                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
                 StrokeWidth = 0.75f * U,
                 StartX = 0,
                 StartY = 6 * U,
@@ -270,7 +270,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(left)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(left)),
             X = 0,
             Y = 0,
             Width = 6 * U,
@@ -278,7 +278,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(middle)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(middle)),
             X = 6 * U,
             Y = 0,
             Width = 6 * U,
@@ -286,7 +286,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(right)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(right)),
             X = 12 * U,
             Y = 0,
             Width = 6 * U,
@@ -299,7 +299,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(top)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(top)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -307,7 +307,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(middle)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(middle)),
             X = 0,
             Y = 4 * U,
             Width = 18 * U,
@@ -315,7 +315,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(bottom)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(bottom)),
             X = 0,
             Y = 8 * U,
             Width = 18 * U,
@@ -326,7 +326,7 @@ public static class FlagImage
         {
             yield return new SvgLine
             {
-                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
                 StrokeWidth = 0.75f * U,
                 StartX = 0,
                 StartY = 4 * U,
@@ -335,7 +335,7 @@ public static class FlagImage
             };
             yield return new SvgLine
             {
-                Stroke = new SvgColourServer(GetColor(fimbriation.Value)),
+                Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
                 StrokeWidth = 0.75f * U,
                 StartX = 0,
                 StartY = 8 * U,
@@ -364,7 +364,7 @@ public static class FlagImage
                     }),
                 new SvgClosePathSegment(false)
             }.ToPathData(),
-            Fill = new SvgColourServer(GetColor(left)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(left)),
         };
         yield return new SvgPath
         {
@@ -382,7 +382,7 @@ public static class FlagImage
                     }),
                 new SvgClosePathSegment(false)
             }.ToPathData(),
-            Fill = new SvgColourServer(GetColor(right)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(right)),
         };
     }
 
@@ -391,7 +391,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(field)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(field)),
             X = 0,
             Y = 0,
             Width = 18 * U,
@@ -414,7 +414,7 @@ public static class FlagImage
                 new SvgMoveToSegment(false, new PointF(0, 6 * U)),
                 new SvgLineSegment(true, new PointF(18 * U, 0)),
             }.ToPathData(),
-            Stroke = new SvgColourServer(GetColor(foreground)),
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(foreground)),
             StrokeWidth = 2.5f * U
         };
     }
@@ -432,7 +432,7 @@ public static class FlagImage
                 new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
                 new SvgClosePathSegment(false)
             }.ToPathData(),
-            Fill = new SvgColourServer(GetColor(northSouthField)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(northSouthField)),
         };
         
         yield return new SvgPath
@@ -445,7 +445,7 @@ public static class FlagImage
                 new SvgLineSegment(false, new PointF(18 * U, 12 * U)),
                 new SvgClosePathSegment(false)
             }.ToPathData(),
-            Fill = new SvgColourServer(GetColor(eastWestField)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(eastWestField)),
         };
         
         yield return new SvgPath
@@ -457,7 +457,7 @@ public static class FlagImage
                 new SvgMoveToSegment(false, new PointF(0, 12 * U)),
                 new SvgLineSegment(false, new PointF(18 * U, 0)),
             }.ToPathData(),
-            Stroke = new SvgColourServer(GetColor(foreground)),
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(foreground)),
             StrokeWidth = 2.5f * U
         };
     }
@@ -467,7 +467,7 @@ public static class FlagImage
     {
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(topLeft)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(topLeft)),
             X = 0,
             Y = 0,
             Width = 9 * U,
@@ -475,7 +475,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(topRight)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(topRight)),
             X = 9 * U,
             Y = 0,
             Width = 9 * U,
@@ -483,7 +483,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(bottomRight)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(bottomRight)),
             X = 9 * U,
             Y = 6 * U,
             Width = 9 * U,
@@ -491,7 +491,7 @@ public static class FlagImage
         };
         yield return new SvgRectangle
         {
-            Fill = new SvgColourServer(GetColor(bottomLeft)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(bottomLeft)),
             X = 0,
             Y = 6 * U,
             Width = 9 * U,
@@ -510,7 +510,7 @@ public static class FlagImage
 
             yield return new SvgRectangle
             {
-                Fill = new SvgColourServer(GetColor(colour)),
+                Fill = new SvgColourServer(FlagImageColours.GetColor(colour)),
                 X = 0,
                 Y = stripeHeight * i,
                 Width = 18 * U,
@@ -518,23 +518,4 @@ public static class FlagImage
             };
         }
     }
-
-    private static Color GetColor(FlagColour colour) =>
-        colour switch
-        {
-            FlagColour.White => Color.FromArgb(255, 255, 255),
-            FlagColour.Red => Color.FromArgb(200, 16, 46),
-            FlagColour.DarkBlue => Color.FromArgb(0, 51, 160),
-            FlagColour.RoyalBlue => Color.FromArgb(6, 102, 219),
-            FlagColour.DarkGreen => Color.FromArgb(0, 102, 56),
-            FlagColour.Gold => Color.FromArgb(252, 209, 22),
-            FlagColour.Black => Color.FromArgb(0, 0, 0),
-            FlagColour.LightGreen => Color.FromArgb(0, 153, 28),
-            FlagColour.LightBlue => Color.FromArgb(108, 207, 246),
-            FlagColour.Maroon => Color.FromArgb(122, 38, 58),
-            FlagColour.Orange => Color.FromArgb(255, 130, 0),
-            FlagColour.Brown => Color.FromArgb(139, 94, 60),
-            FlagColour.Purple => Color.FromArgb(102, 0, 153),
-            _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
-        };
 }
