@@ -35,7 +35,7 @@ public static class FlagImageCharges
     private static float GetRadius(FlagChargeSize size) =>
         size switch
         {
-            FlagChargeSize.Small => 1.5f * FlagImageSizing.U,
+            FlagChargeSize.Small => 1.25f * FlagImageSizing.U,
             FlagChargeSize.Medium => 2 * FlagImageSizing.U,
             FlagChargeSize.Large => 3 * FlagImageSizing.U,
             _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
