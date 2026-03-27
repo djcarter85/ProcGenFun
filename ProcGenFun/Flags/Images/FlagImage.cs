@@ -5,13 +5,12 @@ using ProcGenFun.Flags.Model;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
+using static FlagImageSizing;
 using static ProcGenFun.Flags.Model.FlagPattern;
 using static ProcGenFun.Flags.Model.FlagChargeShape;
 
 public static class FlagImage
 {
-    private const int U = 100;
-
     public static SvgDocument CreateSvg(Flag flag, string? className = null)
     {
         var imageWidth = 18 * U;
