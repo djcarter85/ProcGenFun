@@ -5,6 +5,7 @@ using ProcGenFun.Flags.Model;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
+using static FlagImageSizing;
 
 public static class FlagImageCharges
 {
@@ -35,27 +36,27 @@ public static class FlagImageCharges
     private static float GetRadius(FlagChargeSize size) =>
         size switch
         {
-            FlagChargeSize.Small => 1.25f * FlagImageSizing.U,
-            FlagChargeSize.Medium => 2 * FlagImageSizing.U,
-            FlagChargeSize.Large => 3 * FlagImageSizing.U,
+            FlagChargeSize.Small => 1.25f * U,
+            FlagChargeSize.Medium => 2 * U,
+            FlagChargeSize.Large => 3 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
         };
 
     private static float GetChargeCentreX(FlagChargeLocation chargeLocation) =>
         chargeLocation switch
         {
-            FlagChargeLocation.CentreFarLeft => 3f * FlagImageSizing.U,
-            FlagChargeLocation.TopLeft or FlagChargeLocation.CentreLeft => 4.5f * FlagImageSizing.U,
-            FlagChargeLocation.Centre => 9 * FlagImageSizing.U,
-            FlagChargeLocation.CentreRight => 13.5f * FlagImageSizing.U,
+            FlagChargeLocation.CentreFarLeft => 3f * U,
+            FlagChargeLocation.TopLeft or FlagChargeLocation.CentreLeft => 4.5f * U,
+            FlagChargeLocation.Centre => 9 * U,
+            FlagChargeLocation.CentreRight => 13.5f * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
     private static int GetChargeCentreY(FlagChargeLocation chargeLocation) =>
         chargeLocation switch
         {
-            FlagChargeLocation.TopLeft => 3 * FlagImageSizing.U,
-            FlagChargeLocation.CentreFarLeft or FlagChargeLocation.CentreLeft or FlagChargeLocation.Centre or FlagChargeLocation.CentreRight => 6 * FlagImageSizing.U,
+            FlagChargeLocation.TopLeft => 3 * U,
+            FlagChargeLocation.CentreFarLeft or FlagChargeLocation.CentreLeft or FlagChargeLocation.Centre or FlagChargeLocation.CentreRight => 6 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
