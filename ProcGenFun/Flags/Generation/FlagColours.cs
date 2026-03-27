@@ -6,22 +6,7 @@ using RandN;
 
 public static class FlagColours
 {
-    private static readonly IEnumerable<FlagColour> all =
-    [
-        FlagColour.White,
-        FlagColour.Red,
-        FlagColour.DarkBlue,
-        FlagColour.RoyalBlue,
-        FlagColour.DarkGreen,
-        FlagColour.Gold,
-        FlagColour.Black,
-        FlagColour.LightGreen,
-        FlagColour.LightBlue,
-        FlagColour.Maroon,
-        FlagColour.Orange,
-        FlagColour.Brown,
-        FlagColour.Purple,
-    ];
+    private static readonly IEnumerable<FlagColour> all = Enum.GetValues<FlagColour>();
 
     private static readonly IEnumerable<ColourPairing> disallowedColourPairings =
     [
