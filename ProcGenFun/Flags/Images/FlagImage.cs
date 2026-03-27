@@ -50,6 +50,7 @@ public static class FlagImage
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
             Pall(var field, var foreground) => GetPallFlagElements(field, foreground),
             PartyPerPall(var left, var top, var bottom) => GetPartyPerPallFlagElements(left, top, bottom),
+            Rays(var field, var middle, var foreground) => GetRaysFlagElements(field, middle, foreground),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour field)
@@ -445,6 +446,41 @@ public static class FlagImage
             [
                 new SvgMoveToSegment(false, new PointF(0, 0)),
                 new SvgLineSegment(false, PallConfluence),
+                new SvgLineSegment(false, new PointF(0, FlagHeight)),
+                new SvgClosePathSegment(false)
+            ]
+        };
+    }
+
+    private static IEnumerable<SvgElement> GetRaysFlagElements(
+        FlagColour field, FlagColour middle, FlagColour foreground)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(field)),
+            X = 0,
+            Y = 0,
+            Width = FlagWidth,
+            Height = FlagHeight
+        };
+        yield return new SvgPath
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(middle)),
+            PathData =
+            [
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(FlagWidth, 0)),
+                new SvgLineSegment(false, new PointF(0, FlagHeight)),
+                new SvgClosePathSegment(false)
+            ]
+        };
+        yield return new SvgPath
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(foreground)),
+            PathData =
+            [
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, new PointF(FlagWidth / 2, 0)),
                 new SvgLineSegment(false, new PointF(0, FlagHeight)),
                 new SvgClosePathSegment(false)
             ]
