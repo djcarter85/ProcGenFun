@@ -9,14 +9,14 @@ using static ProcGenFun.Flags.Model.FlagPattern;
 
 public static class FlagImage
 {
+    private const int FlagWidth = 18 * U;
+    private const int FlagHeight = 12 * U;
+
     public static SvgDocument CreateSvg(Flag flag, string? className = null)
     {
-        var imageWidth = 18 * U;
-        var imageHeight = 12 * U;
-
         var svgDocument = new SvgDocument
         {
-            ViewBox = new SvgViewBox(0, 0, imageWidth, imageHeight),
+            ViewBox = new SvgViewBox(0, 0, FlagWidth, FlagHeight),
             CustomAttributes = { { "class", className } }
         };
 
