@@ -13,6 +13,5 @@ public enum FlagColour
     Black,
     Maroon,
     Orange,
-    Brown,
     Purple,
 }

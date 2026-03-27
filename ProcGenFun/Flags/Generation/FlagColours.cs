@@ -13,8 +13,6 @@ public static class FlagColours
         new (FlagColour.Red, FlagColour.LightGreen),
         new (FlagColour.Red, FlagColour.DarkGreen),
         new (FlagColour.Red, FlagColour.Maroon),
-        new (FlagColour.Red, FlagColour.Brown),
-        new (FlagColour.RoyalBlue, FlagColour.Brown),
         new (FlagColour.RoyalBlue, FlagColour.Maroon),
         new (FlagColour.RoyalBlue, FlagColour.LightGreen),
         new (FlagColour.DarkBlue, FlagColour.DarkGreen),
@@ -56,7 +54,6 @@ public static class FlagColours
             FlagColour.LightBlue => 40,
             FlagColour.Orange => 25,
             FlagColour.Maroon => 10,
-            FlagColour.Brown => 10,
             FlagColour.Purple => 2,
             _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
         };
