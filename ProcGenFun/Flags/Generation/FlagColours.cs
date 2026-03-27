@@ -8,17 +8,7 @@ public static class FlagColours
 {
     private static readonly IEnumerable<FlagColour> all = Enum.GetValues<FlagColour>();
 
-    private static readonly IEnumerable<ColourPairing> disallowedColourPairings =
-    [
-        new (FlagColour.Red, FlagColour.LightGreen),
-        new (FlagColour.Red, FlagColour.DarkGreen),
-        new (FlagColour.Red, FlagColour.Maroon),
-        new (FlagColour.Red, FlagColour.Brown),
-        new (FlagColour.RoyalBlue, FlagColour.Brown),
-        new (FlagColour.RoyalBlue, FlagColour.Maroon),
-        new (FlagColour.RoyalBlue, FlagColour.LightGreen),
-        new (FlagColour.DarkBlue, FlagColour.DarkGreen),
-    ];
+    private static readonly IEnumerable<ColourPairing> disallowedColourPairings = [];
 
     public static IDistribution<FlagColour> AllDist() => ColourDist(all);
 
@@ -48,14 +38,11 @@ public static class FlagColours
             FlagColour.White => 100,
             FlagColour.Red => 95,
             FlagColour.DarkBlue => 90,
-            FlagColour.RoyalBlue => 75,
-            FlagColour.DarkGreen => 70,
-            FlagColour.Gold => 70,
+            FlagColour.Green => 70,
+            FlagColour.Yellow => 70,
             FlagColour.Black => 65,
-            FlagColour.LightGreen => 55,
             FlagColour.LightBlue => 40,
             FlagColour.Orange => 25,
-            FlagColour.Maroon => 10,
             FlagColour.Brown => 10,
             FlagColour.Purple => 2,
             _ => throw new ArgumentOutOfRangeException(nameof(colour), colour, null)
