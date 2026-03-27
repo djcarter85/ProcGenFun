@@ -28,11 +28,11 @@ public static class VerticalDibandCreator
         {
             FlagChargeLocation.CentreLeft =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Small, FlagChargeLocation.CentreLeft)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Medium, FlagChargeLocation.CentreLeft)
                 select charges,
             FlagChargeLocation.CentreRight =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Small, FlagChargeLocation.CentreRight)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Medium, FlagChargeLocation.CentreRight)
                 select charges,
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
