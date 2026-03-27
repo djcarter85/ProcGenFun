@@ -79,7 +79,7 @@
     try
     {
       var svgContent = flagImage.GetXML();
-      await JS.InvokeVoidAsync("shareUtils.downloadFlag", svgContent, "flag.svg");
+      await JS.InvokeVoidAsync("shareUtils.downloadFlag", svgContent);
     }
     catch (Exception ex)
     {

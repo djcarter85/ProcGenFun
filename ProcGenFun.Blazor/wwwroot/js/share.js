@@ -25,13 +25,13 @@ window.shareUtils = {
     }
   },
 
-  downloadFlag(svgContent, fileName = "flag.svg") {
+  downloadFlag(svgContent) {
     const blob = new Blob([svgContent], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = fileName;
+    link.download = "flag.svg";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
