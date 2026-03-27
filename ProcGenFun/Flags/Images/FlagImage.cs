@@ -45,6 +45,7 @@ public static class FlagImage
             Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
+            Pall(var field, var foreground) => GetPallFlagElements(field, foreground),
         };
 
     private static IEnumerable<SvgElement> GetSolidFlagElements(FlagColour field)
@@ -385,5 +386,35 @@ public static class FlagImage
                 Height = stripeHeight
             };
         }
+    }
+
+    private static IEnumerable<SvgElement> GetPallFlagElements(FlagColour field, FlagColour foreground)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(field)),
+            X = 0,
+            Y = 0,
+            Width = FlagWidth,
+            Height = FlagHeight
+        };
+
+        // It is unusual to use the flag height in a width calculation, but we want the diagonal to be 45 degrees. 
+        var confluence = new PointF(FlagHeight / 2, FlagHeight / 2);
+
+        yield return new SvgPath
+        {
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(foreground)),
+            StrokeWidth = 2 * U,
+            Fill = new  SvgColourServer(Color.Transparent),
+            PathData =
+            [
+                new SvgMoveToSegment(false, new PointF(0, 0)),
+                new SvgLineSegment(false, confluence),
+                new SvgLineSegment(false, new PointF(FlagWidth, FlagHeight / 2)),
+                new SvgMoveToSegment(false, new PointF(0, FlagHeight)),
+                new SvgLineSegment(false, confluence),
+            ]
+        };
     }
 }

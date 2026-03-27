@@ -25,6 +25,7 @@ public static class FlagCreator
             .Add(FlagPattern.Type.Saltire, 15)
             .Add(FlagPattern.Type.Quartered, 10)
             .Add(FlagPattern.Type.HorizontalStriped, 10)
+            .Add(FlagPattern.Type.Pall, 15)
             .Build();
 
     private static IDistribution<Flag> FlagDist(FlagPattern.Type flagType) =>
@@ -41,6 +42,7 @@ public static class FlagCreator
             FlagPattern.Type.Saltire => SaltireCreator.Dist(),
             FlagPattern.Type.Quartered => QuarteredCreator.Dist(),
             FlagPattern.Type.HorizontalStriped => HorizontalStripedCreator.Dist(),
+            FlagPattern.Type.Pall => PallCreator.Dist(),
             _ => throw new ArgumentOutOfRangeException(nameof(flagType), flagType, null)
         };
 }
