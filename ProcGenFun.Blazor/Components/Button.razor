@@ -1,6 +1,4 @@
-<button
-    class="px-5 py-2 bg-blue-800 text-gray-50 hover:bg-blue-600 rounded-lg"
-    @onclick="OnClick">
+<button class="@Class" @onclick="OnClick">
     @Text
 </button>
 
@@ -9,5 +7,16 @@
     public required string Text { get; set; }
 
     [Parameter]
+    public required ButtonStyle Style { get; set; }
+
+    [Parameter]
     public required Action OnClick { get; set; }
+
+    public enum ButtonStyle { Filled, Outline }
+
+    private string Class => string.Join(" ", new[]{
+        "px-5 py-2 border border-blue-800 rounded-lg",
+        Style == ButtonStyle.Outline ? "text-blue-800 hover:bg-blue-600 hover:text-gray-50" : "",
+        Style == ButtonStyle.Filled ? "bg-blue-800 text-gray-50 hover:bg-blue-600" : "",
+    });
 }

@@ -14,7 +14,7 @@
 <Title>Flags</Title>
 
 <div class="flex justify-center">
-  <Button Text="Generate Flags" OnClick="GenerateFlags" />
+  <Button Text="Generate Flags" OnClick="GenerateFlags" Style=Button.ButtonStyle.Filled />
 </div>
 
 <div class="grid grid-cols-2 sm:grid-cols-3 my-8 gap-8">
@@ -24,7 +24,7 @@
       <div>
         @((MarkupString)flagImage.GetXML())
       </div>
-      <Button Text="Share" OnClick="async () => await ShareFlag(flagImage)" />
+      <Button Text="Share" OnClick="async () => await ShareFlag(flagImage)" Style=Button.ButtonStyle.Outline />
     </div>
   }
 </div>
