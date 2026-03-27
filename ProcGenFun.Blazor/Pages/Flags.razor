@@ -24,13 +24,22 @@
       <div>
         @((MarkupString)flagImage.GetXML())
       </div>
-      <Button OnClick="async () => await ShareFlag(flagImage)" Style=Button.ButtonStyle.Outline
-              Size=Button.ButtonSize.Small>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path
-          d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" />
-        </svg>
-      </Button>
+      <div class="flex gap-2">
+        <Button OnClick="async () => await ShareFlag(flagImage)" Style=Button.ButtonStyle.Outline
+                Size=Button.ButtonSize.Small>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path
+            d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" />
+          </svg>
+        </Button>
+        <Button OnClick="async () => await DownloadFlag(flagImage)" Style=Button.ButtonStyle.Outline
+                Size=Button.ButtonSize.Small>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5-.5H5V1.5a.5.5 0 0 1 1 0V9.4h3.5a.5.5 0 0 1 .37.84l-4 4.5a.5.5 0 0 1-.74 0l-4-4.5a.5.5 0 0 1 .37-.84H.5z" />
+          </svg>
+          Download SVG
+        </Button>
+      </div>
     </div>
   }
 </div>
@@ -62,6 +71,19 @@
     catch (Exception ex)
     {
       Console.WriteLine($"Error sharing flag: {ex.Message}");
+    }
+  }
+
+  private async Task DownloadFlag(SvgDocument flagImage)
+  {
+    try
+    {
+      var svgContent = flagImage.GetXML();
+      await JS.InvokeVoidAsync("shareUtils.downloadFlag", svgContent, "flag.svg");
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Error downloading flag: {ex.Message}");
     }
   }
 }

@@ -25,6 +25,20 @@ window.shareUtils = {
     }
   },
 
+  downloadFlag(svgContent, fileName = "flag.svg") {
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  },
+
   async svgToPng(svgContent) {
     return new Promise((resolve, reject) => {
       // Create an image element from the SVG string
