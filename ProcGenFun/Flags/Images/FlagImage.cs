@@ -12,8 +12,8 @@ public static class FlagImage
     private const float FlagWidth = 18f * U;
     private const float FlagHeight = 12f * U;
 
-    // It is unusual to use the flag height in a width calculation, but we want the diagonal to be 45 degrees. 
-    private static readonly PointF PallConfluence = new(FlagHeight / 2, FlagHeight / 2);
+    // It is unusual to use the flag height in a width calculation, but we want the pall to be a specific shape. 
+    private static readonly PointF PallConfluence = new(FlagHeight * 0.7f, FlagHeight * 0.5f);
     
     public static SvgDocument CreateSvg(Flag flag, string? className = null)
     {
