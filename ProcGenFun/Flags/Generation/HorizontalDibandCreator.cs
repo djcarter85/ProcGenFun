@@ -22,7 +22,7 @@ public static class HorizontalDibandCreator
             HorizontalDibandDecoration.None => FlagChargeSize.Large,
             HorizontalDibandDecoration.Fimbriation => FlagChargeSize.Large,
             HorizontalDibandDecoration.Pile => FlagChargeSize.Small,
-            HorizontalDibandDecoration.VerticalBand => FlagChargeSize.Medium
+            HorizontalDibandDecoration.VerticalBand => FlagChargeSize.Small
         };
 
     private static FlagChargeLocation GetChargeLocation(HorizontalDibandDecoration decoration) =>
