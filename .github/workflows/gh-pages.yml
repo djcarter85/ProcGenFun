@@ -29,6 +29,11 @@ jobs:
       - name: Compile Tailwind CSS
         working-directory: ./ProcGenFun.Blazor
         run: npx tailwindcss -i ./Styles/tailwind.css -o ./wwwroot/css/tailwind.css
+        
+      # Set version for cache-busting
+      - name: Set version
+        working-directory: ./ProcGenFun.Blazor
+        run: VERSION=$(git rev-parse --short HEAD) && sed -i "s/__VERSION__/$VERSION/g" wwwroot/index.html
 
       # Publish the site
       - name: Publish
