@@ -17,7 +17,6 @@ public partial record FlagPattern
     public partial record Quartered(FlagColour TopLeft, FlagColour TopRight, FlagColour BottomRight, FlagColour BottomLeft);
     public partial record HorizontalStriped(FlagColour Colour1, FlagColour Colour2, int StripeCount);
     public partial record Pall(FlagColour Field, FlagColour Foreground);
-    public partial record PartyPerPall(FlagColour Left, FlagColour Top, FlagColour Bottom);
     public partial record Rays(FlagColour Field, FlagColour Middle, FlagColour Foreground);
 
     public enum Type
@@ -34,7 +33,6 @@ public partial record FlagPattern
         Quartered,
         HorizontalStriped,
         Pall,
-        PartyPerPall,
         Rays
     }
 }

@@ -50,7 +50,6 @@ public static class FlagImage
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
             Pall(var field, var foreground) => GetPallFlagElements(field, foreground),
-            PartyPerPall(var left, var top, var bottom) => GetPartyPerPallFlagElements(left, top, bottom),
             Rays(var field, var middle, var foreground) => GetRaysFlagElements(field, middle, foreground),
         };
 
@@ -148,6 +147,20 @@ public static class FlagImage
                     StartY = FlagHeight / 2,
                     EndX = FlagWidth,
                     EndY = FlagHeight / 2,
+                }
+            ],
+            Pile(var colour) =>
+            [
+                new SvgPath
+                {
+                    Fill = new SvgColourServer(FlagImageColours.GetColor(colour)),
+                    PathData =
+                    [
+                        new SvgMoveToSegment(false, new PointF(0, 0)),
+                        new SvgLineSegment(false, PallConfluence),
+                        new SvgLineSegment(false, new PointF(0, FlagHeight)),
+                        new SvgClosePathSegment(false)
+                    ]
                 }
             ]
         };
@@ -428,38 +441,6 @@ public static class FlagImage
                 new SvgLineSegment(false, new PointF(FlagWidth, FlagHeight / 2)),
                 new SvgMoveToSegment(false, new PointF(0, FlagHeight)),
                 new SvgLineSegment(false, PallConfluence),
-            ]
-        };
-    }
-
-    private static IEnumerable<SvgElement> GetPartyPerPallFlagElements(
-        FlagColour left, FlagColour top, FlagColour bottom)
-    {
-        yield return new SvgRectangle
-        {
-            Fill = new SvgColourServer(FlagImageColours.GetColor(top)),
-            X = 0,
-            Y = 0,
-            Width = FlagWidth,
-            Height = FlagHeight
-        };
-        yield return new SvgRectangle
-        {
-            Fill = new SvgColourServer(FlagImageColours.GetColor(bottom)),
-            X = 0,
-            Y = FlagHeight / 2,
-            Width = FlagWidth,
-            Height = FlagHeight
-        };
-        yield return new SvgPath
-        {
-            Fill = new SvgColourServer(FlagImageColours.GetColor(left)),
-            PathData =
-            [
-                new SvgMoveToSegment(false, new PointF(0, 0)),
-                new SvgLineSegment(false, PallConfluence),
-                new SvgLineSegment(false, new PointF(0, FlagHeight)),
-                new SvgClosePathSegment(false)
             ]
         };
     }

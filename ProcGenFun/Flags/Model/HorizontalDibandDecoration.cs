@@ -7,10 +7,12 @@ public partial record HorizontalDibandDecoration
 {
     public partial record None;
     public partial record Fimbriation(FlagColour Colour);
+    public partial record Pile(FlagColour Colour);
     
     public enum Type
     {
         None,
-        Fimbriation
+        Fimbriation,
+        Pile
     }
 }
