@@ -13,7 +13,7 @@ public static class HorizontalDibandCreator
         from bottom in FlagColours.AllowedAdjacentToDist(top)
         from decoration in DecorationDist([top, bottom])
         from chargeType in ChargeTypeDist()
-        from charges in ChargesDist(chargeType, GetChargeAdjacentColours(top, bottom, decoration), GetChargeLocation(decoration), GetChargeSize(decoration))
+        from charges in FlagChargeCreator.ChargesDist(chargeType, GetChargeAdjacentColours(top, bottom, decoration), GetChargeSize(decoration), GetChargeLocation(decoration))
         select new Flag(new FlagPattern.HorizontalDiband(top, bottom, decoration), charges);
 
     private static FlagChargeSize GetChargeSize(HorizontalDibandDecoration decoration) =>
@@ -73,12 +73,4 @@ public static class HorizontalDibandCreator
             .Add(FlagChargeShape.Type.Star, 3)
             .Add(FlagChargeShape.Type.Circle, 2)
             .Build();
-
-    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
-        FlagChargeShape.Type? chargeType, IEnumerable<FlagColour> adjacentColours, FlagChargeLocation location, FlagChargeSize size) =>
-        FlagChargeCreator.ChargesDist(
-            chargeType,
-            adjacentColours,
-            size: size,
-            location);
 }
