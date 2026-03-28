@@ -13,14 +13,15 @@ public static class HorizontalDibandCreator
         from bottom in FlagColours.AllowedAdjacentToDist(top)
         from decoration in DecorationDist([top, bottom])
         from chargeType in ChargeTypeDist()
-        from charges in ChargesDist(chargeType, [top, bottom, GetDecorationColour(decoration)])
+        from charges in ChargesDist(chargeType, GetChargeAdjacentColours(top, bottom, decoration))
         select new Flag(new FlagPattern.HorizontalDiband(top, bottom, decoration), charges);
 
-    private static FlagColour? GetDecorationColour(HorizontalDibandDecoration decoration) =>
+    private static IEnumerable<FlagColour> GetChargeAdjacentColours(FlagColour top, FlagColour bottom,
+        HorizontalDibandDecoration decoration) =>
         decoration switch
         {
-            HorizontalDibandDecoration.None => null,
-            HorizontalDibandDecoration.Fimbriation fimbriation => fimbriation.Colour,
+            HorizontalDibandDecoration.None => [top, bottom],
+            HorizontalDibandDecoration.Fimbriation fimbriation => [top, bottom, fimbriation.Colour],
         };
 
     private static IDistribution<HorizontalDibandDecoration> DecorationDist(IEnumerable<FlagColour> adjacentColours) =>
@@ -52,10 +53,10 @@ public static class HorizontalDibandCreator
             .Add(FlagChargeShape.Type.Circle, 2)
             .Build();
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type? chargeType, IEnumerable<FlagColour?> adjacentColours) =>
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagChargeShape.Type? chargeType, IEnumerable<FlagColour> adjacentColours) =>
         FlagChargeCreator.ChargesDist(
             chargeType,
-            adjacentColours.ExcludingNull(),
+            adjacentColours,
             size: FlagChargeSize.Large,
             FlagChargeLocation.Centre);
 }
