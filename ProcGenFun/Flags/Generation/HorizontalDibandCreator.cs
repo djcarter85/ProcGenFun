@@ -21,7 +21,8 @@ public static class HorizontalDibandCreator
         {
             HorizontalDibandDecoration.None => FlagChargeSize.Large,
             HorizontalDibandDecoration.Fimbriation => FlagChargeSize.Large,
-            HorizontalDibandDecoration.Pile => FlagChargeSize.Small
+            HorizontalDibandDecoration.Pile => FlagChargeSize.Small,
+            HorizontalDibandDecoration.VerticalBand => FlagChargeSize.Medium
         };
 
     private static FlagChargeLocation GetChargeLocation(HorizontalDibandDecoration decoration) =>
@@ -29,7 +30,8 @@ public static class HorizontalDibandCreator
         {
             HorizontalDibandDecoration.None => FlagChargeLocation.Centre,
             HorizontalDibandDecoration.Fimbriation => FlagChargeLocation.Centre,
-            HorizontalDibandDecoration.Pile => FlagChargeLocation.CentreFarLeft
+            HorizontalDibandDecoration.Pile => FlagChargeLocation.CentreFarLeft,
+            HorizontalDibandDecoration.VerticalBand => FlagChargeLocation.CentreFarLeft
         };
 
     private static IEnumerable<FlagColour> GetChargeAdjacentColours(FlagColour top, FlagColour bottom,
@@ -38,7 +40,8 @@ public static class HorizontalDibandCreator
         {
             HorizontalDibandDecoration.None => [top, bottom],
             HorizontalDibandDecoration.Fimbriation fimbriation => [top, bottom, fimbriation.Colour],
-            HorizontalDibandDecoration.Pile pile => [pile.Colour]
+            HorizontalDibandDecoration.Pile pile => [pile.Colour],
+            HorizontalDibandDecoration.VerticalBand verticalBand => [verticalBand.Colour]
         };
 
     private static IDistribution<HorizontalDibandDecoration> DecorationDist(IEnumerable<FlagColour> adjacentColours) =>
@@ -51,6 +54,7 @@ public static class HorizontalDibandCreator
             .Add(HorizontalDibandDecoration.Type.None, 6)
             .Add(HorizontalDibandDecoration.Type.Fimbriation, 1)
             .Add(HorizontalDibandDecoration.Type.Pile, 2)
+            .Add(HorizontalDibandDecoration.Type.VerticalBand, 2)
             .Build();
 
     private static IDistribution<HorizontalDibandDecoration> DecorationDist(
@@ -64,6 +68,9 @@ public static class HorizontalDibandCreator
             HorizontalDibandDecoration.Type.Pile => 
                 from colour in FlagColours.AllowedAdjacentToDist(adjacentColours)
                 select (HorizontalDibandDecoration)new HorizontalDibandDecoration.Pile(colour),
+            HorizontalDibandDecoration.Type.VerticalBand => 
+                from colour in FlagColours.AllowedAdjacentToDist(adjacentColours)
+                select (HorizontalDibandDecoration)new HorizontalDibandDecoration.VerticalBand(colour),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 

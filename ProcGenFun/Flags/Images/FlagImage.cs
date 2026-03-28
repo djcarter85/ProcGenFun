@@ -162,6 +162,17 @@ public static class FlagImage
                         new SvgClosePathSegment(false)
                     ]
                 }
+            ],
+            VerticalBand(var colour) =>
+            [
+                new SvgRectangle
+                {
+                    Fill = new SvgColourServer(FlagImageColours.GetColor(colour)),
+                    X = 0,
+                    Y = 0,
+                    Width = 6 * U,
+                    Height = FlagHeight
+                }
             ]
         };
 
