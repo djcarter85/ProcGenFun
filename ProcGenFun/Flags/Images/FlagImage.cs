@@ -6,6 +6,7 @@ using Svg;
 using Svg.Pathing;
 using static FlagImageSizing;
 using static ProcGenFun.Flags.Model.FlagPattern;
+using static ProcGenFun.Flags.Model.HorizontalDibandDecoration;
 
 public static class FlagImage
 {
@@ -40,7 +41,7 @@ public static class FlagImage
             Solid(var field) => GetSolidFlagElements(field),
             Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
             VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
-            HorizontalDiband(var top, var bottom, var fimbriation) => GetHorizontalDibandFlagElements(top, bottom, fimbriation),
+            HorizontalDiband(var top, var bottom, var decoration) => GetHorizontalDibandFlagElements(top, bottom, decoration),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
             HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
             DiagonalBicolour(var left, var right, var diagonal) => GetDiagonalBicolourFlagElements(left, right, diagonal),
@@ -107,7 +108,7 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetHorizontalDibandFlagElements(
-        FlagColour top, FlagColour bottom, FlagColour? fimbriation)
+        FlagColour top, FlagColour bottom, HorizontalDibandDecoration decoration)
     {
         yield return new SvgRectangle
         {
@@ -126,19 +127,30 @@ public static class FlagImage
             Height = FlagHeight / 2
         };
 
-        if (fimbriation != null)
+        foreach (var decorationElement in GetHorizontalDibandDecorationElements(decoration))
         {
-            yield return new SvgLine
-            {
-                Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
-                StrokeWidth = 0.75f * U,
-                StartX = 0,
-                StartY = FlagHeight / 2,
-                EndX = FlagWidth,
-                EndY = FlagHeight / 2,
-            };
+            yield return decorationElement;
         }
     }
+
+    private static IEnumerable<SvgElement>
+        GetHorizontalDibandDecorationElements(HorizontalDibandDecoration decoration) =>
+        decoration switch
+        {
+            None => [],
+            Fimbriation(var colour) =>
+            [
+                new SvgLine
+                {
+                    Stroke = new SvgColourServer(FlagImageColours.GetColor(colour)),
+                    StrokeWidth = 0.75f * U,
+                    StartX = 0,
+                    StartY = FlagHeight / 2,
+                    EndX = FlagWidth,
+                    EndY = FlagHeight / 2,
+                }
+            ]
+        };
 
     private static IEnumerable<SvgElement> GetVerticalTribandFlagElements(FlagColour left, FlagColour middle, FlagColour right)
     {

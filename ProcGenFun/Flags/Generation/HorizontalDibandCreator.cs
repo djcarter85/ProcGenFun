@@ -11,21 +11,39 @@ public static class HorizontalDibandCreator
     public static IDistribution<Flag> Dist() =>
         from top in FlagColours.AllDist()
         from bottom in FlagColours.AllowedAdjacentToDist(top)
-        from fimbriation in FimbriationDist([top, bottom])
+        from decoration in DecorationDist([top, bottom])
         from chargeType in ChargeTypeDist()
-        from charges in ChargesDist(chargeType, [top, bottom, fimbriation])
-        select new Flag(new FlagPattern.HorizontalDiband(top, bottom, fimbriation), charges);
+        from charges in ChargesDist(chargeType, [top, bottom, GetDecorationColour(decoration)])
+        select new Flag(new FlagPattern.HorizontalDiband(top, bottom, decoration), charges);
 
-    private static IDistribution<FlagColour?> FimbriationDist(IEnumerable<FlagColour> adjacentColours) =>
-        from shouldFimbriate in Bernoulli.FromRatio(1, 5)
-        from fimbriation in FimbriationDist(shouldFimbriate, adjacentColours)
+    private static FlagColour? GetDecorationColour(HorizontalDibandDecoration decoration) =>
+        decoration switch
+        {
+            HorizontalDibandDecoration.None => null,
+            HorizontalDibandDecoration.Fimbriation fimbriation => fimbriation.Colour,
+        };
+
+    private static IDistribution<HorizontalDibandDecoration> DecorationDist(IEnumerable<FlagColour> adjacentColours) =>
+        from type in DecorationTypeDist()
+        from fimbriation in DecorationDist(type, adjacentColours)
         select fimbriation;
 
-    private static IDistribution<FlagColour?> FimbriationDist(
-        bool shouldFimbriate, IEnumerable<FlagColour> adjacentColours) =>
-        shouldFimbriate
-            ? FlagColours.AllowedAdjacentToDist(adjacentColours).Nullable()
-            : Singleton.New<FlagColour?>(null);
+    private static IDistribution<HorizontalDibandDecoration.Type> DecorationTypeDist() =>
+        WeightedDiscreteDistributionBuilder<HorizontalDibandDecoration.Type>.Empty()
+            .Add(HorizontalDibandDecoration.Type.None, 4)
+            .Add(HorizontalDibandDecoration.Type.Fimbriation, 1)
+            .Build();
+
+    private static IDistribution<HorizontalDibandDecoration> DecorationDist(
+        HorizontalDibandDecoration.Type type, IEnumerable<FlagColour> adjacentColours) =>
+        type switch
+        {
+            HorizontalDibandDecoration.Type.None => Singleton.New<HorizontalDibandDecoration>(new HorizontalDibandDecoration.None()),
+            HorizontalDibandDecoration.Type.Fimbriation => 
+                from colour in FlagColours.AllowedAdjacentToDist(adjacentColours)
+                select (HorizontalDibandDecoration)new HorizontalDibandDecoration.Fimbriation(colour),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
 
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
         WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()

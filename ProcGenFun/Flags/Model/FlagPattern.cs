@@ -8,7 +8,7 @@ public partial record FlagPattern
     public partial record Solid(FlagColour Field);
     public partial record Canton(FlagColour Field, FlagColour CantonColour);
     public partial record VerticalDiband(FlagColour Left, FlagColour Right);
-    public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom, FlagColour? Fimbriation);
+    public partial record HorizontalDiband(FlagColour Top, FlagColour Bottom, HorizontalDibandDecoration Decoration);
     public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right);
     public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, FlagColour? Fimbriation);
     public partial record DiagonalBicolour(FlagColour Left, FlagColour Right, Diagonal Diagonal);
