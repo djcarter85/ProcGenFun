@@ -65,6 +65,11 @@
     this.flagImages = flagImagesDist.Sample(this.rng);
   }
 
+  protected override void OnInitialized()
+  {
+    this.GenerateFlags();
+  }
+
   private async Task ShareFlag(SvgDocument flagImage)
   {
     try
