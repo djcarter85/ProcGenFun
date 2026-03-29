@@ -328,6 +328,29 @@ public static class FlagImage
                     Fill = new SvgColourServer(FlagImageColours.GetColor(leftRay.Colour)),
                 }
             ],
+            DiagonalBicolourDecoration.RightRay rightRay =>
+            [
+                new SvgPath
+                {
+                    PathData =
+                    [
+                        new SvgMoveToSegment(false, new PointF(FlagWidth, 0)),
+                        new SvgLineSegment(false, new PointF(FlagWidth, FlagHeight)),
+                        new SvgLineSegment(
+                            false,
+                            new PointF(
+                                FlagWidth / 2,
+                                diagonal switch
+                                {
+                                    Diagonal.Down => 0,
+                                    Diagonal.Up => FlagHeight,
+                                    _ => throw new ArgumentOutOfRangeException(nameof(diagonal), diagonal, null)
+                                })),
+                        new SvgClosePathSegment(false)
+                    ],
+                    Fill = new SvgColourServer(FlagImageColours.GetColor(rightRay.Colour)),
+                }
+            ],
         };
 
     private static IEnumerable<SvgElement> GetCrossFlagElements(
