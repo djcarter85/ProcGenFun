@@ -18,21 +18,21 @@ public static class VerticalDibandCreator
     private static IDistribution<FlagChargeLocation?> ChargeLocationDist() =>
         WeightedDiscreteDistributionBuilder<FlagChargeLocation?>.Empty()
             .Add(null, 4)
-            .Add(FlagChargeLocation.CentreLeft, 1)
-            .Add(FlagChargeLocation.CentreRight, 1)
+            .Add(FlagChargeLocation.CentreLeftHalf, 1)
+            .Add(FlagChargeLocation.CentreRightHalf, 1)
             .Build();
 
     private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
         FlagChargeLocation? chargeLocation, FlagColour left, FlagColour right) =>
         chargeLocation switch
         {
-            FlagChargeLocation.CentreLeft =>
+            FlagChargeLocation.CentreLeftHalf =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Medium, FlagChargeLocation.CentreLeft)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Medium, FlagChargeLocation.CentreLeftHalf)
                 select charges,
-            FlagChargeLocation.CentreRight =>
+            FlagChargeLocation.CentreRightHalf =>
                 from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Medium, FlagChargeLocation.CentreRight)
+                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Medium, FlagChargeLocation.CentreRightHalf)
                 select charges,
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)

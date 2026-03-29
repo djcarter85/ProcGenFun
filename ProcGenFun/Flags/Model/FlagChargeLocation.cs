@@ -2,9 +2,9 @@ namespace ProcGenFun.Flags.Model;
 
 public enum FlagChargeLocation
 {
-    TopLeft,
-    CentreFarLeft,
-    CentreLeft,
+    TopHalfLeftHalf,
+    CentreLeftThird,
+    CentreLeftHalf,
     Centre,
-    CentreRight
+    CentreRightHalf
 }

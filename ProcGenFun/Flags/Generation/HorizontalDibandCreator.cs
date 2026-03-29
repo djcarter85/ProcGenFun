@@ -30,8 +30,8 @@ public static class HorizontalDibandCreator
         {
             HorizontalDibandDecoration.None => FlagChargeLocation.Centre,
             HorizontalDibandDecoration.Fimbriation => FlagChargeLocation.Centre,
-            HorizontalDibandDecoration.Pile => FlagChargeLocation.CentreFarLeft,
-            HorizontalDibandDecoration.VerticalBand => FlagChargeLocation.CentreFarLeft
+            HorizontalDibandDecoration.Pile => FlagChargeLocation.CentreLeftThird,
+            HorizontalDibandDecoration.VerticalBand => FlagChargeLocation.CentreLeftThird
         };
 
     private static IEnumerable<FlagColour> GetChargeAdjacentColours(FlagColour top, FlagColour bottom,

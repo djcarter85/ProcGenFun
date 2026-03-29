@@ -11,7 +11,7 @@ public static class CantonFlagCreator
         from field in FlagColours.AllDist()
         from cantonColour in FlagColours.AllowedAdjacentToDist(field)
         from chargeType in ChargeTypeDist()
-        from charges in FlagChargeCreator.ChargesDist(chargeType, [cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopLeft)
+        from charges in FlagChargeCreator.ChargesDist(chargeType, [cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopHalfLeftHalf)
         select new Flag(new FlagPattern.Canton(field, cantonColour), charges);
 
     private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
