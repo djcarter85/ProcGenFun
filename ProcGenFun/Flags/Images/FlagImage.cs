@@ -49,7 +49,7 @@ public static class FlagImage
             Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
-            Pall(var field, var foreground) => GetPallFlagElements(field, foreground),
+            Pall(var field, var foreground, var fimbriation) => GetPallFlagElements(field, foreground, fimbriation),
             Rays(var field, var middle, var foreground) => GetRaysFlagElements(field, middle, foreground),
         };
 
@@ -429,7 +429,8 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgElement> GetPallFlagElements(FlagColour field, FlagColour foreground)
+    private static IEnumerable<SvgElement> GetPallFlagElements(
+        FlagColour field, FlagColour foreground, FlagColour? fimbriation)
     {
         yield return new SvgRectangle
         {
@@ -439,6 +440,11 @@ public static class FlagImage
             Width = FlagWidth,
             Height = FlagHeight
         };
+
+        if (fimbriation.HasValue)
+        {
+            yield return GetPallElement(fimbriation.Value, strokeWidth: 3 * U);
+        }
         
         yield return GetPallElement(foreground, strokeWidth: 2 * U);
     }
