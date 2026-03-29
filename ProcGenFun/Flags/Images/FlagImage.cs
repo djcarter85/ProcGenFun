@@ -415,7 +415,12 @@ public static class FlagImage
             Fill = new SvgColourServer(FlagImageColours.GetColor(eastWestField)),
         };
         
-        yield return new SvgPath
+        yield return GetSaltireCrossElement(foreground, strokeWidth: 2.5f * U);
+    }
+
+    private static SvgPath GetSaltireCrossElement(FlagColour stroke, SvgUnit strokeWidth)
+    {
+        return new SvgPath
         {
             PathData = new SvgPathSegment[]
             {
@@ -424,8 +429,8 @@ public static class FlagImage
                 new SvgMoveToSegment(false, new PointF(0, FlagHeight)),
                 new SvgLineSegment(false, new PointF(FlagWidth, 0)),
             }.ToPathData(),
-            Stroke = new SvgColourServer(FlagImageColours.GetColor(foreground)),
-            StrokeWidth = 2.5f * U
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(stroke)),
+            StrokeWidth = strokeWidth
         };
     }
 
