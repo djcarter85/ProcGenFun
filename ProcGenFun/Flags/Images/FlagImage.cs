@@ -440,10 +440,14 @@ public static class FlagImage
             Height = FlagHeight
         };
         
-        yield return new SvgPath
+        yield return GetPallElement(foreground, strokeWidth: 2 * U);
+    }
+
+    private static SvgPath GetPallElement(FlagColour colour, SvgUnit strokeWidth) =>
+        new()
         {
-            Stroke = new SvgColourServer(FlagImageColours.GetColor(foreground)),
-            StrokeWidth = 2 * U,
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(colour)),
+            StrokeWidth = strokeWidth,
             Fill = new  SvgColourServer(Color.Transparent),
             PathData =
             [
@@ -454,7 +458,6 @@ public static class FlagImage
                 new SvgLineSegment(false, PallConfluence),
             ]
         };
-    }
 
     private static IEnumerable<SvgElement> GetRaysFlagElements(
         FlagColour field, FlagColour middle, FlagColour foreground)
