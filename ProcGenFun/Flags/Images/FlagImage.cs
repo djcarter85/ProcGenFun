@@ -46,7 +46,7 @@ public static class FlagImage
             HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
             DiagonalBicolour(var left, var right, var diagonal, var decoration) => GetDiagonalBicolourFlagElements(left, right, diagonal, decoration),
             Cross(var field, var foreground, var crossType) => GetCrossFlagElements(field, foreground, crossType),
-            Saltire(var northSouthField, var eastWestField, var foreground) => GetSaltireFlagElements(northSouthField, eastWestField, foreground),
+            Saltire(var northSouthField, var eastWestField, var foreground, var fimbriation) => GetSaltireFlagElements(northSouthField, eastWestField, foreground, fimbriation),
             Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
             Pall(var field, var foreground, var fimbriation) => GetPallFlagElements(field, foreground, fimbriation),
@@ -387,7 +387,7 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetSaltireFlagElements(
-        FlagColour northSouthField, FlagColour eastWestField, FlagColour foreground)
+        FlagColour northSouthField, FlagColour eastWestField, FlagColour foreground, FlagColour? fimbriation)
     {
         yield return new SvgPath
         {
@@ -414,6 +414,11 @@ public static class FlagImage
             }.ToPathData(),
             Fill = new SvgColourServer(FlagImageColours.GetColor(eastWestField)),
         };
+
+        if (fimbriation.HasValue)
+        {
+            yield return GetSaltireCrossElement(fimbriation.Value, strokeWidth: 3 * U);
+        }
         
         yield return GetSaltireCrossElement(foreground, strokeWidth: 2.5f * U);
     }
