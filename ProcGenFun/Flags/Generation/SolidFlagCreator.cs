@@ -19,5 +19,6 @@ public static class SolidFlagCreator
             .Add(FlagChargeShape.Type.Star, 4)
             .Add(FlagChargeShape.Type.Circle, 4)
             .Add(FlagChargeShape.Type.Plus, 1)
+            .Add(FlagChargeShape.Type.Shield, 1)
             .Build();
 }

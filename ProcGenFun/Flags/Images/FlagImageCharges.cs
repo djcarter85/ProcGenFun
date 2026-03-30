@@ -20,6 +20,7 @@ public static class FlagImageCharges
             FlagChargeShape.StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: GetRadius(charge.Size)),
             FlagChargeShape.Circle(var colour) => GetCircleElement(colour, radius: GetRadius(charge.Size)),
             FlagChargeShape.Plus(var colour) => GetPlusElement(colour, radius: GetRadius(charge.Size)),
+            FlagChargeShape.Shield(var colour) => GetShieldElement(colour, radius: GetRadius(charge.Size)),
             _ => throw new ArgumentOutOfRangeException(),
         };
 
@@ -99,6 +100,25 @@ public static class FlagImageCharges
                 new SvgLineSegment(false, new PointF(radius, 0)),
             ]
         };
+
+    private static SvgElement GetShieldElement(FlagColour colour, float radius)
+    {
+        var xRadius = 0.6f * radius;
+        var yRadius = 0.8f * radius;
+        
+        return new SvgPath
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(colour)),
+            PathData =
+            [
+                new SvgMoveToSegment(false, new PointF(-xRadius, -yRadius)),
+                new SvgLineSegment(false, new PointF(xRadius, -yRadius)),
+                new SvgLineSegment(false, new PointF(xRadius, 0)),
+                new SvgArcSegment(xRadius, yRadius, 0, SvgArcSize.Small, SvgArcSweep.Positive, false, new PointF(-xRadius, 0)),
+                new SvgClosePathSegment(false),
+            ]
+        };
+    }
 
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
         new()
