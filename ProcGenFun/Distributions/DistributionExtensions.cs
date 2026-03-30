@@ -41,6 +41,8 @@ public static class DistributionExtensions
         where TResult : struct =>
         from value in source select (TResult?)value;
 
+    public static IDistribution<T> Flatten<T>(this IDistribution<IDistribution<T>> dist) => dist.SelectMany(x => x);
+
     private class RepeatDistribution<T>(IDistribution<T> dist, int count) : IDistribution<IEnumerable<T>>
     {
         public IEnumerable<T> Sample<TRng>(TRng rng) where TRng : notnull, IRng
