@@ -417,7 +417,7 @@ public static class FlagImage
 
         if (fimbriation.HasValue)
         {
-            yield return GetSaltireCrossElement(fimbriation.Value, strokeWidth: 3 * U);
+            yield return GetSaltireCrossElement(fimbriation.Value, strokeWidth: 3.5f * U);
         }
         
         yield return GetSaltireCrossElement(foreground, strokeWidth: 2.5f * U);
