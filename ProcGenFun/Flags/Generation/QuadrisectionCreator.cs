@@ -5,14 +5,14 @@ using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 
-public static class QuarteredCreator
+public static class QuadrisectionCreator
 {
     public static IDistribution<Flag> Dist() =>
         from topLeft in FlagColours.AllDist()
         from topRight in FlagColours.AllowedAdjacentToDist(topLeft)
         from bottomRight in BottomRightDist(topLeft, topRight)
         from bottomLeft in BottomLeftDist(topLeft, topRight, bottomRight)
-        select new Flag(new FlagPattern.Quartered(topLeft, topRight, bottomRight, bottomLeft), []);
+        select new Flag(new FlagPattern.Quadrisection(topLeft, topRight, bottomRight, bottomLeft), []);
 
     private static IDistribution<FlagColour> BottomRightDist(FlagColour topLeft, FlagColour topRight) =>
         Bernoulli.FromRatio(1, 2)

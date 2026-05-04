@@ -6,14 +6,14 @@ using RandN;
 using RandN.Distributions;
 using RandN.Extensions;
 
-public static class VerticalDibandCreator
+public static class VerticalBisectionCreator
 {
     public static IDistribution<Flag> Dist() =>
         from left in FlagColours.AllDist()
         from right in FlagColours.AllowedAdjacentToDist(left)
         from chargeLocation in ChargeLocationDist()
         from charges in ChargesDist(chargeLocation, left, right)
-        select new Flag(new FlagPattern.VerticalDiband(left, right), charges);
+        select new Flag(new FlagPattern.VerticalBisection(left, right), charges);
 
     private static IDistribution<FlagChargeLocation?> ChargeLocationDist() =>
         WeightedDiscreteDistributionBuilder<FlagChargeLocation?>.Empty()

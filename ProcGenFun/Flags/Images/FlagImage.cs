@@ -6,7 +6,7 @@ using Svg;
 using Svg.Pathing;
 using static FlagImageSizing;
 using static ProcGenFun.Flags.Model.FlagPattern;
-using static ProcGenFun.Flags.Model.HorizontalDibandDecoration;
+using static ProcGenFun.Flags.Model.HorizontalBisectionDecoration;
 
 public static class FlagImage
 {
@@ -40,14 +40,14 @@ public static class FlagImage
         {
             Solid(var field) => GetSolidFlagElements(field),
             Canton(var field, var cantonColour) => GetCantonFlagElements(field, cantonColour),
-            VerticalDiband(var left, var right) => GetVerticalDibandFlagElements(left, right),
-            HorizontalDiband(var top, var bottom, var decoration) => GetHorizontalDibandFlagElements(top, bottom, decoration),
+            VerticalBisection(var left, var right) => GetVerticalBisectionFlagElements(left, right),
+            HorizontalBisection(var top, var bottom, var decoration) => GetHorizontalBisectionFlagElements(top, bottom, decoration),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
             HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
-            DiagonalBicolour(var left, var right, var diagonal, var decoration) => GetDiagonalBicolourFlagElements(left, right, diagonal, decoration),
+            DiagonalBisection(var left, var right, var diagonal, var decoration) => GetDiagonalBisectionFlagElements(left, right, diagonal, decoration),
             Cross(var field, var foreground, var crossType) => GetCrossFlagElements(field, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground, var fimbriation) => GetSaltireFlagElements(northSouthField, eastWestField, foreground, fimbriation),
-            Quartered(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuarteredFlagElements(topLeft, topRight, bottomRight, bottomLeft),
+            Quadrisection(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuadrisectionFlagElements(topLeft, topRight, bottomRight, bottomLeft),
             HorizontalStriped(var colour1, var colour2, var stripeCount) => GetHorizontalStripedFlagElements(colour1, colour2, stripeCount),
             Pall(var field, var foreground, var fimbriation) => GetPallFlagElements(field, foreground, fimbriation),
         };
@@ -85,7 +85,7 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgRectangle> GetVerticalDibandFlagElements(FlagColour left, FlagColour right)
+    private static IEnumerable<SvgRectangle> GetVerticalBisectionFlagElements(FlagColour left, FlagColour right)
     {
         yield return new SvgRectangle
         {
@@ -105,8 +105,8 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetHorizontalDibandFlagElements(
-        FlagColour top, FlagColour bottom, HorizontalDibandDecoration decoration)
+    private static IEnumerable<SvgElement> GetHorizontalBisectionFlagElements(
+        FlagColour top, FlagColour bottom, HorizontalBisectionDecoration decoration)
     {
         yield return new SvgRectangle
         {
@@ -132,7 +132,7 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement>
-        GetHorizontalDibandDecorationElements(HorizontalDibandDecoration decoration) =>
+        GetHorizontalDibandDecorationElements(HorizontalBisectionDecoration decoration) =>
         decoration switch
         {
             None => [],
@@ -254,8 +254,8 @@ public static class FlagImage
         }
     }
 
-    private static IEnumerable<SvgElement> GetDiagonalBicolourFlagElements(
-        FlagColour left, FlagColour right, Diagonal diagonal, DiagonalBicolourDecoration decoration)
+    private static IEnumerable<SvgElement> GetDiagonalBisectionFlagElements(
+        FlagColour left, FlagColour right, Diagonal diagonal, DiagonalBisectionDecoration decoration)
     {
         yield return new SvgPath
         {
@@ -301,11 +301,11 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetDiagonalBicolourDecorationElements(
-        DiagonalBicolourDecoration decoration, Diagonal diagonal) =>
+        DiagonalBisectionDecoration decoration, Diagonal diagonal) =>
         decoration switch
         {
-            DiagonalBicolourDecoration.None => [],
-            DiagonalBicolourDecoration.LeftRay leftRay =>
+            DiagonalBisectionDecoration.None => [],
+            DiagonalBisectionDecoration.LeftRay leftRay =>
             [
                 new SvgPath
                 {
@@ -328,7 +328,7 @@ public static class FlagImage
                     Fill = new SvgColourServer(FlagImageColours.GetColor(leftRay.Colour)),
                 }
             ],
-            DiagonalBicolourDecoration.RightRay rightRay =>
+            DiagonalBisectionDecoration.RightRay rightRay =>
             [
                 new SvgPath
                 {
@@ -439,7 +439,7 @@ public static class FlagImage
         };
     }
 
-    private static IEnumerable<SvgElement> GetQuarteredFlagElements(
+    private static IEnumerable<SvgElement> GetQuadrisectionFlagElements(
         FlagColour topLeft, FlagColour topRight, FlagColour bottomRight, FlagColour bottomLeft)
     {
         yield return new SvgRectangle
