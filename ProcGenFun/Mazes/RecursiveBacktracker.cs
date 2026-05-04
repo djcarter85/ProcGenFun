@@ -1,6 +1,5 @@
 ﻿namespace ProcGenFun.Mazes;
 
-using System.Collections.Immutable;
 using ProcGenFun.Distributions;
 using RandN;
 using RandN.Distributions;

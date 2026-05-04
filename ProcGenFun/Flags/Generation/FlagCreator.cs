@@ -3,7 +3,6 @@ namespace ProcGenFun.Flags.Generation;
 using ProcGenFun.Distributions;
 using ProcGenFun.Flags.Model;
 using RandN;
-using RandN.Extensions;
 
 public static class FlagCreator
 {
