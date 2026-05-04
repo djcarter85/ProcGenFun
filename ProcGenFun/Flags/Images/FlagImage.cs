@@ -45,6 +45,7 @@ public static class FlagImage
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
             HorizontalTriband(var top, var middle, var bottom, var sizing, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, sizing, fimbriation),
             DiagonalBisection(var left, var right, var diagonal, var decoration) => GetDiagonalBisectionFlagElements(left, right, diagonal, decoration),
+            DiagonalBand diagonalBand => GetDiagonalBandFlagElements(diagonalBand),
             Cross(var field, var foreground, var crossType) => GetCrossFlagElements(field, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground, var fimbriation) => GetSaltireFlagElements(northSouthField, eastWestField, foreground, fimbriation),
             Quadrisection(var topLeft, var topRight, var bottomRight, var bottomLeft) => GetQuadrisectionFlagElements(topLeft, topRight, bottomRight, bottomLeft),
@@ -317,6 +318,40 @@ public static class FlagImage
         {
             yield return element;
         }
+    }
+
+    private static IEnumerable<SvgElement> GetDiagonalBandFlagElements(DiagonalBand diagonalBand)
+    {
+        yield return new SvgRectangle
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(diagonalBand.Field)),
+            X = 0,
+            Y = 0,
+            Width = FlagWidth,
+            Height = FlagHeight
+        };
+        
+        var bandStart = diagonalBand.Diagonal switch {
+            Diagonal.Down => new PointF(0, 0),
+            Diagonal.Up => new PointF(0, FlagHeight),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        var bandEnd = diagonalBand.Diagonal switch {
+            Diagonal.Down => new PointF(FlagWidth, FlagHeight),
+            Diagonal.Up => new PointF(FlagWidth, 0),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        yield return new SvgPath
+        {
+            PathData = new SvgPathSegment[]
+            {
+                new SvgMoveToSegment(false,  bandStart),
+                new SvgLineSegment(false, bandEnd),
+            }.ToPathData(),
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(diagonalBand.Band)),
+            StrokeWidth = 2.5f * U
+        };
     }
 
     private static IEnumerable<SvgElement> GetDiagonalBicolourDecorationElements(

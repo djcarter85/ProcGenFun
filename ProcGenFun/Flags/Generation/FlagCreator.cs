@@ -15,6 +15,7 @@ public static class FlagCreator
             .Add(VerticalTribandCreator.Dist(), 50)
             .Add(HorizontalTribandCreator.Dist(), 45)
             .Add(DiagonalBisectionCreator.Dist(), 10)
+            .Add(DiagonalBandCreator.Dist(), 10)
             .Add(CrossCreator.Dist(), 25)
             .Add(SaltireCreator.Dist(), 15)
             .Add(QuadrisectionCreator.Dist(), 10)
