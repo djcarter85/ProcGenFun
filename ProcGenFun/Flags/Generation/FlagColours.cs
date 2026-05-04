@@ -26,6 +26,9 @@ public static class FlagColours
     public static IDistribution<FlagColour> AllowedAdjacentToDist(FlagColour adjacentColour) =>
         AllowedAdjacentToDist([adjacentColour]);
 
+    public static IDistribution<FlagColour> AllowedAdjacentToExceptingDist(FlagColour adjacentColour, FlagColour exceptColour) =>
+        ColourDist(AllowedAdjacentTo([adjacentColour]).Except([exceptColour]));
+
     public static IDistribution<FlagColour> AllowedAdjacentToDist(IEnumerable<FlagColour> adjacentColours) =>
         ColourDist(AllowedAdjacentTo(adjacentColours));
 

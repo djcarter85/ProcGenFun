@@ -11,11 +11,18 @@ public static class HorizontalTribandCreator
     public static IDistribution<Flag> Dist() =>
         from top in FlagColours.AllDist()
         from middle in FlagColours.AllowedAdjacentToDist(top)
-        from bottom in FlagColours.AllowedAdjacentToDist(middle)
+        from topAndBottomAreSame in Bernoulli.FromRatio(2, 5)
+        from bottom in BottomColourDist(topAndBottomAreSame, top, middle)
         from fimbriation in FimbriationDist([top, middle, bottom])
         from chargeType in ChargeTypeDist()
         from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: FlagChargeSize.Small, FlagChargeLocation.Centre)
         select new Flag(new FlagPattern.HorizontalTriband(top, middle, bottom, fimbriation), charge);
+
+    private static IDistribution<FlagColour> BottomColourDist(
+        bool topAndBottomAreSame, FlagColour top, FlagColour middle) =>
+        topAndBottomAreSame
+            ? Singleton.New(top)
+            : FlagColours.AllowedAdjacentToExceptingDist(adjacentColour: middle, exceptColour: top);
 
     private static IDistribution<FlagColour?> FimbriationDist(IEnumerable<FlagColour> adjacentColours) =>
         from shouldFimbriate in Bernoulli.FromRatio(1, 5)
