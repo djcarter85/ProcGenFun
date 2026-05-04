@@ -12,7 +12,7 @@ public partial record FlagPattern
     public partial record VerticalTriband(FlagColour Left, FlagColour Middle, FlagColour Right);
     public partial record HorizontalTriband(FlagColour Top, FlagColour Middle, FlagColour Bottom, HorizontalTribandSizing Sizing, FlagColour? Fimbriation);
     public partial record DiagonalBisection(FlagColour Left, FlagColour Right, Diagonal Diagonal, DiagonalBisectionDecoration Decoration);
-    public partial record DiagonalBand(FlagColour Field, FlagColour Band, Diagonal Diagonal);
+    public partial record DiagonalBand(FlagColour Field, FlagColour Band, Diagonal Diagonal, FlagColour? Fimbriation);
     public partial record Cross(FlagColour Field, FlagColour Foreground, CrossType CrossType);
     public partial record Saltire(FlagColour NorthSouthField, FlagColour EastWestField, FlagColour Foreground, FlagColour? Fimbriation);
     public partial record Quadrisection(FlagColour TopLeft, FlagColour TopRight, FlagColour BottomRight, FlagColour BottomLeft);
