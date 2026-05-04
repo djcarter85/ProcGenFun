@@ -211,6 +211,8 @@ public static class FlagImage
             HorizontalTribandSizing.Equal => FlagHeight / 3,
             HorizontalTribandSizing.LargeMiddle => 0.26f * FlagHeight,
             HorizontalTribandSizing.SmallMiddle => 0.4f * FlagHeight,
+            HorizontalTribandSizing.LargeTop => 0.5f * FlagHeight,
+            HorizontalTribandSizing.LargeBottom => 0.25f * FlagHeight,
             _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
         };
         var lowerBandDivide = sizing switch
@@ -218,6 +220,8 @@ public static class FlagImage
             HorizontalTribandSizing.Equal => FlagHeight * 2 / 3,
             HorizontalTribandSizing.LargeMiddle => 0.74f * FlagHeight,
             HorizontalTribandSizing.SmallMiddle => 0.6f * FlagHeight,
+            HorizontalTribandSizing.LargeTop => 0.75f * FlagHeight,
+            HorizontalTribandSizing.LargeBottom => 0.5f * FlagHeight,
             _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
         };
         
