@@ -206,29 +206,32 @@ public static class FlagImage
     private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(
         FlagColour top, FlagColour middle, FlagColour bottom, FlagColour? fimbriation)
     {
+        var upperBandDivide = FlagHeight / 3;
+        var lowerBandDivide = FlagHeight * 2 / 3;
+        
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(FlagImageColours.GetColor(top)),
             X = 0,
             Y = 0,
             Width = FlagWidth,
-            Height = FlagHeight / 3
+            Height = upperBandDivide
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(FlagImageColours.GetColor(middle)),
             X = 0,
-            Y = FlagHeight / 3,
+            Y = upperBandDivide,
             Width = FlagWidth,
-            Height = FlagHeight / 3
+            Height = lowerBandDivide - upperBandDivide
         };
         yield return new SvgRectangle
         {
             Fill = new SvgColourServer(FlagImageColours.GetColor(bottom)),
             X = 0,
-            Y = FlagHeight * 2 / 3,
+            Y = lowerBandDivide,
             Width = FlagWidth,
-            Height = FlagHeight / 3
+            Height = FlagHeight - lowerBandDivide
         };
 
         if (fimbriation != null)
@@ -238,18 +241,18 @@ public static class FlagImage
                 Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
                 StrokeWidth = 0.75f * U,
                 StartX = 0,
-                StartY = FlagHeight / 3,
+                StartY = upperBandDivide,
                 EndX = FlagWidth,
-                EndY = FlagHeight / 3,
+                EndY = upperBandDivide,
             };
             yield return new SvgLine
             {
                 Stroke = new SvgColourServer(FlagImageColours.GetColor(fimbriation.Value)),
                 StrokeWidth = 0.75f * U,
                 StartX = 0,
-                StartY = FlagHeight * 2 / 3,
+                StartY = lowerBandDivide,
                 EndX = FlagWidth,
-                EndY = FlagHeight * 2 / 3,
+                EndY = lowerBandDivide,
             };
         }
     }
