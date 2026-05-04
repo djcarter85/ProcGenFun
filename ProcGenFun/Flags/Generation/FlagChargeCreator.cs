@@ -36,7 +36,7 @@ public static class FlagChargeCreator
                 location)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(
+    public static IDistribution<IReadOnlyList<FlagCharge>> StarBandChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
         FlagChargeLocation location) =>

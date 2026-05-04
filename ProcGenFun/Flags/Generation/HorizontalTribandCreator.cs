@@ -15,18 +15,8 @@ public static class HorizontalTribandCreator
         from bottom in BottomColourDist(topAndBottomAreSame, top, middle)
         from sizing in SizingDist()
         from fimbriation in FimbriationDist([top, middle, bottom])
-        from chargeType in ChargeTypeDist(sizing)
-        from charge in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [middle], size: GetFlagChargeSize(sizing), FlagChargeLocation.Centre)
-        select new Flag(new FlagPattern.HorizontalTriband(top, middle, bottom, sizing, fimbriation), charge);
-
-    private static FlagChargeSize GetFlagChargeSize(HorizontalTribandSizing sizing) =>
-        sizing switch
-        {
-            HorizontalTribandSizing.Equal => FlagChargeSize.Small,
-            HorizontalTribandSizing.LargeMiddle => FlagChargeSize.Medium,
-            HorizontalTribandSizing.SmallMiddle => FlagChargeSize.Small,
-            _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
-        };
+        from charges in ChargesDist(middle, sizing)
+        select new Flag(new FlagPattern.HorizontalTriband(top, middle, bottom, sizing, fimbriation), charges);
 
     private static IDistribution<HorizontalTribandSizing> SizingDist() =>
         WeightedDiscreteDistributionBuilder<HorizontalTribandSizing>.Empty()
@@ -52,9 +42,23 @@ public static class HorizontalTribandCreator
             ? FlagColours.AllowedAdjacentToDist(adjacentColours).Nullable()
             : Singleton.New<FlagColour?>(null);
 
-    private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist(HorizontalTribandSizing sizing) =>
-        WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 3)
-            .Add(FlagChargeShape.Type.StarBand, sizing == HorizontalTribandSizing.SmallMiddle ? 0 : 1)
-            .Build();
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
+        FlagColour middle, HorizontalTribandSizing sizing) =>
+        sizing switch
+        {
+            HorizontalTribandSizing.Equal => ChargesDist(middle, FlagChargeSize.Small),
+            HorizontalTribandSizing.LargeMiddle => ChargesDist(middle, FlagChargeSize.Medium),
+            HorizontalTribandSizing.SmallMiddle => NoChargesDist(),
+            _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
+        };
+
+    private static IDistribution<IReadOnlyList<FlagCharge>> NoChargesDist() =>
+        Singleton.New<IReadOnlyList<FlagCharge>>([]);
+
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour middle, FlagChargeSize chargeSize) =>
+        WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
+            .Add(Singleton.New<IReadOnlyList<FlagCharge>>([]), 3)
+            .Add(FlagChargeCreator.StarBandChargeDist([middle], chargeSize, FlagChargeLocation.Centre), 1)
+            .Build()
+            .Flatten();
 }
