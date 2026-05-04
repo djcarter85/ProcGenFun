@@ -43,7 +43,7 @@ public static class FlagImage
             VerticalBisection(var left, var right) => GetVerticalBisectionFlagElements(left, right),
             HorizontalBisection(var top, var bottom, var decoration) => GetHorizontalBisectionFlagElements(top, bottom, decoration),
             VerticalTriband(var left, var middle, var right) => GetVerticalTribandFlagElements(left, middle, right),
-            HorizontalTriband(var top, var middle, var bottom, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, fimbriation),
+            HorizontalTriband(var top, var middle, var bottom, var sizing, var fimbriation) => GetHorizontalTribandFlagElements(top, middle, bottom, sizing, fimbriation),
             DiagonalBisection(var left, var right, var diagonal, var decoration) => GetDiagonalBisectionFlagElements(left, right, diagonal, decoration),
             Cross(var field, var foreground, var crossType) => GetCrossFlagElements(field, foreground, crossType),
             Saltire(var northSouthField, var eastWestField, var foreground, var fimbriation) => GetSaltireFlagElements(northSouthField, eastWestField, foreground, fimbriation),
@@ -204,10 +204,22 @@ public static class FlagImage
     }
 
     private static IEnumerable<SvgElement> GetHorizontalTribandFlagElements(
-        FlagColour top, FlagColour middle, FlagColour bottom, FlagColour? fimbriation)
+        FlagColour top, FlagColour middle, FlagColour bottom, HorizontalTribandSizing sizing, FlagColour? fimbriation)
     {
-        var upperBandDivide = FlagHeight / 3;
-        var lowerBandDivide = FlagHeight * 2 / 3;
+        var upperBandDivide = sizing switch
+        {
+            HorizontalTribandSizing.Equal => FlagHeight / 3,
+            HorizontalTribandSizing.LargeMiddle => 0.26f * FlagHeight,
+            HorizontalTribandSizing.SmallMiddle => 0.4f * FlagHeight,
+            _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
+        };
+        var lowerBandDivide = sizing switch
+        {
+            HorizontalTribandSizing.Equal => FlagHeight * 2 / 3,
+            HorizontalTribandSizing.LargeMiddle => 0.74f * FlagHeight,
+            HorizontalTribandSizing.SmallMiddle => 0.6f * FlagHeight,
+            _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
+        };
         
         yield return new SvgRectangle
         {
