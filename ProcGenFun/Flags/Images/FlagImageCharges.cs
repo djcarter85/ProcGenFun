@@ -40,7 +40,8 @@ public static class FlagImageCharges
         {
             FlagChargeSize.Small => 1.25f * U,
             FlagChargeSize.Medium => 2 * U,
-            FlagChargeSize.Large => 3 * U,
+            FlagChargeSize.Large => 2.5f * U,
+            FlagChargeSize.ExtraLarge => 3 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
         };
 
@@ -72,7 +73,7 @@ public static class FlagImageCharges
     {
         var groupElement = new SvgGroup();
         
-        var distanceBetweenCentres = 2.5f * radius;
+        var distanceBetweenCentres = 2.2f * radius;
         var firstCentreX = -(starBand.Count - 1) / 2f * distanceBetweenCentres;
         for (int i = 0; i < starBand.Count; i++)
         {

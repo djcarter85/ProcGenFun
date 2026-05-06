@@ -1,3 +1,3 @@
 namespace ProcGenFun.Flags.Model;
 
-public enum FlagChargeSize { Small, Medium, Large }
+public enum FlagChargeSize { Small, Medium, Large, ExtraLarge }
