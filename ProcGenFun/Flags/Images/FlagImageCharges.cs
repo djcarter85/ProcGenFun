@@ -16,11 +16,11 @@ public static class FlagImageCharges
     {
         var chargeElement = charge.Shape switch
         {
-            FlagChargeShape.Star(var colour) => GetStarElement(colour, radius: GetRadius(charge.Size)),
-            FlagChargeShape.StarBand(var colour, var count) => GetStarBandElement(colour, count, radius: GetRadius(charge.Size)),
-            FlagChargeShape.Circle(var colour) => GetCircleElement(colour, radius: GetRadius(charge.Size)),
-            FlagChargeShape.Plus(var colour) => GetPlusElement(colour, radius: GetRadius(charge.Size)),
-            FlagChargeShape.Shield(var colour) => GetShieldElement(colour, radius: GetRadius(charge.Size)),
+            FlagChargeShape.Star star => GetStarElement(star, radius: GetRadius(charge.Size)),
+            FlagChargeShape.StarBand starBand => GetStarBandElement(starBand, radius: GetRadius(charge.Size)),
+            FlagChargeShape.Circle circle => GetCircleElement(circle, radius: GetRadius(charge.Size)),
+            FlagChargeShape.Plus plus => GetPlusElement(plus, radius: GetRadius(charge.Size)),
+            FlagChargeShape.Shield shield => GetShieldElement(shield, radius: GetRadius(charge.Size)),
             _ => throw new ArgumentOutOfRangeException(),
         };
 
@@ -61,37 +61,37 @@ public static class FlagImageCharges
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
-    private static SvgElement GetStarElement(FlagColour colour, float radius) =>
+    private static SvgElement GetStarElement(FlagChargeShape.Star star, float radius) =>
         CreateSvgStar(
             centre: PointF.Empty,
             radius: radius,
-            fillColour: FlagImageColours.GetColor(colour));
+            fillColour: FlagImageColours.GetColor(star.Colour));
 
-    private static SvgElement GetStarBandElement(FlagColour colour, int count, float radius)
+    private static SvgElement GetStarBandElement(FlagChargeShape.StarBand starBand, float radius)
     {
         var groupElement = new SvgGroup();
         
         var distanceBetweenCentres = 2.5f * radius;
-        var firstCentreX = -(count - 1) / 2f * distanceBetweenCentres;
-        for (int i = 0; i < count; i++)
+        var firstCentreX = -(starBand.Count - 1) / 2f * distanceBetweenCentres;
+        for (int i = 0; i < starBand.Count; i++)
         {
             groupElement.Children.Add(CreateSvgStar(
                     centre: new PointF(firstCentreX + i * distanceBetweenCentres, 0),
                     radius: radius,
-                    fillColour: FlagImageColours.GetColor(colour)));
+                    fillColour: FlagImageColours.GetColor(starBand.Colour)));
         }
 
         return groupElement;
     }
 
-    private static SvgElement GetCircleElement(FlagColour colour, float radius) =>
+    private static SvgElement GetCircleElement(FlagChargeShape.Circle circle, float radius) =>
         new SvgCircle
-            { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(FlagImageColours.GetColor(colour)) };
+            { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(FlagImageColours.GetColor(circle.Colour)) };
 
-    private static SvgElement GetPlusElement(FlagColour colour, float radius) =>
+    private static SvgElement GetPlusElement(FlagChargeShape.Plus plus, float radius) =>
         new SvgPath
         {
-            Stroke = new SvgColourServer(FlagImageColours.GetColor(colour)),
+            Stroke = new SvgColourServer(FlagImageColours.GetColor(plus.Colour)),
             StrokeWidth = 0.5f * radius,
             PathData = [
                 new SvgMoveToSegment(false, new PointF(0, -radius)),
@@ -101,14 +101,14 @@ public static class FlagImageCharges
             ]
         };
 
-    private static SvgElement GetShieldElement(FlagColour colour, float radius)
+    private static SvgElement GetShieldElement(FlagChargeShape.Shield shield, float radius)
     {
         var xRadius = 0.6f * radius;
         var yRadius = 0.8f * radius;
         
         return new SvgPath
         {
-            Fill = new SvgColourServer(FlagImageColours.GetColor(colour)),
+            Fill = new SvgColourServer(FlagImageColours.GetColor(shield.Colour)),
             PathData =
             [
                 new SvgMoveToSegment(false, new PointF(-xRadius, -yRadius)),
