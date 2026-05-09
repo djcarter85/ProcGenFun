@@ -7,22 +7,6 @@ using RandN.Extensions;
 
 public static class FlagChargeCreator
 {
-    public static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
-        FlagChargeShape.Type? chargeType,
-        IEnumerable<FlagColour> backgroundColours,
-        FlagChargeSize size,
-        FlagChargeLocation location) =>
-        chargeType switch
-        {
-            null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
-            FlagChargeShape.Type.Star => StarChargeDist(backgroundColours, size, location),
-            FlagChargeShape.Type.StarBand => StarBandChargeDist(backgroundColours, size, location),
-            FlagChargeShape.Type.Circle => CircleChargeDist(backgroundColours, size, location),
-            FlagChargeShape.Type.Plus => PlusChargeDist(backgroundColours, size, location),
-            FlagChargeShape.Type.Shield => ShieldChargeDist(backgroundColours, size, location),
-            _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
-        };
-
     public static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
