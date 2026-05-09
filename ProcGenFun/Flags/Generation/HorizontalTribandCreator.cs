@@ -61,7 +61,7 @@ public static class HorizontalTribandCreator
 
     private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour middle, FlagChargeSize chargeSize) =>
         WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
-            .Add(Singleton.New<IReadOnlyList<FlagCharge>>([]), 3)
+            .Add(NoChargesDist(), 3)
             .Add(FlagChargeCreator.StarBandChargeDist([middle], chargeSize, FlagChargeLocation.Centre), 1)
             .Build()
             .Flatten();
