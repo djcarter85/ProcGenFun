@@ -19,7 +19,7 @@ public static class DiagonalBisectionCreator
     private static IDistribution<DiagonalBisectionDecoration> DecorationDist(
         FlagColour left, FlagColour right) =>
         WeightedDiscreteDistributionBuilder<IDistribution<DiagonalBisectionDecoration>>.Empty()
-            .Add(NoDecorationDist(), 3)
+            .Add(NoDecorationDist(), 4)
             .Add(LeftRayDist(left), 1)
             .Add(RightRayDist(right), 1)
             .Build()
