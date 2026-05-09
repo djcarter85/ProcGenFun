@@ -144,9 +144,13 @@ public static class FlagImageCharges
     private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
         new()
         {
-            PathData = SvgExtensions.ToPathData(ClosedPath([
-                RadialPoint(radius, -0.5f * MathF.PI), RadialPoint(radius, 0.3f * MathF.PI), RadialPoint(radius, -0.9f * MathF.PI), RadialPoint(radius, -0.1f * MathF.PI), RadialPoint(radius, 0.7f * MathF.PI),
-            ])),
+            PathData = ClosedPath([
+                RadialPoint(radius, -0.5f * MathF.PI),
+                RadialPoint(radius, 0.3f * MathF.PI),
+                RadialPoint(radius, -0.9f * MathF.PI), 
+                RadialPoint(radius, -0.1f * MathF.PI),
+                RadialPoint(radius, 0.7f * MathF.PI),
+            ]).ToPathData(),
             Fill = new SvgColourServer(fillColour),
             Transforms =
             [
