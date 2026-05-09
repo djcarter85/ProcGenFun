@@ -9,16 +9,16 @@ public static class SolidFlagCreator
 {
     public static IDistribution<Flag> Dist() =>
         from colour in FlagColours.AllDist()
-        from chargeType in ChargeTypeDist()
-        from charges in FlagChargeCreator.ChargesDist(chargeType, backgroundColours: [colour], size: FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre)
+        from charges in ChargesDist(colour)
         select new Flag(new FlagPattern.Solid(colour), charges);
 
-    private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
-        WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 2)
-            .Add(FlagChargeShape.Type.Star, 4)
-            .Add(FlagChargeShape.Type.Circle, 4)
-            .Add(FlagChargeShape.Type.Plus, 1)
-            .Add(FlagChargeShape.Type.Shield, 1)
-            .Build();
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour colour) =>
+        WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
+            .Add(FlagChargeCreator.NoChargesDist(), 2)
+            .Add(FlagChargeCreator.StarChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 4)
+            .Add(FlagChargeCreator.CircleChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 4)
+            .Add(FlagChargeCreator.PlusChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 1)
+            .Add(FlagChargeCreator.ShieldChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 1)
+            .Build()
+            .Flatten();
 }

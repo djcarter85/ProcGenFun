@@ -23,7 +23,7 @@ public static class FlagChargeCreator
             _ => throw new ArgumentOutOfRangeException(nameof(chargeType), chargeType, null)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(
+    public static IDistribution<IReadOnlyList<FlagCharge>> StarChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
         FlagChargeLocation location) =>
@@ -50,7 +50,7 @@ public static class FlagChargeCreator
                 location)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(
+    public static IDistribution<IReadOnlyList<FlagCharge>> CircleChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
         FlagChargeLocation location) =>
@@ -62,7 +62,7 @@ public static class FlagChargeCreator
                 location)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> PlusChargeDist(
+    public static IDistribution<IReadOnlyList<FlagCharge>> PlusChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
         FlagChargeLocation location) =>
@@ -74,7 +74,7 @@ public static class FlagChargeCreator
                 location)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> ShieldChargeDist(
+    public static IDistribution<IReadOnlyList<FlagCharge>> ShieldChargeDist(
         IEnumerable<FlagColour> backgroundColours,
         FlagChargeSize size,
         FlagChargeLocation location) =>
