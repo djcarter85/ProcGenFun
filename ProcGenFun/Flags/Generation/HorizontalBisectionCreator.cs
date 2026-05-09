@@ -12,8 +12,7 @@ public static class HorizontalBisectionCreator
         from top in FlagColours.AllDist()
         from bottom in FlagColours.AllowedAdjacentToDist(top)
         from decoration in DecorationDist([top, bottom])
-        from chargeType in ChargeTypeDist()
-        from charges in FlagChargeCreator.ChargesDist(chargeType, GetChargeAdjacentColours(top, bottom, decoration), GetChargeSize(decoration), GetChargeLocation(decoration))
+        from charges in ChargeTypeDist(GetChargeAdjacentColours(top, bottom, decoration), GetChargeSize(decoration), GetChargeLocation(decoration))
         select new Flag(new FlagPattern.HorizontalBisection(top, bottom, decoration), charges);
 
     private static FlagChargeSize GetChargeSize(HorizontalBisectionDecoration decoration) =>
@@ -34,7 +33,7 @@ public static class HorizontalBisectionCreator
             HorizontalBisectionDecoration.VerticalBand => FlagChargeLocation.CentreLeftThird
         };
 
-    private static IEnumerable<FlagColour> GetChargeAdjacentColours(FlagColour top, FlagColour bottom,
+    private static IReadOnlyList<FlagColour> GetChargeAdjacentColours(FlagColour top, FlagColour bottom,
         HorizontalBisectionDecoration decoration) =>
         decoration switch
         {
@@ -68,10 +67,14 @@ public static class HorizontalBisectionCreator
         from colour in FlagColours.AllowedAdjacentToDist(adjacentColours)
         select (HorizontalBisectionDecoration)new HorizontalBisectionDecoration.VerticalBand(colour);
 
-    private static IDistribution<FlagChargeShape.Type?> ChargeTypeDist() =>
-        WeightedDiscreteDistributionBuilder<FlagChargeShape.Type?>.Empty()
-            .Add(null, 10)
-            .Add(FlagChargeShape.Type.Star, 3)
-            .Add(FlagChargeShape.Type.Circle, 2)
-            .Build();
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargeTypeDist(
+        IReadOnlyList<FlagColour> backgroundColours,
+        FlagChargeSize size,
+        FlagChargeLocation location) =>
+        WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
+            .Add(FlagChargeCreator.NoChargesDist(), 10)
+            .Add(FlagChargeCreator.StarChargeDist(backgroundColours, size, location), 3)
+            .Add(FlagChargeCreator.CircleChargeDist(backgroundColours, size, location), 2)
+            .Build()
+            .Flatten();
 }
