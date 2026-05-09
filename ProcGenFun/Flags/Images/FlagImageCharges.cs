@@ -93,13 +93,15 @@ public static class FlagImageCharges
 
     private static SvgElement GetCrescentElement(Crescent crescent, float radius)
     {
+        var colour = FlagImageColours.GetColor(crescent.Colour);
         var startPoint = RadialPoint(radius, 0.2f * MathF.PI);
         var endPoint = RadialPoint(radius, -0.2f * MathF.PI);
         var outerRadius = radius;
         var innerRadius = 0.8f * radius;
-        return new SvgPath
+
+        var crescentElement = new SvgPath
         {
-            Fill = new SvgColourServer(FlagImageColours.GetColor(crescent.Colour)),
+            Fill = new SvgColourServer(colour),
             PathData =
             [
                 new SvgMoveToSegment(false, startPoint),
@@ -107,6 +109,10 @@ public static class FlagImageCharges
                 new SvgArcSegment(innerRadius, innerRadius, angle: 0, SvgArcSize.Large, SvgArcSweep.Negative, false, startPoint),
             ]
         };
+
+        return crescent.hasStar
+            ? new SvgGroup { Children = { crescentElement, CreateSvgStar(new PointF(0.5f * radius, 0), 0.5f * radius, colour, rotationDegrees: 18) } }
+            : new SvgGroup { Children = { crescentElement } };
     }
 
     private static SvgElement GetPlusElement(Plus plus, float radius) =>
@@ -141,7 +147,7 @@ public static class FlagImageCharges
         };
     }
 
-    private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour) =>
+    private static SvgPath CreateSvgStar(PointF centre, float radius, Color fillColour, float rotationDegrees = 0f) =>
         new()
         {
             PathData = ClosedPath([
@@ -154,7 +160,8 @@ public static class FlagImageCharges
             Fill = new SvgColourServer(fillColour),
             Transforms =
             [
-                new SvgTranslate(centre.X, centre.Y)
+                new SvgTranslate(centre.X, centre.Y),
+                new SvgRotate(rotationDegrees),
             ]
         };
 

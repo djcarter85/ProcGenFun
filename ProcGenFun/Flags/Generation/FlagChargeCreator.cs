@@ -75,9 +75,10 @@ public static class FlagChargeCreator
         FlagChargeSize size,
         FlagChargeLocation location) =>
         from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
+        from hasStar in Bernoulli.FromRatio(1, 3)
         select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
         {
-            new(new FlagChargeShape.Crescent(colour),
+            new(new FlagChargeShape.Crescent(colour, hasStar),
                 size,
                 location)
         };

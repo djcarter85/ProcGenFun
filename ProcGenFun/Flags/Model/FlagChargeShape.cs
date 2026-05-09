@@ -10,5 +10,5 @@ public partial record FlagChargeShape
     public partial record Circle(FlagColour Colour);
     public partial record Plus(FlagColour Colour);
     public partial record Shield(FlagColour Colour);
-    public partial record Crescent(FlagColour Colour);
+    public partial record Crescent(FlagColour Colour, bool hasStar);
 }
