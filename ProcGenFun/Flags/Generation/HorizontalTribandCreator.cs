@@ -50,18 +50,15 @@ public static class HorizontalTribandCreator
         {
             HorizontalTribandSizing.Equal => ChargesDist(middle, FlagChargeSize.Small),
             HorizontalTribandSizing.LargeMiddle => ChargesDist(middle, FlagChargeSize.Medium),
-            HorizontalTribandSizing.SmallMiddle => NoChargesDist(),
-            HorizontalTribandSizing.LargeTop => NoChargesDist(),
-            HorizontalTribandSizing.LargeBottom => NoChargesDist(),
+            HorizontalTribandSizing.SmallMiddle => FlagChargeCreator.NoChargesDist(),
+            HorizontalTribandSizing.LargeTop => FlagChargeCreator.NoChargesDist(),
+            HorizontalTribandSizing.LargeBottom => FlagChargeCreator.NoChargesDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
         };
 
-    private static IDistribution<IReadOnlyList<FlagCharge>> NoChargesDist() =>
-        Singleton.New<IReadOnlyList<FlagCharge>>([]);
-
     private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour middle, FlagChargeSize chargeSize) =>
         WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
-            .Add(NoChargesDist(), 3)
+            .Add(FlagChargeCreator.NoChargesDist(), 3)
             .Add(FlagChargeCreator.StarBandChargeDist([middle], chargeSize, FlagChargeLocation.Centre), 1)
             .Build()
             .Flatten();

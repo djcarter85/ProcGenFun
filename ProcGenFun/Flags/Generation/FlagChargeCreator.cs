@@ -85,4 +85,7 @@ public static class FlagChargeCreator
                 size,
                 location)
         };
+
+    public static IDistribution<IReadOnlyList<FlagCharge>> NoChargesDist() =>
+        Singleton.New<IReadOnlyList<FlagCharge>>([]);
 }
