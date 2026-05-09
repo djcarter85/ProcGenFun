@@ -26,22 +26,17 @@ public static class VerticalBisectionCreator
         FlagChargeLocation? chargeLocation, FlagColour left, FlagColour right) =>
         chargeLocation switch
         {
-            FlagChargeLocation.CentreLeftHalf =>
-                from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [left], FlagChargeSize.Medium, FlagChargeLocation.CentreLeftHalf)
-                select charges,
-            FlagChargeLocation.CentreRightHalf =>
-                from chargeType in ChargeTypeDist()
-                from charges in FlagChargeCreator.ChargesDist(chargeType, [right], FlagChargeSize.Medium, FlagChargeLocation.CentreRightHalf)
-                select charges,
+            FlagChargeLocation.CentreLeftHalf => ChargesDist(left, FlagChargeLocation.CentreLeftHalf),
+            FlagChargeLocation.CentreRightHalf => ChargesDist(right, FlagChargeLocation.CentreRightHalf),
             null => Singleton.New<IReadOnlyList<FlagCharge>>([]),
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
-    private static IDistribution<FlagChargeShape.Type> ChargeTypeDist() =>
-        WeightedDiscreteDistributionBuilder<FlagChargeShape.Type>.Empty()
-            .Add(FlagChargeShape.Type.Star, 5)
-            .Add(FlagChargeShape.Type.Circle, 1)
-            .Add(FlagChargeShape.Type.Plus, 1)
-            .Build();
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour backgroundColour, FlagChargeLocation location) =>
+        WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
+            .Add(FlagChargeCreator.StarChargeDist([backgroundColour], FlagChargeSize.Medium, location), 5)
+            .Add(FlagChargeCreator.CircleChargeDist([backgroundColour], FlagChargeSize.Medium, location), 1)
+            .Add(FlagChargeCreator.PlusChargeDist([backgroundColour], FlagChargeSize.Medium, location), 1)
+            .Build()
+            .Flatten();
 }
