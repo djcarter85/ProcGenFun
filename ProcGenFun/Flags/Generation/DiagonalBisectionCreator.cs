@@ -13,7 +13,8 @@ public static class DiagonalBisectionCreator
         from right in FlagColours.AllowedAdjacentToDist(left)
         from diagonal in UniformDistribution.Create([Diagonal.Down, Diagonal.Up])
         from decoration in DecorationDist(left, right)
-        select new Flag(new FlagPattern.DiagonalBisection(left, right, diagonal, decoration), []);
+        from charges in ChargesDist(decoration, left, right)
+        select new Flag(new FlagPattern.DiagonalBisection(left, right, diagonal, decoration), charges);
 
     private static IDistribution<DiagonalBisectionDecoration> DecorationDist(
         FlagColour left, FlagColour right) =>
@@ -34,4 +35,15 @@ public static class DiagonalBisectionCreator
     private static IDistribution<DiagonalBisectionDecoration> RightRayDist(FlagColour right) => 
         from colour in FlagColours.AllowedAdjacentToDist(right)
         select (DiagonalBisectionDecoration)new DiagonalBisectionDecoration.RightRay(colour);
+
+    private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(
+        DiagonalBisectionDecoration decoration, FlagColour left, FlagColour right) =>
+        decoration is DiagonalBisectionDecoration.None
+            ? WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
+                .Add(FlagChargeCreator.NoChargesDist(), 3)
+                .Add(FlagChargeCreator.StarChargeDist([left, right], FlagChargeSize.Medium, FlagChargeLocation.Centre), 1)
+                .Add(FlagChargeCreator.CrescentChargeDist([left, right], FlagChargeSize.Medium, FlagChargeLocation.Centre), 1)
+                .Build()
+                .Flatten()
+            : FlagChargeCreator.NoChargesDist();
 }
