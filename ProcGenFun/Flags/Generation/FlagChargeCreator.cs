@@ -70,6 +70,18 @@ public static class FlagChargeCreator
                 location)
         };
 
+    public static IDistribution<IReadOnlyList<FlagCharge>> CrescentChargeDist(
+        IEnumerable<FlagColour> backgroundColours,
+        FlagChargeSize size,
+        FlagChargeLocation location) =>
+        from colour in FlagColours.AllowedAdjacentToDist(backgroundColours)
+        select (IReadOnlyList<FlagCharge>)new List<FlagCharge>
+        {
+            new(new FlagChargeShape.Crescent(colour),
+                size,
+                location)
+        };
+
     public static IDistribution<IReadOnlyList<FlagCharge>> NoChargesDist() =>
         Singleton.New<IReadOnlyList<FlagCharge>>([]);
 }

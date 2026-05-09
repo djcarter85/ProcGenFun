@@ -20,6 +20,7 @@ public static class FlagImageCharges
             Star star => GetStarElement(star, radius: GetRadius(charge.Size)),
             StarBand starBand => GetStarBandElement(starBand, radius: GetRadius(charge.Size)),
             Circle circle => GetCircleElement(circle, radius: GetRadius(charge.Size)),
+            Crescent crescent => GetCrescentElement(crescent, radius: GetRadius(charge.Size)),
             Plus plus => GetPlusElement(plus, radius: GetRadius(charge.Size)),
             Shield shield => GetShieldElement(shield, radius: GetRadius(charge.Size)),
             _ => throw new ArgumentOutOfRangeException(),
@@ -89,6 +90,24 @@ public static class FlagImageCharges
     private static SvgElement GetCircleElement(Circle circle, float radius) =>
         new SvgCircle
             { CenterX = 0, CenterY = 0, Radius = radius, Fill = new SvgColourServer(FlagImageColours.GetColor(circle.Colour)) };
+
+    private static SvgElement GetCrescentElement(Crescent crescent, float radius)
+    {
+        var startPoint = RadialPoint(radius, 0.2f * MathF.PI);
+        var endPoint = RadialPoint(radius, -0.2f * MathF.PI);
+        var outerRadius = radius;
+        var innerRadius = 0.8f * radius;
+        return new SvgPath
+        {
+            Fill = new SvgColourServer(FlagImageColours.GetColor(crescent.Colour)),
+            PathData =
+            [
+                new SvgMoveToSegment(false, startPoint),
+                new SvgArcSegment(outerRadius, outerRadius, angle: 0, SvgArcSize.Large, SvgArcSweep.Positive, false, endPoint),
+                new SvgArcSegment(innerRadius, innerRadius, angle: 0, SvgArcSize.Large, SvgArcSweep.Negative, false, startPoint),
+            ]
+        };
+    }
 
     private static SvgElement GetPlusElement(Plus plus, float radius) =>
         new SvgPath

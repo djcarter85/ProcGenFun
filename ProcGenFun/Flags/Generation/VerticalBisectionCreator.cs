@@ -37,6 +37,7 @@ public static class VerticalBisectionCreator
             .Add(FlagChargeCreator.StarChargeDist([backgroundColour], FlagChargeSize.Medium, location), 5)
             .Add(FlagChargeCreator.CircleChargeDist([backgroundColour], FlagChargeSize.Medium, location), 1)
             .Add(FlagChargeCreator.PlusChargeDist([backgroundColour], FlagChargeSize.Medium, location), 1)
+            .Add(FlagChargeCreator.CrescentChargeDist([backgroundColour], FlagChargeSize.Medium, location), 3)
             .Build()
             .Flatten();
 }

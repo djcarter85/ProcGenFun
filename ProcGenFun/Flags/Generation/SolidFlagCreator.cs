@@ -19,6 +19,7 @@ public static class SolidFlagCreator
             .Add(FlagChargeCreator.CircleChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 4)
             .Add(FlagChargeCreator.PlusChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 1)
             .Add(FlagChargeCreator.ShieldChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 1)
+            .Add(FlagChargeCreator.CrescentChargeDist(backgroundColours: [colour], FlagChargeSize.ExtraLarge, FlagChargeLocation.Centre), 2)
             .Build()
             .Flatten();
 }

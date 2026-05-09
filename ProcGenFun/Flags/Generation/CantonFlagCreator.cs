@@ -19,6 +19,7 @@ public static class CantonFlagCreator
             .Add(FlagChargeCreator.StarChargeDist([cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopHalfLeftHalf), 8)
             .Add(FlagChargeCreator.PlusChargeDist([cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopHalfLeftHalf), 4)
             .Add(FlagChargeCreator.CircleChargeDist([cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopHalfLeftHalf), 2)
+            .Add(FlagChargeCreator.CrescentChargeDist([cantonColour], FlagChargeSize.Medium,  FlagChargeLocation.TopHalfLeftHalf), 6)
             .Build()
             .Flatten();
 }

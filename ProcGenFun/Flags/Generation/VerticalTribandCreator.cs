@@ -24,8 +24,9 @@ public static class VerticalTribandCreator
 
     private static IDistribution<IReadOnlyList<FlagCharge>> ChargesDist(FlagColour backgroundColour) =>
         WeightedDiscreteDistributionBuilder<IDistribution<IReadOnlyList<FlagCharge>>>.Empty()
-            .Add(FlagChargeCreator.NoChargesDist(), 3)
-            .Add(FlagChargeCreator.StarChargeDist([backgroundColour], FlagChargeSize.Medium, FlagChargeLocation.Centre), 1)
+            .Add(FlagChargeCreator.NoChargesDist(), 9)
+            .Add(FlagChargeCreator.StarChargeDist([backgroundColour], FlagChargeSize.Medium, FlagChargeLocation.Centre), 3)
+            .Add(FlagChargeCreator.CrescentChargeDist([backgroundColour], FlagChargeSize.Medium, FlagChargeLocation.Centre), 1)
             .Build()
             .Flatten();
 }
