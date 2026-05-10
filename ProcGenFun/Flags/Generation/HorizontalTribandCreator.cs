@@ -24,7 +24,6 @@ public static class HorizontalTribandCreator
             .Add(HorizontalTribandSizing.LargeMiddle, 1)
             .Add(HorizontalTribandSizing.SmallMiddle, 1)
             .Add(HorizontalTribandSizing.LargeTop, 1)
-            .Add(HorizontalTribandSizing.LargeBottom, 1)
             .Build();
 
     private static IDistribution<FlagColour> BottomColourDist(
@@ -52,7 +51,6 @@ public static class HorizontalTribandCreator
             HorizontalTribandSizing.LargeMiddle => ChargesDist(middle, FlagChargeSize.Medium),
             HorizontalTribandSizing.SmallMiddle => FlagChargeCreator.NoChargesDist(),
             HorizontalTribandSizing.LargeTop => FlagChargeCreator.NoChargesDist(),
-            HorizontalTribandSizing.LargeBottom => FlagChargeCreator.NoChargesDist(),
             _ => throw new ArgumentOutOfRangeException(nameof(sizing), sizing, null)
         };
 

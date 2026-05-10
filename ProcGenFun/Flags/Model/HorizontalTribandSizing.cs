@@ -5,6 +5,5 @@ public enum HorizontalTribandSizing
     Equal,
     LargeMiddle,
     SmallMiddle,
-    LargeTop,
-    LargeBottom
+    LargeTop
 }
