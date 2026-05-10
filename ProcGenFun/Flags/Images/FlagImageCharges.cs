@@ -53,13 +53,14 @@ public static class FlagImageCharges
             FlagChargeLocation.TopHalfLeftHalf or FlagChargeLocation.CentreLeftHalf => 4.5f * U,
             FlagChargeLocation.Centre => 9 * U,
             FlagChargeLocation.CentreRightHalf => 13.5f * U,
+            FlagChargeLocation.TopLeftCorner => 3 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
 
     private static int GetChargeCentreY(FlagChargeLocation chargeLocation) =>
         chargeLocation switch
         {
-            FlagChargeLocation.TopHalfLeftHalf => 3 * U,
+            FlagChargeLocation.TopHalfLeftHalf or FlagChargeLocation.TopLeftCorner => 3 * U,
             FlagChargeLocation.CentreLeftThird or FlagChargeLocation.CentreLeftHalf or FlagChargeLocation.Centre or FlagChargeLocation.CentreRightHalf => 6 * U,
             _ => throw new ArgumentOutOfRangeException(nameof(chargeLocation), chargeLocation, null)
         };
