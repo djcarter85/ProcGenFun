@@ -20,6 +20,11 @@ public partial class FlagsForm : Form
 
     private void CreateFlagsButton_Click(object sender, EventArgs e)
     {
+        this.CreateAndDisplayFlags();
+    }
+
+    private void CreateAndDisplayFlags()
+    {
         var imageDist =
             from flag in FlagCreator.FlagDist()
             let svg = FlagImage.CreateSvg(flag)
