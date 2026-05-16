@@ -16,6 +16,8 @@ public partial class FlagsForm : Form
         this.rng = rng;
 
         this.InitializeComponent();
+        
+        this.CreateAndDisplayFlags();
     }
 
     private void CreateFlagsButton_Click(object sender, EventArgs e)
