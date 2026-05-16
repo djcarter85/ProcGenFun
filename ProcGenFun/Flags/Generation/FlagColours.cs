@@ -15,6 +15,7 @@ public static class FlagColours
         new (FlagColour.Red, FlagColour.Maroon),
         new (FlagColour.RoyalBlue, FlagColour.Maroon),
         new (FlagColour.RoyalBlue, FlagColour.LightGreen),
+        new (FlagColour.RoyalBlue, FlagColour.DarkGreen),
         new (FlagColour.DarkBlue, FlagColour.DarkGreen),
     ];
 
